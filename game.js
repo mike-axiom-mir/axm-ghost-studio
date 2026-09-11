@@ -99,11 +99,15 @@ function getStatusLabel() {
   return atCore ? 'CORE FULL' : 'ROUTING';
 }
 
+function setTextIfChanged(element, value) {
+  if (element.textContent !== value) element.textContent = value;
+}
+
 function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
-  chargeText.textContent = `${Math.round(state.player.charge)}%`;
-  relayText.textContent = `${online} / ${state.beacons.length}`;
-  stateText.textContent = getStatusLabel();
+  setTextIfChanged(chargeText, `${Math.round(state.player.charge)}%`);
+  setTextIfChanged(relayText, `${online} / ${state.beacons.length}`);
+  setTextIfChanged(stateText, getStatusLabel());
 }
 
 function drawGrid() {

@@ -7,6 +7,7 @@ import vm from 'node:vm';
 const testsDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testsDir, '..');
 const gameSource = readFileSync(path.join(root, 'game.js'), 'utf8');
+const htmlSource = readFileSync(path.join(root, 'index.html'), 'utf8');
 
 const textCalls = [];
 const pathCalls = [];
@@ -28,8 +29,14 @@ const ctx = {
 };
 
 function makeElement() {
+  let value = '';
   return {
-    textContent: '',
+    textWrites: 0,
+    get textContent() { return value; },
+    set textContent(next) {
+      value = String(next);
+      this.textWrites += 1;
+    },
     addEventListener() {}
   };
 }
@@ -59,7 +66,33 @@ const context = vm.createContext({
 vm.runInContext(gameSource, context, { filename: 'game.js' });
 const run = expression => vm.runInContext(expression, context);
 
+assert.doesNotMatch(
+  htmlSource,
+  /<section\b[^>]*class=["']status["'][^>]*aria-live=/i,
+  'rapidly changing charge/relay values should not make the whole status strip a live region'
+);
+assert.match(
+  htmlSource,
+  /<strong\b(?=[^>]*\bid=["']stateText["'])(?=[^>]*\brole=["']status["'])(?=[^>]*\baria-atomic=["']true["'])[^>]*>/i,
+  'the concise state label should own the polite status announcement surface'
+);
+
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'fresh run should identify the full core state');
+const initialWrites = {
+  charge: elements.chargeText.textWrites,
+  relay: elements.relayText.textWrites,
+  state: elements.stateText.textWrites
+};
+run('updateHud(); updateHud();');
+assert.deepEqual(
+  {
+    charge: elements.chargeText.textWrites,
+    relay: elements.relayText.textWrites,
+    state: elements.stateText.textWrites
+  },
+  initialWrites,
+  'unchanged HUD values should not be rewritten into the live accessibility surface'
+);
 
 run('state.player.x = 145; state.player.y = 125; state.player.charge = 80; state.beacons[0].energy = 20; updateHud();');
 assert.equal(elements.stateText.textContent, 'TRANSFER R1', 'relay contact should identify the transfer target');
@@ -85,4 +118,4 @@ assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should r
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 
-console.log('experience feedback passed: core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether');
+console.log('experience feedback passed: scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether');
