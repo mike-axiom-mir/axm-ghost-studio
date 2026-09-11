@@ -15,7 +15,7 @@
     "restart": "R or Restart button"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
-  "current_milestone": "Loop Closure Evidence: accepted main now has machine-executed WON, BLACKOUT, and retry evidence on the open-chamber 4.2/s composition; genuine PLAYTESTED + VISUALLY INSPECTED full-session terminal evidence is still required. Route/resource-affecting compositions must re-prove WON on the exact proposed composition before landing.",
+  "current_milestone": "Loop Closure Evidence: accepted main has machine-executed WON, BLACKOUT, and retry evidence plus real Chromium VISUALLY INSPECTED WON, BLACKOUT, and restart output on the open-chamber 4.2/s composition; genuine human full-session PLAYTESTED evidence is still required. Route/resource-affecting compositions must re-prove WON on the exact proposed composition before landing.",
   "occupied_lanes_advisory": [
     "Gameplay PR #4: standard gamepad movement/restart parity",
     "World PR #6: bulkhead route-pressure geometry",
@@ -27,15 +27,14 @@
   "known_failures": [
     "Accepted main still has no full normal-input WON session reported PLAYTESTED by a human/browser interaction run.",
     "Accepted main still has no full normal-input BLACKOUT session reported PLAYTESTED by a human/browser interaction run.",
-    "Accepted main has machine-execution closure evidence on the open-chamber 4.2/s composition, but that exact accepted composition is not yet supported by genuine full-session VISUALLY INSPECTED and human PLAYTESTED terminal evidence.",
-    "Literal packaged file:// or localhost launch remained blocked in some specialist environments despite structural wiring tests.",
+    "Literal packaged file:// or localhost launch remains blocked in some specialist environments despite structural wiring tests; the accepted terminal render inspection used exact repository contents loaded in real Chromium with CSS/JS inlined solely to bypass that navigation restriction.",
     "World PR #6 changes route costs and cannot inherit the accepted open-chamber WON evidence without exact-composition re-proof."
   ],
   "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "evidence_status": {
     "runnable_build": "TESTED on the accepted 4.2/s runtime blob by the Systems source verification using tests/integration-smoke.mjs; the same smoke test remains present on main. A fresh post-compose Integration execution was BLOCKED by environment DNS.",
     "playable_loop": "Accepted main: TESTED/MEASURED automated WON, BLACKOUT and retry through the real runtime and registered keyboard events; human full-session PLAYTESTED evidence remains absent.",
-    "visual_output": "VISUALLY INSPECTED for the founding runtime only; accepted 4.2/s full terminal-session output has no genuine full-session rendered inspection claim yet.",
+    "visual_output": "VISUALLY INSPECTED on the accepted open-chamber 4.2/s composition: real Chromium renders for WON, BLACKOUT, and restarted RUNNING state were viewed using exact accepted index.html/styles.css/game.js contents. Literal packaged file:// or localhost navigation remained BLOCKED, so packaged-launch rendering is not claimed.",
     "gamepad": "NOT TESTED on main; Gameplay PRs #4/#7/#12/#15 contain simulated standard Gamepad API and compatibility evidence without physical hardware certification."
   },
   "recent_decisions": [
@@ -46,14 +45,16 @@
     "The first loop centers on transporting charge between a core and independently decaying relays.",
     "While Loop Closure Evidence is open, WON feasibility evidence is composition-specific for route/resource-affecting changes.",
     "Systems PR #5 and stacked QA PR #13 were recomposed onto current accepted main by Integration PR #16 using their exact tested blobs; accepted relay decay is now 4.2/s and the machine-only closure evidence is part of main.",
+    "QA visually inspected real Chromium WON, BLACKOUT, and restarted RUNNING renders for the exact accepted open-chamber 4.2/s content after Integration PR #16; this is rendered evidence, not human PLAYTESTED evidence.",
     "Further machine-only closure proof is not required for the unchanged accepted open-chamber composition unless route/resource composition changes.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "QA / Experience: prioritize genuine browser/human full-session WON, BLACKOUT, retry and rendered terminal-feedback evidence on accepted reality rather than duplicating machine-only closure proof.",
+    "QA: prioritize genuine human/fresh-player full-session WON, BLACKOUT, and retry PLAYTESTED evidence on accepted reality rather than duplicating machine-only or current-composition render proof.",
+    "QA / Experience: if Experience PR #8 is composed, visually inspect its contextual status, numeric relay cue, transfer tether, and terminal presentation on that exact accepted composition.",
     "World: before #6 lands, re-prove WON feasibility on the exact combined 4.2/s + bulkhead geometry composition or provide equivalent closure evidence.",
     "Integration: disjoint Experience and input-parity work may continue under normal readiness/composition checks because they preserve movement ceiling and accepted route/resource feasibility unless their exact runtime composition proves otherwise.",
-    "Director: hold competing identity expansion until genuine PLAYTESTED + VISUALLY INSPECTED Loop Closure Evidence exists."
+    "Director: hold competing identity expansion until genuine human full-session PLAYTESTED Loop Closure Evidence exists."
   ],
-  "state_notes": "main is accepted studio reality. Systems #5 + QA #13 evidence was landed through Integration PR #16; those source PRs are historical proposal/evidence records rather than occupied landing lanes. Open PRs/branches otherwise remain in-flight proposals. See studio/GOVERNANCE.md, GAME_CHARTER.md, and studio/DECISION_LOG.md for internal authority, merge rules, the composition-specific closure gate, and the closure evidence ladder."
+  "state_notes": "main is accepted studio reality. Systems #5 + QA #13 evidence was landed through Integration PR #16. QA added exact-content real-Chromium rendered evidence for WON, BLACKOUT, and restart to PR #16 after landing; this updates visual evidence only and does not relabel automation as PLAYTESTED. Open PRs/branches otherwise remain in-flight proposals. See studio/GOVERNANCE.md, GAME_CHARTER.md, and studio/DECISION_LOG.md for internal authority, merge rules, the composition-specific closure gate, and the closure evidence ladder."
 }
