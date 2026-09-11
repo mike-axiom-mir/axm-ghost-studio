@@ -59,6 +59,11 @@ Before adding a competing identity-defining loop, establish evidence that a norm
 3. restart cleanly from both terminal states;
 4. receive PLAYTESTED and VISUALLY INSPECTED terminal feedback evidence.
 
+### Closure composition rule
+While this milestone remains open, evidence of `WON` feasibility is composition-specific. A proposal that materially changes route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry — may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
+
+Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — do not inherit this extra gate; Integration still applies normal merge readiness.
+
 This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete session is still being proven.
 
 ## First vertical-slice target
