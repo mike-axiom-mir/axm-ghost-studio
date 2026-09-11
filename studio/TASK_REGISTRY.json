@@ -1,0 +1,71 @@
+{
+  "schema_version": "0.1",
+  "timezone": "Europe/Amsterdam",
+  "minimum_recurrence": "PT1H",
+  "experiment_start_date": "2026-09-12",
+  "notes": [
+    "The Game Director gets the first founding hour alone.",
+    "All later roles are staggered within each hour to reduce collision.",
+    "Every role must rescan newest GitHub state before claiming work and immediately before publishing.",
+    "Semantic overlap counts as overlap even when files differ.",
+    "Mike retains merge/CANON authority."
+  ],
+  "tasks": [
+    {
+      "name": "Ghost Studio — Game Director",
+      "role_file": "01_GAME_DIRECTOR.txt",
+      "first_activation": "2026-09-12T08:00:00+02:00",
+      "recurrence": "hourly",
+      "minute": 0,
+      "purpose": "Found Game 001, then protect coherence, identity and bounded milestones."
+    },
+    {
+      "name": "Ghost Studio — Integration",
+      "role_file": "02_INTEGRATION_STEWARD.txt",
+      "first_activation": "2026-09-12T09:08:00+02:00",
+      "recurrence": "hourly",
+      "minute": 8,
+      "purpose": "Protect runnable integration, coordination, dependency clarity and anti-overlap discipline."
+    },
+    {
+      "name": "Ghost Studio — Gameplay",
+      "role_file": "03_GAMEPLAY_ENGINEER.txt",
+      "first_activation": "2026-09-12T09:16:00+02:00",
+      "recurrence": "hourly",
+      "minute": 16,
+      "purpose": "Improve second-to-second controls, interaction feel and gameplay consequences."
+    },
+    {
+      "name": "Ghost Studio — Systems",
+      "role_file": "04_SYSTEMS_DESIGNER.txt",
+      "first_activation": "2026-09-12T09:24:00+02:00",
+      "recurrence": "hourly",
+      "minute": 24,
+      "purpose": "Grow coherent rules, scoring, resources, progression, difficulty and explicit state."
+    },
+    {
+      "name": "Ghost Studio — World",
+      "role_file": "05_WORLD_ENCOUNTER_DESIGNER.txt",
+      "first_activation": "2026-09-12T09:32:00+02:00",
+      "recurrence": "hourly",
+      "minute": 32,
+      "purpose": "Shape spatial decisions, encounters, objectives and pacing around proven mechanics."
+    },
+    {
+      "name": "Ghost Studio — Experience",
+      "role_file": "06_EXPERIENCE_ART_AUDIO_DIRECTOR.txt",
+      "first_activation": "2026-09-12T09:40:00+02:00",
+      "recurrence": "hourly",
+      "minute": 40,
+      "purpose": "Protect readability, UI, feedback, sensory identity, accessibility basics and provenance."
+    },
+    {
+      "name": "Ghost Studio — QA",
+      "role_file": "07_QA_PLAYTEST_SPECIALIST.txt",
+      "first_activation": "2026-09-12T09:48:00+02:00",
+      "recurrence": "hourly",
+      "minute": 48,
+      "purpose": "Establish factual playability through reproduction, regression checks and real interaction evidence."
+    }
+  ]
+}
