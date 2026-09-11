@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "experiment": "AXM Ghost Studio — Game 001",
+  "status": "UNFOUNDED",
+  "founded": false,
+  "game_identity": null,
+  "playable_loop": null,
+  "controls": null,
+  "technology_stack": null,
+  "current_milestone": "Game Director founding pass",
+  "occupied_lanes_advisory": [],
+  "known_failures": [],
+  "build_run_instructions": null,
+  "evidence_status": {
+    "runnable_build": "NOT TESTED",
+    "playable_loop": "NOT TESTED",
+    "visual_output": "NOT TESTED",
+    "gamepad": "NOT TESTED"
+  },
+  "recent_decisions": [
+    "Mike retains merge/CANON authority.",
+    "No game concept is chosen before the founding Director pass.",
+    "No task may auto-merge.",
+    "No-change is valid and preferable to duplicate churn."
+  ],
+  "candidate_next_work": [
+    "Game Director: perform the founding pass described in studio/FOUNDING_GATE.md"
+  ],
+  "state_notes": "This file is intentionally sparse. Live PRs, branches, and newest commits outrank stale coordination fields. Do not update this file merely because a scheduled run occurred."
+}
