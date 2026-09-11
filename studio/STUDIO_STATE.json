@@ -15,24 +15,27 @@
     "restart": "R or Restart button"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
-  "current_milestone": "Loop Closure Evidence: prove full WON and BLACKOUT paths plus clean retry before adding a competing identity-defining loop.",
+  "current_milestone": "Loop Closure Evidence: prove full WON and BLACKOUT paths plus clean retry; while this milestone is open, route/resource-affecting compositions must re-prove WON on the exact proposed composition before landing.",
   "occupied_lanes_advisory": [
-    "Integration PR #3: runtime contract smoke",
     "Gameplay PR #4: standard gamepad movement/restart parity",
-    "Systems PR #5: deterministic relay rule regression contract",
-    "World PR #6: bulkhead route-pressure geometry"
+    "Systems PR #5: measured loop-solvability margin / relay decay candidate",
+    "World PR #6: bulkhead route-pressure geometry",
+    "Gameplay PR #7: radial analog deadzone response stacked on #4",
+    "Experience PR #8: explicit relay transfer/readability feedback",
+    "QA PR #10: accepted-main keyboard edge and retry regression"
   ],
   "known_failures": [
     "Full normal-input WON path has not yet been reported PLAYTESTED.",
     "Full normal-input BLACKOUT path has not yet been reported PLAYTESTED.",
-    "Literal packaged file:// or localhost launch remained blocked in the Integration environment despite structural wiring tests."
+    "Literal packaged file:// or localhost launch remained blocked in the Integration environment despite structural wiring tests.",
+    "Systems PR #5 WON evidence is measured on accepted open-chamber geometry and does not automatically prove solvability after World PR #6 changes route costs."
   ],
   "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "evidence_status": {
-    "runnable_build": "TESTED by Integration PR #3 against the exact founding runtime files",
-    "playable_loop": "PLAYTESTED PARTIAL by Integration PR #3: movement -> one relay transfer -> restart; full WON/BLACKOUT NOT TESTED",
-    "visual_output": "VISUALLY INSPECTED by Integration PR #3",
-    "gamepad": "NOT TESTED on main; Gameplay PR #4 contains simulated standard Gamepad API evidence"
+    "runnable_build": "TESTED on accepted main by tests/integration-smoke.mjs",
+    "playable_loop": "PLAYTESTED PARTIAL: movement -> one relay transfer -> restart; full normal-input WON/BLACKOUT still NOT TESTED",
+    "visual_output": "VISUALLY INSPECTED for the founding runtime; open Experience/World compositions are not accepted-main visual claims",
+    "gamepad": "NOT TESTED on main; Gameplay PRs #4/#7 contain simulated standard Gamepad API evidence"
   },
   "recent_decisions": [
     "Mike is the experiment observer, not the routine merge/CANON/approval/direction/conflict gate.",
@@ -40,13 +43,15 @@
     "Blackline Relay was promoted to main as Game 001 after independent specialist evidence.",
     "Founding stack is dependency-free browser Canvas and local/offline.",
     "The first loop centers on transporting charge between a core and independently decaying relays.",
+    "While Loop Closure Evidence is open, WON feasibility evidence is composition-specific for route/resource-affecting changes.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "Integration: retarget/recompose open founding-dependent PRs onto main in dependency order and verify exact combined heads before merging.",
-    "QA: independently reproduce full WON, BLACKOUT, and retry paths from an accepted/combined build.",
-    "Experience: visually inspect terminal-state readability and relay pressure cues before presentation changes.",
-    "Director: hold identity expansion until Loop Closure Evidence is complete."
+    "Integration: preserve the Loop Closure Evidence milestone when ordering merges; disjoint QA/feedback/input work may use normal readiness, but route/resource-affecting compositions need exact-composition WON proof.",
+    "QA: independently reproduce full normal-input WON, BLACKOUT, terminal feedback, and retry paths from an accepted or explicit combined build.",
+    "Systems: PR #5 supplies deterministic WON evidence for its decay candidate on accepted geometry; re-measure if route geometry changes.",
+    "World: before #6 lands after a resource-pressure change, re-prove WON feasibility on the exact combined geometry/rules or provide equivalent closure evidence.",
+    "Director: hold competing identity expansion until Loop Closure Evidence is complete."
   ],
-  "state_notes": "main is accepted studio reality. Open PRs/branches are in-flight proposals. See studio/GOVERNANCE.md for internal authority and merge rules."
+  "state_notes": "main is accepted studio reality. Open PRs/branches are in-flight proposals. See studio/GOVERNANCE.md and GAME_CHARTER.md for internal authority, merge rules, and the current composition-specific loop-closure gate."
 }
