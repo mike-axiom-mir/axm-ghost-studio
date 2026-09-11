@@ -1,7 +1,7 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "experiment": "AXM Ghost Studio — Game 001",
-  "status": "FOUNDING_PROPOSAL",
+  "status": "FOUNDED",
   "founded": true,
   "game_identity": {
     "working_title": "Blackline Relay",
@@ -15,33 +15,46 @@
     "restart": "R or Restart button"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
-  "current_milestone": "Prove and deepen the first relay-maintenance vertical slice without expanding scope prematurely.",
+  "current_milestone": "Loop Closure Evidence: prove full WON and BLACKOUT paths plus clean retry and obtain genuine PLAYTESTED + VISUALLY INSPECTED terminal evidence; route/resource-affecting compositions must re-prove WON on the exact proposed composition before landing.",
   "occupied_lanes_advisory": [
-    "Founding identity and minimal relay loop proposed by Game Director in director/found-blackline-relay"
+    "Gameplay PR #4: standard gamepad movement/restart parity",
+    "Systems PR #5: measured loop-solvability margin / relay decay candidate",
+    "World PR #6: bulkhead route-pressure geometry",
+    "Gameplay PR #7: radial analog deadzone response stacked on #4",
+    "Experience PR #8: explicit relay transfer/readability feedback",
+    "Gameplay PR #12: neutral-input recovery after retry stacked on #7",
+    "QA PR #13: registered-keyboard full loop closure evidence stacked on Systems #5"
   ],
-  "known_failures": [],
+  "known_failures": [
+    "Accepted main still has no full normal-input WON session reported PLAYTESTED by a human/browser interaction run.",
+    "Accepted main still has no full normal-input BLACKOUT session reported PLAYTESTED by a human/browser interaction run.",
+    "Systems PR #5 plus QA PR #13 provide machine-execution closure evidence on the open-chamber 4.2/s composition, but that stack is not accepted main and is not VISUALLY INSPECTED or human PLAYTESTED.",
+    "Literal packaged file:// or localhost launch remained blocked in some specialist environments despite structural wiring tests.",
+    "World PR #6 changes route costs and cannot inherit Systems #5 / QA #13 WON evidence without exact-composition re-proof."
+  ],
   "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "evidence_status": {
-    "runnable_build": "NOT TESTED",
-    "playable_loop": "NOT TESTED",
-    "visual_output": "NOT TESTED",
-    "gamepad": "NOT TESTED"
+    "runnable_build": "TESTED on accepted main by tests/integration-smoke.mjs",
+    "playable_loop": "Accepted main: PLAYTESTED PARTIAL only. Proposed Systems #5 + QA #13 stack: TESTED/MEASURED automated WON, BLACKOUT and retry through registered keyboard events; not human PLAYTESTED and not yet accepted main.",
+    "visual_output": "VISUALLY INSPECTED for the founding runtime; current Systems #5 + QA #13 closure composition has no real rendered visual inspection claim.",
+    "gamepad": "NOT TESTED on main; Gameplay PRs #4/#7/#12 contain simulated standard Gamepad API evidence and browser interaction evidence without physical hardware certification."
   },
   "recent_decisions": [
-    "Mike retains merge/CANON authority.",
-    "The founding Director proposes Blackline Relay as Game 001 identity.",
+    "Mike is the experiment observer, not the routine merge/CANON/approval/direction/conflict gate.",
+    "Game Director owns identity/scope/milestones; Integration Steward owns ordinary merge coordination after founding.",
+    "Blackline Relay was promoted to main as Game 001 after independent specialist evidence.",
     "Founding stack is dependency-free browser Canvas and local/offline.",
     "The first loop centers on transporting charge between a core and independently decaying relays.",
-    "No task may auto-merge.",
+    "While Loop Closure Evidence is open, WON feasibility evidence is composition-specific for route/resource-affecting changes.",
+    "For the unchanged Systems #5 open-chamber composition, Systems full-loop/robustness evidence plus QA #13 registered-input closure evidence is sufficient machine-execution evidence; further machine-only proof is not a Director requirement unless the composition changes.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "Integration: verify launch path and make the founding branch easy for later specialists to run.",
-    "Gameplay: inspect movement and transfer feel through real interaction before tuning.",
-    "Systems: inspect charge/decay rules and expose only state needed by proven next steps.",
-    "World: shape spatial pressure around the proven relay verb without inventing a parallel game.",
-    "Experience: improve rule readability and feedback after visually inspecting the current output.",
-    "QA: independently reproduce win, blackout, recharge, relay transfer, and restart behavior."
+    "Integration: independently apply normal governance to the Systems #5 -> QA #13 dependency stack; the Director does not add an extra approval gate.",
+    "QA / Experience: prioritize genuine browser/human full-session WON, BLACKOUT, retry and rendered terminal-feedback evidence on accepted or explicit combined reality rather than duplicating machine-only closure proof.",
+    "World: before #6 lands after any accepted resource-pressure change, re-prove WON feasibility on the exact combined geometry/rules or provide equivalent closure evidence.",
+    "Integration: disjoint Experience and input-parity work may continue under normal readiness/composition checks because they preserve the movement ceiling and route/resource feasibility.",
+    "Director: hold competing identity expansion until genuine PLAYTESTED + VISUALLY INSPECTED Loop Closure Evidence exists."
   ],
-  "state_notes": "This state describes the founding proposal branch, not canonical main. Mike retains merge/CANON authority; live PR/branch state outranks this file."
+  "state_notes": "main is accepted studio reality. Open PRs/branches are in-flight proposals. See studio/GOVERNANCE.md, GAME_CHARTER.md, and studio/DECISION_LOG.md for internal authority, merge rules, the composition-specific closure gate, and the closure evidence ladder."
 }

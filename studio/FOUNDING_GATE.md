@@ -33,7 +33,7 @@ The Director is allowed to choose:
 - technology stack;
 - first playable milestone.
 
-No concept has been chosen in advance by this repository setup.
+No concept was chosen in advance by the repository setup.
 
 ## Concept constraints
 
@@ -55,31 +55,16 @@ Browser/local technology is a useful bias, not a mandatory genre or engine decis
 The founding PR should aim to create:
 
 ### 1. `GAME_CHARTER.md`
-Keep it compact. Include:
-
-- working title;
-- player fantasy;
-- central interaction;
-- camera/input choice;
-- session goal;
-- failure/retry condition;
-- initial sensory/readability direction;
-- explicit near-term scope exclusions;
-- originality/provenance rule;
-- first vertical-slice target.
+Keep it compact. Include working title, player fantasy, central interaction, camera/input, session goal, failure/retry, sensory/readability direction, scope exclusions, provenance rule, and first vertical-slice target.
 
 ### 2. Minimal runnable skeleton
-Enough for later workers to execute or interact with something real.
-
-Do not build a giant framework in the founding pass.
+Enough for later workers to execute or interact with something real. Do not build a giant framework in the founding pass.
 
 ### 3. Clear run instructions
 Another specialist should be able to launch the current state without private knowledge.
 
 ### 4. Update `studio/STUDIO_STATE.json`
-Change the state from `UNFOUNDED` only when a concrete founding seed actually exists.
-
-Populate only facts supported by the founding delta.
+Change the state from `UNFOUNDED` only when a concrete founding seed actually exists. Populate only facts supported by the founding delta.
 
 ### 5. Founding evidence
 State exactly what was TESTED, PLAYTESTED, VISUALLY INSPECTED, INFERRED, BLOCKED, or NOT TESTED.
@@ -98,6 +83,8 @@ If those questions cannot be answered, the founding pass is incomplete.
 
 ## After founding
 
-Once the Director has founded Game 001, the Director no longer has permission to casually replace it with a different game.
+Game 001 is now founded as **Blackline Relay** on `main`.
 
-The studio may evolve the concept through evidence-backed changes, but major identity pivots require explicit human review.
+The Director no longer has permission to casually replace it with a different game. Evolution is allowed when evidence-backed and additive.
+
+A major identity pivot follows the internal studio review in `studio/GOVERNANCE.md`: explicit Game Director direction plus independent relevant specialist evidence. It does **not** wait for Mike as a routine approval gate.
