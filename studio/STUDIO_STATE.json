@@ -1,7 +1,7 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "experiment": "AXM Ghost Studio — Game 001",
-  "status": "FOUNDING_PROPOSAL",
+  "status": "FOUNDED",
   "founded": true,
   "game_identity": {
     "working_title": "Blackline Relay",
@@ -15,33 +15,38 @@
     "restart": "R or Restart button"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
-  "current_milestone": "Prove and deepen the first relay-maintenance vertical slice without expanding scope prematurely.",
+  "current_milestone": "Loop Closure Evidence: prove full WON and BLACKOUT paths plus clean retry before adding a competing identity-defining loop.",
   "occupied_lanes_advisory": [
-    "Founding identity and minimal relay loop proposed by Game Director in director/found-blackline-relay"
+    "Integration PR #3: runtime contract smoke",
+    "Gameplay PR #4: standard gamepad movement/restart parity",
+    "Systems PR #5: deterministic relay rule regression contract",
+    "World PR #6: bulkhead route-pressure geometry"
   ],
-  "known_failures": [],
+  "known_failures": [
+    "Full normal-input WON path has not yet been reported PLAYTESTED.",
+    "Full normal-input BLACKOUT path has not yet been reported PLAYTESTED.",
+    "Literal packaged file:// or localhost launch remained blocked in the Integration environment despite structural wiring tests."
+  ],
   "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "evidence_status": {
-    "runnable_build": "NOT TESTED",
-    "playable_loop": "NOT TESTED",
-    "visual_output": "NOT TESTED",
-    "gamepad": "NOT TESTED"
+    "runnable_build": "TESTED by Integration PR #3 against the exact founding runtime files",
+    "playable_loop": "PLAYTESTED PARTIAL by Integration PR #3: movement -> one relay transfer -> restart; full WON/BLACKOUT NOT TESTED",
+    "visual_output": "VISUALLY INSPECTED by Integration PR #3",
+    "gamepad": "NOT TESTED on main; Gameplay PR #4 contains simulated standard Gamepad API evidence"
   },
   "recent_decisions": [
-    "Mike retains merge/CANON authority.",
-    "The founding Director proposes Blackline Relay as Game 001 identity.",
+    "Mike is the experiment observer, not the routine merge/CANON/approval/direction/conflict gate.",
+    "Game Director owns identity/scope/milestones; Integration Steward owns ordinary merge coordination after founding.",
+    "Blackline Relay was promoted to main as Game 001 after independent specialist evidence.",
     "Founding stack is dependency-free browser Canvas and local/offline.",
     "The first loop centers on transporting charge between a core and independently decaying relays.",
-    "No task may auto-merge.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "Integration: verify launch path and make the founding branch easy for later specialists to run.",
-    "Gameplay: inspect movement and transfer feel through real interaction before tuning.",
-    "Systems: inspect charge/decay rules and expose only state needed by proven next steps.",
-    "World: shape spatial pressure around the proven relay verb without inventing a parallel game.",
-    "Experience: improve rule readability and feedback after visually inspecting the current output.",
-    "QA: independently reproduce win, blackout, recharge, relay transfer, and restart behavior."
+    "Integration: retarget/recompose open founding-dependent PRs onto main in dependency order and verify exact combined heads before merging.",
+    "QA: independently reproduce full WON, BLACKOUT, and retry paths from an accepted/combined build.",
+    "Experience: visually inspect terminal-state readability and relay pressure cues before presentation changes.",
+    "Director: hold identity expansion until Loop Closure Evidence is complete."
   ],
-  "state_notes": "This state describes the founding proposal branch, not canonical main. Mike retains merge/CANON authority; live PR/branch state outranks this file."
+  "state_notes": "main is accepted studio reality. Open PRs/branches are in-flight proposals. See studio/GOVERNANCE.md for internal authority and merge rules."
 }

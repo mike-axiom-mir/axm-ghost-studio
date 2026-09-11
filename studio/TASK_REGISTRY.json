@@ -1,17 +1,17 @@
 {
-  "schema_version": "0.2",
+  "schema_version": "0.3",
   "timezone": "Europe/Amsterdam",
   "minimum_recurrence": "PT1H",
   "schedule_authority": "externally-configured ChatGPT Task schedule",
   "absolute_start_dates_authoritative": false,
   "notes": [
     "This registry does not choose or change task start dates.",
-    "The ChatGPT Task scheduler configured by Mike is the sole timing authority.",
+    "The externally configured ChatGPT Task scheduler is the timing authority.",
     "The Game Director gets the first founding hour alone.",
     "All later roles are staggered relative to the Director start to reduce collision.",
-    "Every role must rescan newest GitHub state before claiming work and immediately before publishing.",
+    "Every role must rescan newest GitHub state before claiming work and immediately before publishing or merging.",
     "Semantic overlap counts as overlap even when files differ.",
-    "Mike retains merge/CANON authority."
+    "Mike is the experiment observer, not the routine merge/CANON gate; internal authority is defined in studio/GOVERNANCE.md."
   ],
   "relative_schedule": {
     "director": "T+0:00 then hourly",
@@ -28,14 +28,14 @@
       "role_file": "01_GAME_DIRECTOR.txt",
       "recurrence": "hourly",
       "relative_start": "T+0:00",
-      "purpose": "Found Game 001, then protect coherence, identity and bounded milestones."
+      "purpose": "Protect coherence, identity and bounded milestones; own identity/governance decisions without absorbing every role."
     },
     {
       "name": "Ghost Studio — Integration",
       "role_file": "02_INTEGRATION_STEWARD.txt",
       "recurrence": "hourly",
       "relative_start": "T+1:08",
-      "purpose": "Protect runnable integration, coordination, dependency clarity and anti-overlap discipline."
+      "purpose": "Protect runnable integration, coordination, dependency clarity, anti-overlap discipline and ordinary merge landing."
     },
     {
       "name": "Ghost Studio — Gameplay",

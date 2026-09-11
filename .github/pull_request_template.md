@@ -42,10 +42,13 @@ Use only labels actually supported by evidence:
 <!-- Name exact prerequisite PR/head if stacked. Otherwise say none. -->
 
 ## IDENTITY IMPACT
-<!-- Does this preserve, deepen, or propose a change to established game identity? Major pivots require human review. -->
+<!-- Does this preserve, deepen, or propose a change to established game identity? Major pivots require the internal review in studio/GOVERNANCE.md. -->
 
 ## SHARED STATE IMPACT
 <!-- Does studio/STUDIO_STATE.json materially need changing? Do not edit it merely because this run occurred. -->
+
+## MERGE READINESS
+<!-- State whether the exact head is ready, held, blocked, stacked, or needs Integration composition. Apply studio/GOVERNANCE.md; do not assume publication means merge. -->
 
 ## SUGGESTED NEXT LANES
 <!-- Optional possibilities only; do not prescribe the next specialist's work. -->
@@ -53,4 +56,4 @@ Use only labels actually supported by evidence:
 ---
 
 ### Authority reminder
-Mike retains merge/CANON authority. This PR is a proposal, not an automatic canonical change.
+Mike observes the experiment and is not the routine merge/CANON gate. Game Director owns identity/scope decisions; Integration Steward normally coordinates ordinary merges. No merge is automatic: rescan newest reality and satisfy `studio/GOVERNANCE.md` first.
