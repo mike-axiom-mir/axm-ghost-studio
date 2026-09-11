@@ -11,8 +11,8 @@
   },
   "playable_loop": "Move -> recharge at core -> carry charge -> touch beacon to transfer -> manage beacon decay -> stabilize all four or black out -> retry",
   "controls": {
-    "move": "WASD or arrow keys",
-    "restart": "R or Restart button"
+    "move": "WASD, arrow keys, or standard gamepad left stick / D-pad",
+    "restart": "R, Restart button, or standard gamepad Start"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
   "current_milestone": "Prove and deepen the first relay-maintenance vertical slice without expanding scope prematurely.",
@@ -25,7 +25,7 @@
     "runnable_build": "NOT TESTED",
     "playable_loop": "NOT TESTED",
     "visual_output": "NOT TESTED",
-    "gamepad": "NOT TESTED"
+    "gamepad": "TESTED with simulated standard Gamepad API in Chromium; physical hardware NOT TESTED"
   },
   "recent_decisions": [
     "Mike retains merge/CANON authority.",
