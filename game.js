@@ -81,11 +81,29 @@ function update(dt) {
   updateHud();
 }
 
+function getTransferTarget() {
+  if (state.mode !== 'RUNNING') return null;
+  const p = state.player;
+  return state.beacons.find(beacon =>
+    distance(p, beacon) <= p.r + beacon.r && p.charge > 0 && beacon.energy < 100
+  ) || null;
+}
+
+function getStatusLabel() {
+  if (state.mode !== 'RUNNING') return state.mode;
+  const transferTarget = getTransferTarget();
+  if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
+  const atCore = distance(state.player, core) <= state.player.r + core.r;
+  if (atCore && state.player.charge < 99.5) return 'RECHARGING';
+  if (state.player.charge <= 25) return 'LOW CHARGE';
+  return atCore ? 'CORE FULL' : 'ROUTING';
+}
+
 function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
   chargeText.textContent = `${Math.round(state.player.charge)}%`;
   relayText.textContent = `${online} / ${state.beacons.length}`;
-  stateText.textContent = state.mode;
+  stateText.textContent = getStatusLabel();
 }
 
 function drawGrid() {
@@ -134,9 +152,30 @@ function drawBeacon(beacon, index) {
   ctx.stroke();
 
   ctx.fillStyle = '#e8f2f7';
-  ctx.font = '13px system-ui';
   ctx.textAlign = 'center';
-  ctx.fillText(`R${index + 1}`, beacon.x, beacon.y + 5);
+  ctx.font = '12px system-ui';
+  ctx.fillText(`R${index + 1}`, beacon.x, beacon.y - 2);
+  ctx.font = '11px system-ui';
+  ctx.fillText(`${Math.round(beacon.energy)}%`, beacon.x, beacon.y + 13);
+}
+
+function drawTransferFeedback() {
+  const target = getTransferTarget();
+  if (!target) return;
+  const p = state.player;
+  ctx.beginPath();
+  ctx.moveTo(p.x, p.y);
+  ctx.lineTo(target.x, target.y);
+  ctx.strokeStyle = 'rgba(255, 228, 122, .7)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  const midpointX = (p.x + target.x) / 2;
+  const midpointY = (p.y + target.y) / 2;
+  ctx.beginPath();
+  ctx.arc(midpointX, midpointY, 4 + Math.sin(state.elapsed * 12) * 1.5, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff1ae';
+  ctx.fill();
 }
 
 function drawPlayer() {
@@ -172,6 +211,7 @@ function render() {
   drawGrid();
   drawCore();
   state.beacons.forEach(drawBeacon);
+  drawTransferFeedback();
   drawPlayer();
   drawOverlay();
 }
