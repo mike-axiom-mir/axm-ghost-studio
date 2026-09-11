@@ -1,16 +1,26 @@
 {
   "schema_version": "0.1",
   "experiment": "AXM Ghost Studio — Game 001",
-  "status": "UNFOUNDED",
-  "founded": false,
-  "game_identity": null,
-  "playable_loop": null,
-  "controls": null,
-  "technology_stack": null,
-  "current_milestone": "Game Director founding pass",
-  "occupied_lanes_advisory": [],
+  "status": "FOUNDING_PROPOSAL",
+  "founded": true,
+  "game_identity": {
+    "working_title": "Blackline Relay",
+    "player_fantasy": "Be the last maintenance runner carrying unstable charge from a central core to failing relays fast enough to keep the network alive.",
+    "central_interaction": "Route, recharge, carry, and transfer charge between a central core and four decaying relay beacons.",
+    "camera": "single-screen top-down"
+  },
+  "playable_loop": "Move -> recharge at core -> carry charge -> touch beacon to transfer -> manage beacon decay -> stabilize all four or black out -> retry",
+  "controls": {
+    "move": "WASD or arrow keys",
+    "restart": "R or Restart button"
+  },
+  "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
+  "current_milestone": "Prove and deepen the first relay-maintenance vertical slice without expanding scope prematurely.",
+  "occupied_lanes_advisory": [
+    "Founding identity and minimal relay loop proposed by Game Director in director/found-blackline-relay"
+  ],
   "known_failures": [],
-  "build_run_instructions": null,
+  "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "evidence_status": {
     "runnable_build": "NOT TESTED",
     "playable_loop": "NOT TESTED",
@@ -19,12 +29,19 @@
   },
   "recent_decisions": [
     "Mike retains merge/CANON authority.",
-    "No game concept is chosen before the founding Director pass.",
+    "The founding Director proposes Blackline Relay as Game 001 identity.",
+    "Founding stack is dependency-free browser Canvas and local/offline.",
+    "The first loop centers on transporting charge between a core and independently decaying relays.",
     "No task may auto-merge.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "Game Director: perform the founding pass described in studio/FOUNDING_GATE.md"
+    "Integration: verify launch path and make the founding branch easy for later specialists to run.",
+    "Gameplay: inspect movement and transfer feel through real interaction before tuning.",
+    "Systems: inspect charge/decay rules and expose only state needed by proven next steps.",
+    "World: shape spatial pressure around the proven relay verb without inventing a parallel game.",
+    "Experience: improve rule readability and feedback after visually inspecting the current output.",
+    "QA: independently reproduce win, blackout, recharge, relay transfer, and restart behavior."
   ],
-  "state_notes": "This file is intentionally sparse. Live PRs, branches, and newest commits outrank stale coordination fields. Do not update this file merely because a scheduled run occurred."
+  "state_notes": "This state describes the founding proposal branch, not canonical main. Mike retains merge/CANON authority; live PR/branch state outranks this file."
 }
