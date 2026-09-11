@@ -18,16 +18,18 @@ const beaconSeed = [
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
 let gamepadRestartHeld = false;
+let movementArmed = true;
 let state;
 let previousTime = performance.now();
 
-function resetGame() {
+function resetGame(requireNeutralMovement = false) {
   state = {
     mode: 'RUNNING',
     player: { x: core.x, y: core.y, r: 13, charge: 100 },
     beacons: beaconSeed.map((b, i) => ({ ...b, r: 29, energy: i === 0 ? 34 : 0 })),
     elapsed: 0
   };
+  movementArmed = !requireNeutralMovement;
   previousTime = performance.now();
   updateHud();
 }
@@ -65,7 +67,7 @@ function readGamepadIntent() {
   }
 
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
-  if (restartPressed && !gamepadRestartHeld) resetGame();
+  if (restartPressed && !gamepadRestartHeld) resetGame(true);
   gamepadRestartHeld = restartPressed;
 
   const analog = applyRadialDeadzone(pad.axes?.[0] || 0, pad.axes?.[1] || 0);
@@ -87,7 +89,6 @@ function update(dt) {
   const gamepad = readGamepadIntent();
   if (state.mode !== 'RUNNING') return;
 
-  state.elapsed += dt;
   const p = state.player;
   let dx = gamepad.dx;
   let dy = gamepad.dy;
@@ -101,6 +102,17 @@ function update(dt) {
     dx /= inputLength;
     dy /= inputLength;
   }
+
+  const hasMovementIntent = dx !== 0 || dy !== 0;
+  if (!movementArmed) {
+    if (hasMovementIntent) {
+      updateHud();
+      return;
+    }
+    movementArmed = true;
+  }
+
+  state.elapsed += dt;
   const moving = dx !== 0 || dy !== 0;
   if (moving) {
     const speed = 235;
@@ -237,12 +249,12 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
-  if (key === 'r') resetGame();
+  if (key === 'r') resetGame(true);
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => keys.clear());
-restartButton.addEventListener('click', resetGame);
+restartButton.addEventListener('click', () => resetGame(true));
 
 resetGame();
 requestAnimationFrame(frame);
