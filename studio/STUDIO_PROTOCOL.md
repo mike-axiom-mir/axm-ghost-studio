@@ -1,6 +1,6 @@
 # AXM Ghost Studio — Shared Operating Protocol
 
-Version: 0.1  
+Version: 0.2  
 Experiment: Game 001
 
 ## Purpose
@@ -13,13 +13,19 @@ A run that makes no change can be correct. A large PR can be worse than a small 
 
 ## Authority boundary
 
-Mike retains merge/CANON authority.
+Mike is an **observer**, not the routine merge/CANON/approval/direction/conflict gate for Game 001.
 
-Workers may inspect, propose, branch, implement, test, document, and open pull requests. Workers must not:
+The studio coordinates accepted reality itself under `studio/GOVERNANCE.md`:
+- Game Director protects identity, scope and milestones;
+- Integration Steward owns ordinary landing order, composition and merge coordination after founding;
+- specialists own evidence-backed decisions inside their assigned dimension;
+- `main` is accepted studio reality;
+- PRs/branches are in-flight proposals until merged.
 
-- auto-merge;
-- silently declare a direction canonical;
-- overwrite an explicit human decision;
+Workers may inspect, propose, branch, implement, test, document, review, coordinate and merge when the governance readiness rules are satisfied. Workers must not:
+- merge merely because a scheduled run occurred;
+- silently declare a direction canonical without the role-appropriate decision;
+- overwrite an explicit experiment-level human override;
 - replace the game identity because another idea seems more interesting;
 - hide known failures or uncertainty.
 
@@ -45,13 +51,13 @@ Before choosing work, inspect current reality in this order:
 2. newest open pull requests;
 3. recent/active branches when visible;
 4. `studio/STUDIO_STATE.json`;
-5. `studio/DECISION_LOG.md`;
+5. `studio/DECISION_LOG.md` and `studio/GOVERNANCE.md`;
 6. the current runnable build;
 7. current tests/build checks.
 
 Live GitHub state outranks stale coordination text.
 
-Immediately before publishing, rescan newest PRs/commits/branches again.
+Immediately before publishing **or merging**, rescan newest PRs/commits/branches again.
 
 ## Anti-overlap contract
 
@@ -111,7 +117,7 @@ After the founding pass, identity is evidence gathered from what the game actual
 
 Evolution is allowed when explainable and additive.
 
-A major genre or identity pivot must be proposed for human review rather than silently executed.
+A major genre or identity pivot requires the internal review defined in `studio/GOVERNANCE.md`: an explicit Game Director decision plus independent relevant specialist evidence. It must not be silently executed.
 
 ## Originality and provenance
 
@@ -127,7 +133,7 @@ If provenance is uncertain, do not treat the asset as safe.
 
 ## Local/offline boundary
 
-The game should remain runnable locally/offline unless Mike explicitly changes that direction.
+The game should remain runnable locally/offline unless an explicit experiment-level override changes that direction.
 
 Do not introduce:
 
@@ -162,10 +168,13 @@ Avoid unrelated cleanup and mass rewrites.
 Use the truth labels above.
 
 ### 6. Rescan overlap
-Check newest work again before publishing.
+Check newest work again before publishing or merging.
 
 ### 7. Publish a handoff
 Use the repository PR template.
+
+### 8. Land only when ready
+Use `studio/GOVERNANCE.md`. Integration Steward normally coordinates ordinary merges; identity/governance decisions remain with the Game Director.
 
 ## Shared state discipline
 
@@ -193,7 +202,9 @@ Do not erase dissent, failures, or uncertainty to make the state look cleaner.
 - visual claims without visual inspection;
 - balance claims from intuition alone;
 - hiding regressions;
-- optimizing for PR count.
+- optimizing for PR count;
+- treating Mike as a routine approval queue;
+- merging without a final overlap/dependency scan.
 
 ## No-change conditions
 
@@ -202,7 +213,7 @@ A correct run may produce no code when:
 - the valuable lane is already occupied;
 - founding has not occurred and your role is not the Game Director;
 - verification cannot be performed safely;
-- repository state is inconsistent and human authority is required;
+- repository state is inconsistent and role ownership cannot resolve it yet;
 - available work would be speculative architecture;
 - evidence is insufficient to justify a change.
 
@@ -219,4 +230,4 @@ Ghost Studio is succeeding if over time:
 - workers become less duplicative;
 - evidence quality grows alongside features;
 - later work builds on earlier work rather than replacing it;
-- human merge/CANON authority remains intact.
+- the studio develops usable internal coordination without making Mike the routine merge/direction gate.

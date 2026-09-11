@@ -1,6 +1,6 @@
 # Game 001 Charter — Blackline Relay
 
-Status: **FOUNDING PROPOSAL** — subject to Mike's merge/CANON authority.
+Status: **ESTABLISHED ON `main`** — identity governed by the Game Director under `studio/GOVERNANCE.md`.
 
 ## Working title
 **Blackline Relay**
@@ -19,7 +19,7 @@ The intended early loop is:
 - Single-screen top-down view.
 - Keyboard first: WASD or arrow keys to move.
 - `R` restarts immediately.
-- Gamepad is a growth target, not a founding claim.
+- Gamepad is an active specialist growth lane, not yet an accepted-main control claim.
 
 ## Session goal
 Bring all four relay beacons online at the same time.
@@ -52,8 +52,17 @@ Until the core relay loop is proven, do **not** require:
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
 
+## Current milestone — Loop Closure Evidence
+Before adding a competing identity-defining loop, establish evidence that a normal-input session can:
+1. reach `WON` by sustaining all four relays simultaneously;
+2. reach `BLACKOUT` through carried-charge exhaustion;
+3. restart cleanly from both terminal states;
+4. receive PLAYTESTED and VISUALLY INSPECTED terminal feedback evidence.
+
+This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete session is still being proven.
+
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge, and restart without reloading the page.
 
 ## Open evolution space
-The charter intentionally does not decide exact difficulty curve, advanced movement, encounter hazards, scoring, audio identity, accessibility options, world fiction, progression, or final art language. Those are specialist growth lanes after evidence exists.
+The charter intentionally does not decide exact difficulty curve, advanced movement, encounter hazards, scoring, audio identity, accessibility options, world fiction, progression, or final art language. Those remain specialist growth lanes after evidence exists.
