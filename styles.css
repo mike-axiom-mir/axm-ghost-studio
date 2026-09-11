@@ -1,0 +1,14 @@
+html, body { margin: 0; min-height: 100%; background: #07090d; color: #eef6ff; font-family: system-ui, sans-serif; }
+body { display: grid; place-items: center; }
+.shell { width: min(1100px, 96vw); padding: 20px; box-sizing: border-box; }
+header { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+h1 { margin: 0; letter-spacing: .08em; text-transform: uppercase; }
+.eyebrow { margin: 0 0 4px; color: #91a4b8; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; }
+button { border: 1px solid #7ce6ff; background: #0d1720; color: #eaffff; padding: 10px 16px; cursor: pointer; }
+.status { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 10px; }
+.status div { border: 1px solid #253443; background: #0c1118; padding: 10px 12px; display: flex; justify-content: space-between; gap: 12px; }
+.status span { color: #91a4b8; }
+canvas { width: 100%; height: auto; display: block; border: 1px solid #283846; background: #090d12; box-shadow: 0 0 40px rgba(0,0,0,.45); }
+.instructions { display: flex; flex-wrap: wrap; gap: 12px 24px; color: #b7c8d8; font-size: .92rem; }
+.instructions p { margin: 12px 0 0; }
+@media (max-width: 700px) { .status { grid-template-columns: 1fr; } header { align-items: start; } }
