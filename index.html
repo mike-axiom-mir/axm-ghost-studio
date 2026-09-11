@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blackline Relay</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <p class="eyebrow">AXM Ghost Studio — Game 001</p>
+        <h1>Blackline Relay</h1>
+      </div>
+      <button id="restartButton" type="button">Restart</button>
+    </header>
+
+    <section class="status" aria-live="polite">
+      <div><span>Runner charge</span><strong id="chargeText">100%</strong></div>
+      <div><span>Relays online</span><strong id="relayText">0 / 4</strong></div>
+      <div><span>Status</span><strong id="stateText">RUNNING</strong></div>
+    </section>
+
+    <canvas id="game" width="960" height="600" aria-label="Top-down relay chamber"></canvas>
+
+    <section class="instructions">
+      <p><strong>Move:</strong> WASD or arrow keys</p>
+      <p><strong>Goal:</strong> recharge at the center core, then touch failing relays to transfer charge. Keep all four online at once.</p>
+      <p><strong>Retry:</strong> R or Restart</p>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
