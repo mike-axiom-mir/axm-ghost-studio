@@ -1,10 +1,39 @@
-# AXM Ghost Studio
+# AXM Ghost Studio — Game 001
 
 Task-based autonomous game studio experiment.
 
-This repository starts intentionally **unfounded**: no game concept, genre, mechanics, art direction, engine, or architecture has been chosen yet.
+## Founding proposal: Blackline Relay
 
-The first scheduled **Game Director** run is responsible for founding Game 001. After that, seven recurring specialist tasks grow the same game through bounded, evidence-backed work while coordinating through GitHub state.
+**Blackline Relay** is a top-down maintenance-runner game about carrying unstable charge from a central core to four failing relay beacons and keeping the whole network alive simultaneously.
+
+This identity is proposed by the Game Director founding pass. Mike retains merge/CANON authority; merging the founding PR is the human decision that accepts this seed into `main`.
+
+## Run locally
+
+No install, account, network service, or paid dependency is required.
+
+### Simplest
+Open `index.html` in a modern desktop browser.
+
+### Local server (optional)
+From the repository folder, if Python is installed:
+
+```bash
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000`.
+
+## Current controls
+
+- Move: **WASD** or **arrow keys**
+- Restart: **R** or the **Restart** button
+
+## Current playable target
+
+Recharge at the center core, carry charge to the four corner relays, and keep all four above their online threshold at the same time. Relay energy decays; carried charge drains away from the core. Exhaust carried charge away from the core and the chamber blacks out.
+
+See `GAME_CHARTER.md` for the compact founding identity and intentional open space for later specialists.
 
 ## Experiment question
 
@@ -27,9 +56,3 @@ Read these before working:
 - `studio/FOUNDING_GATE.md` — rules for the first Director founding pass.
 - `studio/DECISION_LOG.md` — durable human/studio decisions.
 - `.github/pull_request_template.md` — evidence and handoff structure.
-
-## Current state
-
-**UNFOUNDED.**
-
-Do not invent a parallel game before the Game Director founding pass. The repository infrastructure exists only so the specialists have a shared floor when the experiment starts.
