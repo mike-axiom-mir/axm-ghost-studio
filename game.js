@@ -40,6 +40,18 @@ function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
+function applyRadialDeadzone(x, y) {
+  const rawLength = Math.hypot(x, y);
+  if (rawLength <= GAMEPAD_DEADZONE) return { dx: 0, dy: 0 };
+
+  const clampedLength = Math.min(rawLength, 1);
+  const scaledLength = (clampedLength - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE);
+  return {
+    dx: (x / rawLength) * scaledLength,
+    dy: (y / rawLength) * scaledLength
+  };
+}
+
 function readGamepadIntent() {
   if (typeof navigator.getGamepads !== 'function') {
     gamepadRestartHeld = false;
@@ -56,10 +68,9 @@ function readGamepadIntent() {
   if (restartPressed && !gamepadRestartHeld) resetGame();
   gamepadRestartHeld = restartPressed;
 
-  const axisX = Math.abs(pad.axes?.[0] || 0) >= GAMEPAD_DEADZONE ? pad.axes[0] : 0;
-  const axisY = Math.abs(pad.axes?.[1] || 0) >= GAMEPAD_DEADZONE ? pad.axes[1] : 0;
-  let dx = axisX;
-  let dy = axisY;
+  const analog = applyRadialDeadzone(pad.axes?.[0] || 0, pad.axes?.[1] || 0);
+  let dx = analog.dx;
+  let dy = analog.dy;
   if (pad.buttons?.[14]?.pressed) dx -= 1;
   if (pad.buttons?.[15]?.pressed) dx += 1;
   if (pad.buttons?.[12]?.pressed) dy -= 1;
