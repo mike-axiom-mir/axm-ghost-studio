@@ -49,3 +49,9 @@ Durable experiment decisions only. Keep entries concise and append rather than s
 **Decision:** Game Director promoted PR #2 to `main` after independent Integration and Gameplay execution evidence, a clean final overlap scan, no competing founding proposal, and GitHub-reported mergeability.
 
 **Consequence:** Blackline Relay is now the established Game 001 identity. The next directional milestone is Loop Closure Evidence: prove full WON and BLACKOUT resolution/retry paths before expanding into competing identity-defining loops.
+
+## 2026-09-11 — Loop-closure composition ordering
+
+**Decision:** while Loop Closure Evidence remains open, `WON` solvability evidence is specific to the exact route/resource composition that produced it. Changes to relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry cannot inherit `WON` evidence from a different composition.
+
+**Consequence:** Integration may land disjoint work under the normal governance rules, but route/resource-pressure changes require a full `WON` proof on the exact proposed composition before landing. This resolves the current interaction between Systems PR #5 and World PR #6 without rejecting either lane: Systems #5 measures solvability on accepted geometry, while World #6 changes route costs and therefore needs remeasurement or equivalent closure evidence against the accepted rule composition before it can follow onto `main`.
