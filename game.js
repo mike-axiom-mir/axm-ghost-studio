@@ -24,10 +24,11 @@ const GAMEPAD_DEADZONE = 0.2;
 let gamepadRestartHeld = false;
 let movementArmed = true;
 let gamepadNeutralPending = false;
+let gamepadNeutralPendingIndex = null;
 let state;
 let previousTime = performance.now();
 
-function resetGame(requireNeutralMovement = false, requireGamepadNeutral = false) {
+function resetGame(requireNeutralMovement = false, requireGamepadNeutral = false, neutralGamepadIndex = null) {
   state = {
     mode: 'RUNNING',
     player: { x: core.x, y: core.y, r: 13, charge: 100 },
@@ -36,6 +37,7 @@ function resetGame(requireNeutralMovement = false, requireGamepadNeutral = false
   };
   movementArmed = !requireNeutralMovement;
   gamepadNeutralPending = requireNeutralMovement && requireGamepadNeutral;
+  gamepadNeutralPendingIndex = gamepadNeutralPending ? neutralGamepadIndex : null;
   previousTime = performance.now();
   updateHud();
 }
@@ -89,6 +91,22 @@ function getStandardGamepad() {
   return Array.from(navigator.getGamepads() || []).find(candidate => candidate?.connected && candidate.mapping === 'standard') || null;
 }
 
+function getGamepadIndex(pad) {
+  if (!pad || typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  if (Number.isInteger(pad.index)) return pad.index;
+  const slot = Array.from(navigator.getGamepads() || []).indexOf(pad);
+  return slot >= 0 ? slot : null;
+}
+
+function getStandardGamepadByIndex(index) {
+  if (index === null || typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  return Array.from(navigator.getGamepads() || []).find((candidate, slot) =>
+    candidate?.connected &&
+    candidate.mapping === 'standard' &&
+    (Number.isInteger(candidate.index) ? candidate.index : slot) === index
+  ) || null;
+}
+
 function hasGamepadMovementIntent(pad = getStandardGamepad()) {
   if (!pad) return false;
 
@@ -125,7 +143,7 @@ function readGamepadIntent() {
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
   if (restartPressed && !gamepadRestartHeld) {
     const requireNeutral = hasKeyboardMovementIntent() || movementInputActive;
-    resetGame(requireNeutral, movementInputActive);
+    resetGame(requireNeutral, movementInputActive, movementInputActive ? getGamepadIndex(pad) : null);
     gamepadRestartHeld = true;
     return null;
   }
@@ -140,7 +158,7 @@ function currentMovementIntentActive() {
 function resetForCurrentMovementIntent() {
   const pad = getStandardGamepad();
   const gamepadMovementActive = hasGamepadMovementIntent(pad);
-  resetGame(hasKeyboardMovementIntent() || gamepadMovementActive, gamepadMovementActive);
+  resetGame(hasKeyboardMovementIntent() || gamepadMovementActive, gamepadMovementActive, gamepadMovementActive ? getGamepadIndex(pad) : null);
 }
 
 function update(dt) {
@@ -165,8 +183,12 @@ function update(dt) {
   const gamepadMovementActive = hasGamepadMovementIntent(movementPad);
   const movementInputActive = hasKeyboardMovementIntent() || gamepadMovementActive;
   if (!movementArmed) {
-    if (gamepadNeutralPending && movementPad && !gamepadMovementActive) gamepadNeutralPending = false;
-    if (movementInputActive || (gamepadNeutralPending && !movementPad)) {
+    const pendingPad = gamepadNeutralPending ? getStandardGamepadByIndex(gamepadNeutralPendingIndex) : null;
+    if (gamepadNeutralPending && pendingPad && !hasGamepadMovementIntent(pendingPad)) {
+      gamepadNeutralPending = false;
+      gamepadNeutralPendingIndex = null;
+    }
+    if (movementInputActive || gamepadNeutralPending) {
       dx = 0;
       dy = 0;
     } else {

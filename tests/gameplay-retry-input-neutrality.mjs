@@ -18,11 +18,12 @@ const elements = {
   restartButton: { addEventListener: (type, handler) => { if (type === 'click') restartClick = handler; } }
 };
 const buttons = Array.from({ length: 16 }, () => ({ pressed: false }));
-const pad = { connected: true, mapping: 'standard', axes: [0, 0], buttons };
+const pad = { index: 0, connected: true, mapping: 'standard', axes: [0, 0], buttons };
+const secondPad = { index: 1, connected: false, mapping: 'standard', axes: [0, 0], buttons: Array.from({ length: 16 }, () => ({ pressed: false })) };
 const sandbox = {
   document: { getElementById: id => elements[id] },
   window: { addEventListener: (type, handler) => { handlers[type] = handler; } },
-  navigator: { getGamepads: () => [pad] },
+  navigator: { getGamepads: () => [pad, secondPad] },
   performance: { now: () => 0 },
   requestAnimationFrame: noop,
   console
@@ -115,4 +116,37 @@ pad.axes = [1, 0];
 run('update(0.1)');
 closeTo(run('state.player.x'), 503.5);
 
-console.log('gameplay retry input neutrality passed: opposing held inputs and controller absence cannot counterfeit the neutral recovery edge');
+// A different neutral controller must not satisfy the pending neutral edge for
+// the controller that was active when retry began.
+run('resetGame()');
+pad.connected = true;
+pad.axes = [1, 0];
+secondPad.connected = true;
+secondPad.axes = [0, 0];
+run("state.mode = 'BLACKOUT'");
+restartClick();
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+assert.equal(run('gamepadNeutralPendingIndex'), 0);
+pad.connected = false;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+assert.equal(run('gamepadNeutralPendingIndex'), 0);
+pad.connected = true;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+pad.axes = [0, 0];
+run('update(0.01)');
+assert.equal(run('movementArmed'), true);
+assert.equal(run('gamepadNeutralPending'), false);
+assert.equal(run('gamepadNeutralPendingIndex'), null);
+pad.axes = [1, 0];
+run('update(0.1)');
+closeTo(run('state.player.x'), 503.5);
+secondPad.connected = false;
+
+console.log('gameplay retry input neutrality passed: opposing held inputs, controller absence, and unrelated pads cannot counterfeit the neutral recovery edge');
