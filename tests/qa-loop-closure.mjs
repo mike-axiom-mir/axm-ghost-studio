@@ -224,7 +224,7 @@ assert.equal(result.afterBlackoutRetry.player.charge, 100);
 assert.equal(result.afterBlackoutRetry.beacons.map(beacon => beacon.energy).join(','), '34,0,0,0');
 assert.equal(
   JSON.stringify(result.hud),
-  JSON.stringify({ charge: '100%', relays: '0 / 4', mode: 'RUNNING' })
+  JSON.stringify({ charge: '100%', relays: '0 / 4', mode: 'CORE FULL' })
 );
 
 console.log(
