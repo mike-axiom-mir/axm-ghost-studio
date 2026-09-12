@@ -52,6 +52,19 @@ const run = expression => vm.runInContext(expression, context);
 assert.doesNotMatch(htmlSource, /<section\b[^>]*class=["']status["'][^>]*aria-live=/i, 'rapidly changing charge/relay values should not make the whole status strip a live region');
 assert.match(htmlSource, /<strong\b(?=[^>]*\bid=["']stateText["'])(?=[^>]*\brole=["']status["'])(?=[^>]*\baria-atomic=["']true["'])[^>]*>/i, 'the concise state label should own the polite status announcement surface');
 
+pathCalls.length = 0;
+run('drawGrid();');
+const horizontalGridYs = [];
+for (let i = 0; i < pathCalls.length - 1; i += 1) {
+  const move = pathCalls[i];
+  const line = pathCalls[i + 1];
+  if (move[0] === 'moveTo' && move[1] === 0 && line[0] === 'lineTo' && line[1] === 960 && move[2] === line[2]) {
+    horizontalGridYs.push(move[2]);
+  }
+}
+const expectedGridYs = Array.from({ length: Math.floor(600 / 48) + 1 }, (_, index) => index * 48);
+assert.deepEqual(horizontalGridYs, expectedGridYs, 'grid rows should remain horizontal instead of fanning diagonally toward the lower-right corner');
+
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'fresh run should identify the full core state');
 const initialWrites = { charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, state: elements.stateText.textWrites };
 run('updateHud(); updateHud();');
@@ -83,4 +96,4 @@ assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should r
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 
-console.log('experience feedback passed: scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo');
+console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo');
