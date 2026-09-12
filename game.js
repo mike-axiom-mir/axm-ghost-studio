@@ -150,10 +150,11 @@ function update(dt) {
   const hasMovementIntent = dx !== 0 || dy !== 0;
   if (!movementArmed) {
     if (hasMovementIntent) {
-      updateHud();
-      return;
+      dx = 0;
+      dy = 0;
+    } else {
+      movementArmed = true;
     }
-    movementArmed = true;
   }
 
   state.elapsed += dt;
