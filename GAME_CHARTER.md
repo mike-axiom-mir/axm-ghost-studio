@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the **Route-Urgency Tradeoff Slice** is accepted, do **not** require:
+Until the **Decision Chain Slice** is accepted, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -77,22 +77,32 @@ The accepted Experience/readability layer exposes relay energy numerically plus 
 
 This satisfies the autonomous milestone. It does **not** prove that a fresh human notices the urgent relay, interprets the percentages correctly, finds the choice fair, experiences tension, or enjoys the decision. Those remain `PLAYTESTED` unknowns.
 
-## Current milestone — Route-Urgency Tradeoff Slice
-The studio has separately proven that route cost matters and that live relay urgency matters. The next bounded problem is to prove that those two facts can **compete inside one decision** instead of collapsing into a memorized route rule or an obvious "always service the lowest percentage" rule.
+## Completed milestone — Route-Urgency Tradeoff Slice
+Accepted `main` now proves that route cost and live relay urgency can compete inside one service decision without adding a new mechanic.
 
-Start with the accepted geometry, decay rules, and readability layer. Do not add a new resource, hazard, relay class, scoring system, or primary verb merely to manufacture a tradeoff if the existing model can already produce one.
+World PR #35 is accepted as test-only evidence on the unchanged runtime. At a naturally reached 13.30 s upper-passage snapshot, runner charge is about 96.45% and relay energies are R1 53.38 / R2 49.69 / R3 0.00 / R4 0.00. Nearby R1 takes about 0.87 s to reach while urgent offline R3 takes about 2.04 s. Under the same 1.00 s service horizon, the R1 branch preserves about 44.83% runner charge and leaves 2 relays online; the R3 branch leaves about 39.22% runner charge and 3 relays online. Independent Systems reproduction also measured lower immediate network recovery burden on the urgent branch. Neither option dominates both route/resource cost and network recovery.
+
+The accepted route/readability presentation exposes passage geometry and live relay percentages without a new HUD or debug-only information. Existing `WON`, ordinary `BLACKOUT`, retry, completion precedence, controller/readability composition, and route geometry remain preserved because PR #35 changes tests only.
+
+This is deterministic machine evidence, not a human quality claim. It does **not** prove that a fresh player notices the tradeoff, understands it, finds either branch fair, feels tension, or enjoys the decision.
+
+## Current milestone — Decision Chain Slice
+The studio has now proven a single coupled route-versus-urgency choice. The next bounded problem is to prove that **one service choice changes the next meaningful service decision**, so Blackline Relay behaves like an evolving maintenance problem rather than a set of isolated evidence snapshots or a static target order.
+
+Start with the accepted geometry, decay/resource rules, and readability layer. Reuse the accepted 13.30 s tradeoff state when useful. Do not add a new resource, hazard, relay class, scoring layer, chamber, or primary verb merely to create a chain if the current model already produces one.
 
 The milestone is satisfied when one exact accepted composition demonstrates all of the following:
 
-1. **A coupled choice state:** during a normal run, at least two reachable relay-service choices exist from the same meaningful snapshot where one choice has a meaningful route-cost advantage and another has a meaningful live-urgency advantage. No option should trivially dominate the other on both dimensions.
-2. **Measured tradeoff consequence:** starting from that same or equivalently controlled snapshot, the candidate choices are executed under a comparable service/horizon policy and produce measurably different network consequences. Record enough route time, runner-charge spend, relay/offline exposure, preserved online count, recovery burden, or completion margin to show what is being traded.
-3. **Readable decision inputs:** the exact accepted browser composition exposes both the relevant route shape and live relay state at decision time without hidden debug information. Reuse the existing bulkheads/passages and relay-state presentation unless evidence shows a concrete readability failure.
-4. **Loop preservation:** `WON`, ordinary `BLACKOUT`, retry, completion precedence, and the accepted route-shaped/readability composition remain exercised on the exact accepted composition. Any proposal that changes route/resource pressure still follows the composition-specific `WON` rule.
-5. **Identity restraint:** combat, meta-progression, another chamber, scoring, a new primary verb, bespoke hazards, or new relay classes are not required to satisfy this milestone.
+1. **A shared first decision:** begin from one normal-run snapshot with at least two plausible, non-dominated relay-service choices. The accepted R1-versus-R3 tradeoff may serve as that starting point if it remains reproducible.
+2. **Comparable branch continuation:** execute both choices and continue each branch under the same bounded normal-run policy until the next meaningful service decision appears; do not stop only at the immediate fixed service horizon.
+3. **Decision-state divergence:** show that the first choice materially changes the next decision inputs — such as runner position/charge, relay energies, online/offline exposure, route cost, or recovery burden — enough that the two branches present meaningfully different next service pressures or plausible targets.
+4. **No immediate fake choice:** both branches must remain non-terminal long enough to expose that next decision. Record later `WON` / `BLACKOUT` outcomes when measured, but do not tune rules merely to force both branches to win.
+5. **Loop preservation:** exact accepted `WON`, ordinary `BLACKOUT`, retry, completion precedence, route geometry, and readable relay-state feedback remain protected. Any proposal that changes route/resource pressure still follows the composition-specific `WON` rule.
+6. **Identity restraint:** combat, meta-progression, another chamber, scoring, new relay classes, bespoke hazards, or a new primary verb are not required to satisfy this milestone.
 
-Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether the tradeoff is actually perceived, understandable, fair, tense, or enjoyable. Those claims stay explicitly unknown rather than becoming autonomous completion requirements.
+Systems/QA are the natural first evidence lane because this milestone may already be satisfiable by extending the accepted deterministic branch harness through one more decision. World should hold geometry expansion unless evidence shows that the current chamber collapses both branches back into the same spatial choice. Experience should hold presentation expansion unless the next decision cannot be read with existing relay percentages and route cues. Gameplay PR #36 remains an independent input/retry reliability lane. Integration retains ordinary composition and landing authority.
 
-Systems/QA are the natural first evidence lane because this milestone may already be satisfiable by branching one accepted live snapshot into different service decisions. World and Experience should hold expansion unless that evidence exposes a concrete spatial or readability problem. Gameplay PR #15 remains an independent input-parity lane unless its final composition materially changes route/resource behavior. Integration retains ordinary composition and landing authority.
+Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether the chain is actually noticed, understandable, fair, tense, or enjoyable. Those claims stay explicitly unknown rather than becoming autonomous completion requirements.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
