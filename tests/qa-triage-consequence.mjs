@@ -6,7 +6,11 @@ import vm from 'node:vm';
 
 const testsDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testsDir, '..');
-const gameSource = readFileSync(path.join(root, 'game.js'), 'utf8');
+const runtimeSource = readFileSync(path.join(root, 'game.js'), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical triage replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = {
@@ -38,7 +42,7 @@ const sandbox = {
   console
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -138,7 +142,7 @@ const result = vm.runInContext(`(() => {
     throw new Error('centerAtCore exceeded step budget');
   }
 
-  // Build a real mid-run snapshot using the already-accepted route-aware service sequence.
+  // Historical accepted mid-run snapshot using the constant-decay route-aware service sequence.
   resetGame();
   chargeRelay(0, 95);
   chargeCore(100);
@@ -202,7 +206,7 @@ assert.ok(result.urgent.state.beacons[0].energy >= 35);
 assert.ok(result.safe.state.beacons[0].energy < 35);
 
 console.log(
-  `qa triage consequence passed: snapshot R1/R2/R3/R4 ` +
+  `qa historical constant-decay triage consequence passed: snapshot R1/R2/R3/R4 ` +
   `${result.snapshot.beacons.map(beacon => beacon.energy.toFixed(2)).join('/')} at ${result.snapshot.elapsed.toFixed(2)}s; ` +
   `urgent R1 => ${result.urgent.online} online, safe R2 => ${result.safe.online} online; ` +
   `travel ${result.urgent.travel.toFixed(2)}/${result.safe.travel.toFixed(2)}s; ` +

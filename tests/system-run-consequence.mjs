@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical run-consequence replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -34,7 +38,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -226,7 +230,7 @@ const result = vm.runInContext(`(() => {
     };
   }
 
-  // Recreate the accepted Route-Urgency first-decision snapshot.
+  // Recreate the accepted historical Route-Urgency first-decision snapshot.
   resetGame();
   chargeRelay(0, 95);
   chargeCore(100);
@@ -269,17 +273,15 @@ assert.ok(Math.abs(urgent.cumulativeService - 7) < 0.02);
 assert.equal(JSON.stringify(Array.from(cheap.targets, index => index + 1)), JSON.stringify([1, 3, 4, 2, 3, 4, 2]));
 assert.equal(JSON.stringify(Array.from(urgent.targets, index => index + 1)), JSON.stringify([3, 4, 2, 1, 3, 4, 2]));
 
-// The first choice remains consequential for multiple later service decisions.
 const cheapThirdFollowup = cheap.trajectory[3];
 const urgentThirdFollowup = urgent.trajectory[3];
 assert.equal(cheapThirdFollowup.index + 1, 2);
 assert.equal(urgentThirdFollowup.index + 1, 1);
 assert.ok(
   Math.abs(cheapThirdFollowup.burden - urgentThirdFollowup.burden) > 20,
-  'the branches should still carry materially different recovery burden after three follow-up services'
+  'the historical branches should still carry materially different recovery burden after three follow-up services'
 );
 
-// Under this one branch-neutral policy, relay-state consequences substantially reconverge by the sixth follow-up.
 assert.equal(
   JSON.stringify(Array.from(cheap.final.beacons, beacon => Math.round(beacon.energy * 1000) / 1000)),
   JSON.stringify(Array.from(urgent.final.beacons, beacon => Math.round(beacon.energy * 1000) / 1000))
@@ -296,14 +298,13 @@ assert.ok(
   'post-service player positions should also nearly reconverge'
 );
 
-// History does not disappear: the cheap-first branch still reaches the converged phase sooner and with less travel.
 const elapsedGap = urgent.final.elapsed - cheap.final.elapsed;
 const travelGap = urgent.cumulativeTravel - cheap.cumulativeTravel;
 assert.ok(elapsedGap > 0.9 && elapsedGap < 1.2);
 assert.ok(travelGap > 0.7 && travelGap < 1.1);
 
 console.log(
-  `systems run-consequence passed: first ${first.elapsed.toFixed(2)}s; ` +
+  `systems historical constant-decay run-consequence passed: first ${first.elapsed.toFixed(2)}s; ` +
   `cheap targets ${cheap.targets.map(index => 'R' + (index + 1)).join('>')} -> ` +
   `${cheap.final.elapsed.toFixed(2)}s, charge ${cheap.final.player.charge.toFixed(3)}, ` +
   `energies ${cheap.final.beacons.map(beacon => beacon.energy.toFixed(3)).join('/')}, ` +

@@ -236,7 +236,7 @@ function update(dt) {
   }
 
   for (const beacon of state.beacons) {
-    beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);
+    beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);
     const touching = distance(p, beacon) <= p.r + beacon.r;
     if (touching && p.charge > 0 && beacon.energy < 100) {
       const transfer = Math.min(44 * dt, p.charge, 100 - beacon.energy);
