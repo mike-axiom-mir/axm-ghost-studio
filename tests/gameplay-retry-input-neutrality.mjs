@@ -149,4 +149,40 @@ run('update(0.1)');
 closeTo(run('state.player.x'), 503.5);
 secondPad.connected = false;
 
-console.log('gameplay retry input neutrality passed: opposing held inputs, controller absence, and unrelated pads cannot counterfeit the neutral recovery edge');
+// A second neutral controller must not manufacture a Start release for the
+// controller whose Start press is still physically held across disconnect.
+run('resetGame()');
+pad.connected = true;
+secondPad.connected = true;
+pad.axes = [0, 0];
+secondPad.axes = [0, 0];
+pad.buttons[9].pressed = false;
+secondPad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 9");
+pad.buttons[9].pressed = true;
+run('update(0.1)');
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
+run("state.player.x = 650; state.elapsed = 3; state.beacons[0].energy = 25");
+pad.connected = false;
+run('readGamepadIntent()');
+pad.connected = true;
+run('readGamepadIntent()');
+assert.equal(run('state.player.x'), 650);
+assert.equal(run('state.elapsed'), 3);
+assert.equal(run('state.beacons[0].energy'), 25);
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 9");
+pad.buttons[9].pressed = true;
+run('update(0.1)');
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+secondPad.connected = false;
+
+console.log('gameplay retry input neutrality passed: opposing held inputs, controller absence, unrelated pads, and multi-pad Start reconnect cannot counterfeit recovery edges');
