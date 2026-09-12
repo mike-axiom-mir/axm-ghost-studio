@@ -14,6 +14,10 @@ const beaconSeed = [
   { x: 145, y: H - 125 },
   { x: W - 145, y: H - 125 }
 ];
+const bulkheads = [
+  { x: 300, y: 170, w: 42, h: 260 },
+  { x: W - 342, y: 170, w: 42, h: 260 }
+];
 
 const keys = new Set();
 let state;
@@ -38,6 +42,26 @@ function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
+function circleIntersectsRect(circle, rect) {
+  const closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+  const closestY = clamp(circle.y, rect.y, rect.y + rect.h);
+  const dx = circle.x - closestX;
+  const dy = circle.y - closestY;
+  return dx * dx + dy * dy < circle.r * circle.r;
+}
+
+function positionBlocked(x, y, radius) {
+  return bulkheads.some(rect => circleIntersectsRect({ x, y, r: radius }, rect));
+}
+
+function movePlayer(player, moveX, moveY) {
+  const nextX = clamp(player.x + moveX, player.r, W - player.r);
+  if (!positionBlocked(nextX, player.y, player.r)) player.x = nextX;
+
+  const nextY = clamp(player.y + moveY, player.r, H - player.r);
+  if (!positionBlocked(player.x, nextY, player.r)) player.y = nextY;
+}
+
 function update(dt) {
   if (state.mode !== 'RUNNING') return;
 
@@ -54,8 +78,7 @@ function update(dt) {
   if (moving) {
     const length = Math.hypot(dx, dy);
     const speed = 235;
-    p.x = clamp(p.x + (dx / length) * speed * dt, p.r, W - p.r);
-    p.y = clamp(p.y + (dy / length) * speed * dt, p.r, H - p.r);
+    movePlayer(p, (dx / length) * speed * dt, (dy / length) * speed * dt);
   }
 
   const atCore = distance(p, core) <= p.r + core.r;
@@ -118,6 +141,25 @@ function drawGrid() {
   }
   for (let y = 0; y <= H; y += 48) {
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+}
+
+function drawBulkheads() {
+  for (const rect of bulkheads) {
+    ctx.fillStyle = '#141b23';
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    ctx.strokeStyle = '#40515f';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+
+    ctx.strokeStyle = '#263440';
+    ctx.lineWidth = 1;
+    for (let y = rect.y + 14; y < rect.y + rect.h; y += 22) {
+      ctx.beginPath();
+      ctx.moveTo(rect.x + 6, y);
+      ctx.lineTo(rect.x + rect.w - 6, y);
+      ctx.stroke();
+    }
   }
 }
 
@@ -219,6 +261,7 @@ function render() {
   ctx.fillStyle = '#090d12';
   ctx.fillRect(0, 0, W, H);
   drawGrid();
+  drawBulkheads();
   drawCore();
   state.beacons.forEach(drawBeacon);
   drawTransferFeedback();
