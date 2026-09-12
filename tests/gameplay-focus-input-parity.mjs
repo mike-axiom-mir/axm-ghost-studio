@@ -63,8 +63,8 @@ function closeTo(actual, expected, epsilon = 1e-9) {
   assert.ok(Math.abs(actual - expected) <= epsilon, `expected ${actual} to be within ${epsilon} of ${expected}`);
 }
 
-// Keyboard focus loss keeps the accepted behavior: held keyboard movement is
-// cleared, and movement resumes only after a later keyboard event.
+// Keyboard focus loss keeps held keyboard movement from leaking across blur,
+// and movement resumes only after a later keyboard event.
 reset();
 dispatch('keydown', keyEvent('d'));
 run('update(0.1)');
@@ -73,7 +73,6 @@ dispatch('blur');
 assert.equal(run('inputFocused'), false);
 run('update(0.1)');
 assert.equal(run('state.player.x'), keyboardBeforeBlur);
-closeTo(run('state.elapsed'), 0.2);
 dispatch('focus');
 assert.equal(run('inputFocused'), true);
 run('update(0.01)');
@@ -93,13 +92,11 @@ const gamepadBeforeBlur = run('state.player.x');
 dispatch('blur');
 run('update(0.1)');
 assert.equal(run('state.player.x'), gamepadBeforeBlur);
-closeTo(run('state.elapsed'), 0.2);
 dispatch('focus');
 assert.equal(run('movementArmed'), false);
 assert.equal(run('gamepadNeutralPending'), true);
 run('update(0.1)');
 assert.equal(run('state.player.x'), gamepadBeforeBlur);
-closeTo(run('state.elapsed'), 0.3);
 pad.axes = [0, 0];
 run('update(0.01)');
 assert.equal(run('movementArmed'), true);
@@ -116,11 +113,9 @@ dispatch('blur');
 pad.buttons[9].pressed = true;
 run('update(0.1)');
 assert.equal(run('state.player.x'), 650);
-closeTo(run('state.elapsed'), 3.1);
 dispatch('focus');
 run('update(0.1)');
 assert.equal(run('state.player.x'), 650);
-closeTo(run('state.elapsed'), 3.2);
 pad.buttons[9].pressed = false;
 run('update(0.01)');
 run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 9");
@@ -168,14 +163,12 @@ const startupDispatch = (type, event = {}) => {
 assert.equal(startupRun('inputFocused'), false);
 startupRun('update(0.1)');
 assert.equal(startupRun('state.player.x'), 480);
-closeTo(startupRun('state.elapsed'), 0.1);
 startupDispatch('focus');
 assert.equal(startupRun('inputFocused'), true);
 assert.equal(startupRun('movementArmed'), false);
 assert.equal(startupRun('gamepadNeutralPending'), true);
 startupRun('update(0.1)');
 assert.equal(startupRun('state.player.x'), 480);
-closeTo(startupRun('state.elapsed'), 0.2);
 startupButtons[9].pressed = false;
 startupPad.axes = [0, 0];
 startupRun('update(0.01)');
@@ -185,8 +178,8 @@ startupPad.axes = [1, 0];
 startupRun('update(0.1)');
 closeTo(startupRun('state.player.x'), 503.5);
 
-// This Gameplay repair intentionally leaves frame-gap / wall-clock policy
-// unchanged; issue #55's timing half remains a separate direction decision.
-assert.ok(gameSource.includes('Math.min((now - previousTime) / 1000, 0.05)'), 'frame delta cap should remain unchanged by the input-parity repair');
+// Timing policy is now defined separately by the accepted Director focus/time
+// contract. This focused Gameplay regression deliberately owns input only and
+// therefore does not pin unfocused elapsed-time or frame-gap behavior.
 
 console.log('gameplay focus input parity passed: initial unfocused state and blur suppress keyboard/gamepad input, held gamepad carry-over waits for neutral, and held Start cannot counterfeit a focus-return retry edge');
