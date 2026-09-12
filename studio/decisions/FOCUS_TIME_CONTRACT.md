@@ -1,7 +1,8 @@
 # Game Director Decision — Focus / Simulation Time Contract
 
-Status: proposed Director decision for Game 001
+Status: **ACCEPTED ON `main`** for Game 001; bounded clarity amendment recorded below.
 Date: 2026-09-12
+Last clarified: 2026-09-13
 Scope: Blackline Relay only
 Evidence basis: QA issue #55, Gameplay PR #59, Integration PR #60, accepted Game 001 charter/governance.
 
@@ -37,8 +38,24 @@ This contract therefore separates two cases that the current 0.05 s clamp confla
 - **Gameplay:** focus/visibility lifecycle, input neutralization, return-edge behavior, and the smallest runtime timing mechanism needed to satisfy the contract.
 - **Systems:** verify relay/recharge/drain/transfer pressure remains internally consistent under the chosen focused-time mechanism, including the proportional-decay composition if/when accepted.
 - **QA:** synthetic long-gap and repeated-slow-frame regressions plus real-browser focus/background and throttled-performance evidence where available.
-- **Experience:** only add player-facing pause/degraded feedback if runtime behavior would otherwise be ambiguous; reuse existing status surfaces before inventing a new layer.
+- **Experience:** player-facing focus/pause and recovery clarity through the existing status surface when the runtime would otherwise be ambiguous; exact wording remains Experience-owned.
 - **Integration:** compose/land ordinary implementation PRs when exact evidence and overlap rules pass.
+
+## Bounded clarity amendment — 2026-09-13
+
+Source review of Gameplay PR #65 established the ambiguity anticipated by the original Experience condition: its proposed runtime can mechanically pause while unfocused/hidden yet continue rendering an ordinary active `RUNNING` status such as `ROUTING`, `CORE FULL`, `RECHARGING`, or `TRANSFER R#`.
+
+Therefore, **if a focus/time implementation with that behavior becomes accepted reality, the same accepted composition must make inactive focus/visibility pause distinguishable through the existing status surface.** This is a presentation-coherence requirement on the accepted pacing contract, not a new gameplay system or a new milestone.
+
+The bounded status hierarchy is:
+
+1. while inactive because of focus/visibility loss, the existing status surface distinguishes the paused state from ordinary active play;
+2. after active focus returns, any accepted movement-neutral recovery feedback (for example `RECONNECT CONTROLLER` / `RELEASE TO MOVE` from the current Experience #63 proposal, if that proposal or equivalent behavior is accepted) takes priority while movement remains intentionally disarmed;
+3. once recovery is satisfied, the normal transfer/recharge/low-charge/core/routing hierarchy resumes.
+
+Experience owns exact wording and focused presentation regression. Gameplay retains lifecycle/timing/input ownership. Integration retains final composition, exact-head verification, final overlap scan, and ordinary landing. This amendment does **not** authorize a pause screen, second HUD layer, icon system, audio system, new mechanic, relay rule, geometry change, or proportional-decay change.
+
+Once the final composed runtime satisfies the existing focus/time evidence gates plus this bounded status condition, **no further Game Director or Mike approval is required for ordinary landing** under `studio/GOVERNANCE.md`.
 
 ## Relationship to current open work
 
@@ -54,16 +71,17 @@ A later implementation should, at minimum, demonstrate:
 - return with held input does not produce a fresh movement/retry edge until the accepted neutral/release contract is satisfied;
 - a synthetic long **unfocused** gap produces no catch-up pressure on return;
 - repeated **focused** frame intervals above 50 ms no longer reduce the simulation-pressure clock merely because render cadence is below 20 FPS, within the implementation's declared safety bound;
+- inactive focus/visibility pause is distinguishable through the existing status surface, and active return hands back to accepted recovery/normal status hierarchy;
 - existing `WON`, `BLACKOUT`, retry, route/urgency, and proportional-decay contracts remain intact on the exact composed runtime where applicable.
 
 ## Truth boundary
 
-**SOURCE-VERIFIED:** accepted `main` uses a 0.05 s per-frame delta cap and keyboard-only blur clearing; QA #55 documents time truncation and low-FPS pressure drift; Gameplay #59 addresses input parity but leaves timing unchanged.
+**SOURCE-VERIFIED:** accepted `main` uses a 0.05 s per-frame delta cap and keyboard-only blur clearing; QA #55 documents time truncation and low-FPS pressure drift; Gameplay #59 addresses input parity but leaves timing unchanged. Source review of proposed Gameplay #65 shows explicit pause/substeps while its status language remains ordinary active-state language when inactive; Experience #63 owns adjacent recovery-status wording as a separate proposal.
 
 **MEASURED:** QA quantified the 20 FPS threshold and the simulation slowdown below it; Systems quantified corresponding wall-clock stretching for proposed proportional relay pressure.
 
-**INFERRED / DIRECTOR DECISION:** explicit focus pause plus focused-time integrity is the smallest coherent pacing contract for the established single-player maintenance fantasy.
+**INFERRED / DIRECTOR DECISION:** explicit focus pause plus focused-time integrity is the smallest coherent pacing contract for the established single-player maintenance fantasy; when that pause is mechanically active, the existing status surface should not simultaneously communicate ordinary active routing/recharge/transfer state.
 
-**NOT TESTED:** no implementation is provided by this decision record. Real-browser focus/visibility scheduling, CPU-throttled behavior, physical controllers, subjective fairness, tension, clarity, or fun remain unproven until specialist implementation/evidence exists.
+**NOT TESTED:** this record does not implement runtime or presentation. Real-browser focus/visibility scheduling, CPU-throttled behavior, physical controllers, final composed status behavior, subjective fairness, tension, clarity, or fun remain unproven until specialist implementation/evidence exists.
 
 No Mike approval is required for ordinary follow-on implementation or landing under merged studio governance.
