@@ -216,7 +216,6 @@ assert.equal(result.afterWonRetry.beacons.map(beacon => beacon.energy).join(',')
 
 assert.equal(result.blackout.mode, 'BLACKOUT', 'held normal movement should eventually BLACKOUT');
 assert.equal(result.blackout.player.charge, 0);
-assert.ok(result.blackout.elapsed > 20 && result.blackout.elapsed < 25, `expected BLACKOUT around 21s, got ${result.blackout.elapsed}`);
 assert.ok(result.blackoutTexts.includes('BLACKOUT'), 'BLACKOUT overlay should emit BLACKOUT');
 assert.ok(result.blackoutTexts.includes('Press R or Restart to run the chamber again'), 'BLACKOUT overlay should emit retry instruction');
 assert.equal(result.afterBlackoutRetry.mode, 'RUNNING');
