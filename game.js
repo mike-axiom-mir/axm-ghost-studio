@@ -274,6 +274,11 @@ function getTransferTarget() {
 
 function getStatusLabel() {
   if (state.mode !== 'RUNNING') return state.mode;
+  if (!hasActiveGameplayFocus()) return 'PAUSED — RETURN TO GAME';
+  if (!movementArmed) {
+    if (gamepadNeutralPending && !getStandardGamepadByIndex(gamepadNeutralPendingIndex)) return 'RECONNECT CONTROLLER';
+    return 'RELEASE TO MOVE';
+  }
   const transferTarget = getTransferTarget();
   if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
   const atCore = distance(state.player, core) <= state.player.r + core.r;
@@ -459,11 +464,13 @@ window.addEventListener('blur', () => {
   keys.clear();
   inputFocused = false;
   syncSimulationClock();
+  updateHud();
 });
 window.addEventListener('focus', () => {
   inputFocused = true;
   syncSimulationClock();
   if (hasActiveGameplayFocus()) guardFocusedGamepadCarryover();
+  updateHud();
 });
 if (typeof document.addEventListener === 'function') {
   document.addEventListener('visibilitychange', () => {
@@ -471,6 +478,7 @@ if (typeof document.addEventListener === 'function') {
     keys.clear();
     syncSimulationClock();
     if (hasActiveGameplayFocus()) guardFocusedGamepadCarryover();
+    updateHud();
   });
 }
 restartButton.addEventListener('click', () => {
