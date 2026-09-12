@@ -84,4 +84,35 @@ pad.axes = [1, 0];
 run('update(0.1)');
 closeTo(run('state.player.x'), 503.5);
 
-console.log('gameplay retry input neutrality passed: opposing held inputs cannot counterfeit the neutral recovery edge');
+// Controller absence is not an observed neutral edge. If gamepad movement was
+// active when retry began, disconnect/reconnect-held must stay disarmed until
+// the reconnected controller is actually observed neutral.
+pad.axes = [1, 0];
+pad.buttons[14].pressed = false;
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+run("state.mode = 'BLACKOUT'");
+restartClick();
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+pad.connected = false;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+closeTo(run('state.elapsed'), 0.1);
+pad.connected = true;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+assert.equal(run('gamepadNeutralPending'), true);
+closeTo(run('state.elapsed'), 0.2);
+pad.axes = [0, 0];
+run('update(0.01)');
+assert.equal(run('movementArmed'), true);
+assert.equal(run('gamepadNeutralPending'), false);
+pad.axes = [1, 0];
+run('update(0.1)');
+closeTo(run('state.player.x'), 503.5);
+
+console.log('gameplay retry input neutrality passed: opposing held inputs and controller absence cannot counterfeit the neutral recovery edge');
