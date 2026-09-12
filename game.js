@@ -2,6 +2,7 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const chargeText = document.getElementById('chargeText');
 const relayText = document.getElementById('relayText');
+const relayDetail = document.getElementById('relayDetail');
 const stateText = document.getElementById('stateText');
 const restartButton = document.getElementById('restartButton');
 
@@ -130,6 +131,8 @@ function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
   setTextIfChanged(chargeText, `${Math.round(state.player.charge)}%`);
   setTextIfChanged(relayText, `${online} / ${state.beacons.length}`);
+  const relaySummary = state.beacons.map((beacon, index) => `R${index + 1} ${Math.round(beacon.energy)}%`).join(', ');
+  if (relayDetail) setTextIfChanged(relayDetail, `Relay status: ${relaySummary}`);
   setTextIfChanged(stateText, getStatusLabel());
 }
 
