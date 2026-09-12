@@ -66,7 +66,7 @@ function update(dt) {
   }
 
   for (const beacon of state.beacons) {
-    beacon.energy = Math.max(0, beacon.energy - 5.2 * dt);
+    beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);
     const touching = distance(p, beacon) <= p.r + beacon.r;
     if (touching && p.charge > 0 && beacon.energy < 100) {
       const transfer = Math.min(44 * dt, p.charge, 100 - beacon.energy);
@@ -117,7 +117,7 @@ function drawGrid() {
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
   }
   for (let y = 0; y <= H; y += 48) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, H); ctx.stroke();
   }
 }
 
