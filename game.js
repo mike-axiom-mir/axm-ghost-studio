@@ -108,7 +108,6 @@ function readGamepadMovementIntent(pad = getStandardGamepad()) {
 function readGamepadIntent() {
   const pad = getStandardGamepad();
   if (!pad) {
-    gamepadRestartHeld = false;
     return { dx: 0, dy: 0 };
   }
 
@@ -117,6 +116,8 @@ function readGamepadIntent() {
   if (restartPressed && !gamepadRestartHeld) {
     const requireNeutral = hasKeyboardMovementIntent() || movement.dx !== 0 || movement.dy !== 0;
     resetGame(requireNeutral);
+    gamepadRestartHeld = true;
+    return null;
   }
   gamepadRestartHeld = restartPressed;
   return movement;
@@ -130,7 +131,7 @@ function currentMovementIntentActive() {
 
 function update(dt) {
   const gamepad = readGamepadIntent();
-  if (state.mode !== 'RUNNING') return;
+  if (!gamepad || state.mode !== 'RUNNING') return;
 
   const p = state.player;
   let dx = gamepad.dx;
