@@ -49,7 +49,47 @@ const result = vm.runInContext(`(() => {
     [-1, 1, ['a', 's']], [0, 1, ['s']], [1, 1, ['d', 's']]
   ];
 
+  // The accepted route-shaping slice makes direct Euclidean steering invalid at the
+  // central bulkheads. Keep the existing service sequence, but route through one of
+  // the bounded upper/lower passages when crossing between the core bay and a side.
+  function routeTarget(target) {
+    const p = state.player;
+    const isCore = target === core;
+    const targetLeft = target.x < 287;
+    const targetRight = target.x > 673;
+    const playerLeft = p.x < 287;
+    const playerRight = p.x > 673;
+    const passageY = y => y < core.y ? 150 : 450;
+
+    if (targetLeft && !playerLeft) {
+      const y = passageY(target.y);
+      if (p.x > 360 && Math.abs(p.y - y) > 5) return { x: 360, y };
+      if (p.x > 280) return { x: 280, y };
+    }
+
+    if (targetRight && !playerRight) {
+      const y = passageY(target.y);
+      if (p.x < 600 && Math.abs(p.y - y) > 5) return { x: 600, y };
+      if (p.x < 680) return { x: 680, y };
+    }
+
+    if (isCore && playerLeft) {
+      const y = passageY(p.y);
+      if (Math.abs(p.y - y) > 5) return { x: 280, y };
+      if (p.x < 360) return { x: 360, y };
+    }
+
+    if (isCore && playerRight) {
+      const y = passageY(p.y);
+      if (Math.abs(p.y - y) > 5) return { x: 680, y };
+      if (p.x > 600) return { x: 600, y };
+    }
+
+    return target;
+  }
+
   function chooseDirection(target) {
+    target = routeTarget(target);
     let best = null;
     for (const [dx, dy, inputKeys] of directions) {
       const length = Math.hypot(dx, dy);
@@ -106,7 +146,7 @@ const result = vm.runInContext(`(() => {
   return JSON.parse(JSON.stringify(state));
 })()`, sandbox);
 
-assert.equal(result.mode, 'WON', 'bounded keyboard-direction route should reach WON');
+assert.equal(result.mode, 'WON', 'bounded route-aware keyboard-direction route should reach WON');
 assert.ok(result.player.charge > 5, `expected solvability margin above 5% runner charge, got ${result.player.charge}`);
 assert.ok(result.beacons.every(beacon => beacon.energy >= 35), 'all relays must be online at resolution');
 assert.ok(result.elapsed < 40, `expected bounded route below 40 seconds, got ${result.elapsed}`);
