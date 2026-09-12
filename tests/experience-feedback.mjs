@@ -87,6 +87,25 @@ assert.ok(
   'active transfer should surround the target relay with a visible outer halo'
 );
 
+// Bridge the accepted QA triage-consequence snapshot to the actual player-facing relay cues.
+// This proves the proposal can expose that accepted decision state without hidden debug text;
+// it does not prove that a human will interpret the urgency correctly.
+textCalls.length = 0;
+run(`
+  state.mode = 'RUNNING';
+  state.player.x = core.x;
+  state.player.y = core.y;
+  state.player.charge = 100;
+  [28.36, 53.71, 0, 56.15].forEach((energy, index) => { state.beacons[index].energy = energy; });
+  updateHud();
+  state.beacons.forEach(drawBeacon);
+`);
+assert.equal(elements.relayText.textContent, '2 / 4', 'accepted triage snapshot should report two relays online');
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'accepted triage snapshot should preserve the centered full-core state');
+for (const expected of ['R1', '28%', 'R2', '54%', 'R3', '0%', 'R4', '56%']) {
+  assert.ok(textCalls.some(([text]) => text === expected), `accepted triage snapshot should expose ${expected}`);
+}
+
 run('state.player.x = 480; state.player.y = 200; state.player.charge = 20; updateHud();');
 assert.equal(elements.stateText.textContent, 'LOW CHARGE', 'low carried charge should be explicit away from interactions');
 run('state.player.x = core.x; state.player.y = core.y; state.player.charge = 55; updateHud();');
@@ -96,4 +115,4 @@ assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should r
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 
-console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo');
+console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo, accepted triage snapshot cues');
