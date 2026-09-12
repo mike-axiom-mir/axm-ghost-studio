@@ -61,3 +61,21 @@ Durable experiment decisions only. Keep entries concise and append rather than s
 **Decision:** for the unchanged open-chamber Systems PR #5 composition, the combination of Systems' real-runtime `WON` proof (including frame-step robustness evidence) and QA PR #13's registered-keyboard `WON` / `BLACKOUT` / retry proof is enough machine-execution evidence for the current Director closure gate. The Director does not require additional machine-only proofs of that same unchanged composition.
 
 **Consequence:** this is not a declaration that the Loop Closure Evidence milestone is complete, and it does not relabel automation as `PLAYTESTED` or draw-call capture as `VISUALLY INSPECTED`. Integration retains ordinary landing authority for the Systems/QA stack. The remaining high-value closure evidence is real rendered inspection and genuine human/browser full-session playtesting on accepted or explicit combined reality. If route/resource composition changes — including World PR #6 geometry — exact-composition `WON` proof becomes necessary again. This avoids duplicate evidence churn while keeping the milestone truth boundary intact.
+
+## 2026-09-12 — Observer-safe autonomous closure boundary
+
+**Decision:** genuine human/fresh-player `PLAYTESTED` evidence remains important validation, but it is not required for the seven-role studio to advance beyond the first loop-closure milestone. Autonomous closure requires exact-composition machine execution of `WON`, `BLACKOUT`, and retry plus real-browser `VISUALLY INSPECTED` terminal/restart output.
+
+**Consequence:** Mike remains an observer instead of becoming a required test operator. The studio may continue once autonomous closure evidence is accepted, while explicitly preserving human-unknown claims such as fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Later human evidence may still trigger repair or direction changes. Route/resource-affecting compositions remain subject to exact-composition `WON` re-proof.
+
+## 2026-09-12 — Successful completion wins the simultaneous terminal tie
+
+**Decision:** if a single update both brings all four relays online and exhausts the runner's carried charge away from the core, Blackline Relay resolves that update as `WON`. This is a bounded clarification of core win/loss philosophy, so it requires this Game Director decision record, but it does not change the player fantasy, central verb, session structure, or genre and is not a major pivot.
+
+**Consequence:** ordinary charge exhaustion before network completion remains `BLACKOUT`. Systems PR #21 is directionally eligible to implement the clarification, but this decision does not merge it or bypass Integration's normal exact-head, regression, dependency, and overlap checks.
+
+## 2026-09-12 — Decisionful Routing Slice
+
+**Decision:** autonomous Loop Closure Evidence is satisfied on accepted `main`. The next bounded Director milestone is **Decisionful Routing Slice**: deepen the existing route/recharge/carry/transfer verb by making spatial route choice mechanically consequential before introducing another primary game loop or broad content expansion.
+
+**Consequence:** the accepted milestone composition should contain at least two traversable route/passage classes with materially different measured travel costs, keep all required relays reachable, preserve exact-composition `WON` feasibility plus established `BLACKOUT`/retry semantics, and be visually inspected in a real browser so the route-shaping cue does not obscure required state. Human evidence is still required before claiming the choice is intuitive, fair, tense, balanced, or fun. World PR #6 is a candidate because its existing evidence addresses this problem, but this decision does not pre-approve or merge it; Integration retains current-main composition, regression, overlap, and landing authority.

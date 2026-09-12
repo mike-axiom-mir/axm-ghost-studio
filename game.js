@@ -77,7 +77,7 @@ function update(dt) {
 
   const online = state.beacons.filter(b => b.energy >= 35).length;
   if (online === state.beacons.length) state.mode = 'WON';
-  if (p.charge <= 0.001 && !atCore) state.mode = 'BLACKOUT';
+  else if (p.charge <= 0.001 && !atCore) state.mode = 'BLACKOUT';
   updateHud();
 }
 
