@@ -369,7 +369,7 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
-  if (key === 'r') resetGame(currentMovementIntentActive());
+  if (key === 'r' && !event.repeat) resetGame(currentMovementIntentActive());
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));

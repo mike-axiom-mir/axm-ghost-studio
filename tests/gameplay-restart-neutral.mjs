@@ -30,7 +30,7 @@ const sandbox = {
 vm.createContext(sandbox);
 vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
 const run = source => vm.runInContext(source, sandbox);
-const keyEvent = key => ({ key, preventDefault: noop });
+const keyEvent = (key, repeat = false) => ({ key, repeat, preventDefault: noop });
 const closeTo = (actual, expected, epsilon = 1e-9) => assert.ok(Math.abs(actual - expected) <= epsilon, `expected ${actual} to be within ${epsilon} of ${expected}`);
 
 handlers.keydown(keyEvent('d'));
@@ -49,6 +49,24 @@ handlers.keydown(keyEvent('d'));
 run('update(0.5)');
 closeTo(run('state.player.x'), 597.5);
 handlers.keyup(keyEvent('d'));
+
+// Browser key-repeat for one held R press must stay one restart edge.
+// A repeated keydown must not erase progress made after the initial retry.
+run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 9");
+handlers.keydown(keyEvent('r'));
+run("state.player.x = 620; state.elapsed = 2; state.beacons[0].energy = 25");
+handlers.keydown(keyEvent('r', true));
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 620);
+assert.equal(run('state.elapsed'), 2);
+assert.equal(run('state.beacons[0].energy'), 25);
+handlers.keyup(keyEvent('r'));
+run("state.mode = 'BLACKOUT'");
+handlers.keydown(keyEvent('r'));
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
+handlers.keyup(keyEvent('r'));
 
 // A restart with no movement held must accept a fresh movement press immediately;
 // the neutral gate exists only to stop already-held input from carrying into the new run.
@@ -121,4 +139,4 @@ pad.axes = [0.6, 0];
 run('update(0.5)');
 closeTo(run('state.player.x'), 538.75);
 
-console.log('gameplay restart neutral passed: held movement waits for neutral, Start retry is atomic, and reconnect-held does not create a duplicate Start edge');
+console.log('gameplay restart neutral passed: held movement waits for neutral, keyboard repeat stays one retry edge, Start retry is atomic, and reconnect-held does not create a duplicate Start edge');
