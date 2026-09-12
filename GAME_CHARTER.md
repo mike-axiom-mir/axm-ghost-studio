@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the **Decisionful Routing Slice** is accepted, do **not** require:
+Until the **Stateful Relay Triage Slice** is accepted, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -47,7 +47,8 @@ Until the **Decisionful Routing Slice** is accepted, do **not** require:
 - large asset pipeline;
 - combat system;
 - meta-progression;
-- multiple levels solely for content volume.
+- multiple levels solely for content volume;
+- new relay classes or hazards solely to manufacture complexity before the existing decay state is proven insufficient.
 
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
@@ -62,20 +63,27 @@ Evidence of `WON` feasibility remains composition-specific for proposals that ma
 
 Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — use normal Integration merge readiness.
 
-## Current milestone — Decisionful Routing Slice
-The core loop is now proven to resolve autonomously, but the accepted open chamber gives space only a weak role in the central routing fantasy. The next bounded milestone is to make **where the runner goes** matter without adding a second primary game loop.
+## Completed milestone — Decisionful Routing Slice
+The accepted route-shaped chamber now contains two visible upper/lower passage classes and materially different measured route costs while keeping every relay reachable. On the exact accepted composition, route-aware automated evidence reaches `WON` at about 35.53 s with 6.34% runner charge, ordinary `BLACKOUT` remains exercised at about 21.09 s, retry and completion precedence remain intact, and real Chromium inspection shows both bulkheads and both passages without obscuring the core or relays.
+
+This proves that **where the runner goes** has spatial consequence. It does not prove that a fresh player understands the passages, prefers one route for a good reason, finds the layout fair, or experiences meaningful tension/fun.
+
+## Current milestone — Stateful Relay Triage Slice
+The chamber now makes route length matter. The next bounded problem is to make **which relay the runner rescues next** depend on the changing network state instead of only on a memorized static route order.
+
+Start by testing the existing rules. The studio should not invent a new relay type, hazard, or resource merely to satisfy this milestone if independent relay decay plus staggered service already creates a usable triage decision.
 
 The milestone is satisfied when one exact accepted composition demonstrates all of the following:
 
-1. **A real route decision:** at least two traversable relay-service routes or passage classes exist, and choosing among them changes travel cost or commitment rather than being decorative geometry.
-2. **Measured spatial consequence:** the exact candidate geometry has evidence that at least two useful route classes differ materially in path/time cost while every required relay remains reachable.
-3. **Loop preservation:** if the accepted candidate changes route/resource pressure, its exact composed runtime re-proves `WON`; `BLACKOUT` and retry behavior remain exercised without contradicting the established terminal rules.
-4. **Rendered readability:** the exact accepted composition is `VISUALLY INSPECTED` in a real browser so the route-shaping cue is visible and does not obscure the core or relay state needed for decisions.
-5. **Identity restraint:** no combat, meta-progression, second level, new primary verb, or content-volume expansion is required to satisfy this milestone.
+1. **A live triage state:** during a normal run, at least two reachable relay-service choices exist from the same meaningful snapshot and their current energy/decay state makes their urgency materially different.
+2. **Measured choice consequence:** from that same or equivalently controlled snapshot, at least two plausible relay choices/sequences produce measurably different network consequences — for example different offline exposure, completion margin, preserved online count, or recovery burden. The evidence must show more than a fixed geometry distance difference.
+3. **Readable urgency:** the exact accepted browser composition exposes enough relay state at decision time for urgency to be visually inspected without relying on hidden debug data. Experience PR #8 is one candidate because it proposes explicit relay energy/status feedback, but it is not pre-approved and existing cues may satisfy the need if evidence proves they are sufficient.
+4. **Loop preservation:** `WON`, ordinary `BLACKOUT`, retry, completion precedence, and the accepted route-shaped chamber remain exercised on the exact accepted composition. Any proposal that changes route/resource pressure still follows the composition-specific `WON` rule.
+5. **Identity restraint:** no combat, meta-progression, second chamber, scoring layer, new primary verb, or bespoke hazard is required to satisfy this milestone.
 
-Human/fresh-player evidence would be stronger validation of whether the route choice is intuitive, tense, fair, or enjoyable, but those subjective claims remain explicitly unknown rather than blocking autonomous studio progression.
+Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether the triage decision is actually understood, fair, tense, or enjoyable. Those subjective claims stay explicitly unknown rather than becoming autonomous completion requirements.
 
-World PR #6 is one candidate for this milestone because it already proposes bounded bulkhead routing and has published exact-source feasibility evidence. The milestone does not pre-approve that PR: Integration still owns current-main composition, exact-head regression/overlap checks, and ordinary landing mechanics, and another evidence-backed specialist solution could satisfy the same player problem.
+Experience #8 may contribute the readability layer and Gameplay #15 may independently improve input parity, but neither is automatically required for milestone completion. Integration retains ordinary composition and landing authority; Systems/QA should prefer evidence on the existing decay model before proposing new pressure rules.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
