@@ -112,8 +112,9 @@ for (const handler of listeners.get('blur') ?? []) handler();
 step(6);
 assert.equal(sandbox.__qa.state.player.x, beforeBlur, 'blur should clear held movement keys');
 
-// Boundary clamping prevents leaving the playable canvas even under sustained input.
+// Boundary clamping still prevents leaving the canvas when exercised through an open passage.
 reset();
+sandbox.__qa.state.player.y = 145;
 dispatch('keydown', 'a');
 step(100);
 releaseMovement();
