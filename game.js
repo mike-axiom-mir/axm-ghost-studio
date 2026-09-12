@@ -108,7 +108,6 @@ function readGamepadMovementIntent(pad = getStandardGamepad()) {
 function readGamepadIntent() {
   const pad = getStandardGamepad();
   if (!pad) {
-    gamepadRestartHeld = false;
     return { dx: 0, dy: 0 };
   }
 
