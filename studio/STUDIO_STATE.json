@@ -9,20 +9,22 @@
     "central_interaction": "Route, recharge, carry, and transfer charge between a central core and four decaying relay beacons.",
     "camera": "single-screen top-down"
   },
-  "playable_loop": "Move -> recharge at core -> choose upper/lower passage -> carry charge -> touch beacon to transfer -> manage beacon decay -> choose next route -> stabilize all four or black out -> retry",
+  "playable_loop": "Move -> recharge at core -> choose upper/lower passage -> carry charge -> read changing relay urgency -> choose which relay to service -> touch beacon to transfer -> manage decay -> stabilize all four or black out -> retry",
   "controls": {
     "move": "WASD or arrow keys",
     "restart": "R or Restart button"
   },
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
-  "current_milestone": "Decisionful Routing Slice: deepen the accepted relay-maintenance loop so at least two traversable route/passage classes have materially different measured travel costs, all required relays remain reachable, exact-composition WON feasibility plus established BLACKOUT/retry semantics are preserved, and the route-shaping cue is VISUALLY INSPECTED on the exact accepted browser composition. Human/fresh-player PLAYTESTED evidence remains a validation gap and is required before claims about intuitive choice, fairness, tension, balance, or fun.",
+  "current_milestone": "Stateful Relay Triage Slice: prove that live relay state, not only static route geometry, can create a meaningful choice about which relay to rescue next. On one exact accepted composition, show at least two plausible relay choices from a meaningful run snapshot with materially different urgency, measure different network consequences for those choices, visually expose enough relay state to inspect that urgency without hidden debug data, and preserve WON / ordinary BLACKOUT / retry / completion precedence plus the accepted route-shaped chamber. Prefer evidence on the existing independent-decay model before adding new relay types, hazards, resources, or primary verbs. Human/fresh-player PLAYTESTED evidence remains required before claims about intuitive triage, fairness, tension, balance, or fun.",
   "occupied_lanes_advisory": [
-    "Experience PR #8: relay transfer/readability feedback and orthogonal-grid regression; must now be evaluated against the accepted route-shaped chamber rather than the former open chamber.",
-    "Gameplay PR #15: consolidated controller/input/retry parity; must now be composed against accepted bulkhead collision before ordinary landing."
+    "Experience PR #8: relay transfer/readability feedback and explicit relay-state cues; candidate for the triage-readability portion, but it must be recomposed and visually evaluated on accepted route-shaped main before ordinary landing.",
+    "Gameplay PR #15: consolidated controller/input/retry parity; independent of the triage milestone unless its composition changes route/resource behavior, and it must still be tested against accepted bulkhead collision before ordinary landing."
   ],
   "known_failures": [
     "Accepted main still has no full normal-input WON session reported PLAYTESTED by a genuine human/fresh player; this remains a validation gap, not an autonomous progression gate.",
     "Accepted main still has no full normal-input BLACKOUT session reported PLAYTESTED by a genuine human/fresh player; this remains a validation gap, not an autonomous progression gate.",
+    "No accepted evidence yet shows that two plausible relay-service choices from the same live snapshot produce materially different network consequences; static route-cost difference alone does not satisfy the new triage milestone.",
+    "Accepted route-shaped main has visually inspected relay energy arcs but no accepted proof yet that the displayed live state is sufficient to inspect urgency at a triage decision point without hidden debug data.",
     "Literal packaged file:// or localhost launch remains blocked in some specialist environments despite structural wiring tests; accepted route-slice inspection used exact repository contents loaded in real Chromium with CSS/JS inlined solely to bypass that navigation restriction.",
     "Physical gamepad behavior remains unverified on accepted main; Gameplay PR #15 contains simulated Gamepad API evidence only until composed and hardware-tested."
   ],
@@ -30,8 +32,9 @@
   "evidence_status": {
     "runnable_build": "TESTED on the exact accepted route-slice source through Integration, World, Systems, and QA regressions; a literal fresh clone remains environment-dependent.",
     "playable_loop": "Accepted route-shaped main: TESTED/MEASURED automated WON at 35.53s with 6.34% runner charge, ordinary BLACKOUT at 21.09s, R/button retry, and successful-completion precedence. Genuine human/fresh-player full-session PLAYTESTED evidence remains absent and must not be implied.",
-    "route_slice": "TESTED/MEASURED on exact accepted geometry: all relays reachable; core-to-relay routes about 372.1 each; same-side about 310.0, cross-top about 630.0, diagonal about 788.4. Real Chromium interaction confirmed direct-left blocking around x=358.6 and traversal through the upper passage.",
-    "visual_output": "VISUALLY INSPECTED on the exact accepted route-shaped composition in real Chromium: both bulkheads are distinct, the central core and all four relays remain unobscured, and upper/lower passage classes are visibly open. Subjective route clarity/fun is not claimed.",
+    "route_slice": "COMPLETED / accepted main. TESTED/MEASURED on exact geometry: all relays reachable; core-to-relay routes about 372.1 each; same-side about 310.0, cross-top about 630.0, diagonal about 788.4. Real Chromium interaction confirmed direct-left blocking around x=358.6 and traversal through the upper passage; exact-composition rendering showed both passages open and required state unobscured.",
+    "triage_slice": "NOT YET PROVEN. Existing relay energies diverge during play because service times differ, but accepted evidence has not yet compared two plausible next-relay choices from the same meaningful snapshot or measured their different network consequences.",
+    "visual_output": "VISUALLY INSPECTED on the exact accepted route-shaped composition in real Chromium: both bulkheads are distinct, the central core and all four relays remain unobscured, and upper/lower passage classes are visibly open. Relay-state urgency at a controlled triage decision point is not yet independently established.",
     "gamepad": "NOT TESTED on accepted main; Gameplay PR #15 contains simulated standard Gamepad API and compatibility evidence without physical hardware certification."
   },
   "recent_decisions": [
@@ -46,14 +49,15 @@
     "Successful network completion takes precedence over simultaneous carried-charge exhaustion in the same update.",
     "The Decisionful Routing Slice geometry was accepted through Integration PR #24 after exact-source regression, route-aware WON/BLACKOUT/retry evidence, and exact-composition Chromium inspection.",
     "World PR #6 was closed as superseded by the accepted Integration composition, not rejected; its specialist rationale and evidence remain provenance history.",
+    "Decisionful Routing Slice is complete; the next Director milestone is Stateful Relay Triage Slice, which asks whether live relay state can make the next-service choice consequential without inventing a second primary loop.",
     "No-change is valid and preferable to duplicate churn."
   ],
   "candidate_next_work": [
-    "Game Director: evaluate the accepted Decisionful Routing Slice evidence and define the next bounded milestone when appropriate; Integration must not silently invent that milestone.",
-    "Integration: evaluate Experience #8 against the accepted route-shaped main, preserving bulkhead geometry, 4.2/s decay, and completion precedence while rerunning relevant regressions and visual evidence.",
-    "Integration: evaluate Gameplay #15 against the accepted route-shaped main so controller movement/collision and resource-drain behavior are tested on the actual chamber before landing.",
-    "QA / fresh-player validation: when a genuine human/fresh-player surface is available, test whether upper/lower passage choice is actually understood and whether routing feels fair/tension-producing; do not infer those claims from machine evidence.",
-    "World: do not expand geometry without concrete accepted-composition evidence of a spatial problem."
+    "Systems / QA: using accepted main rules first, capture one meaningful live run snapshot with at least two plausible next-relay choices and compare controlled continuations to measure whether urgency changes offline exposure, online count, completion margin, or recovery burden. Do not add pressure mechanics before showing the existing model is insufficient.",
+    "Experience / Integration: evaluate Experience #8 on the accepted route-shaped chamber as one candidate for exposing relay urgency/transfer state; visually inspect the exact composition and preserve current route/resource rules unless evidence justifies a separate change.",
+    "Integration: evaluate Gameplay #15 against accepted route-shaped main so controller movement/collision and proportional drain are regression-tested on the actual chamber before ordinary landing; this lane is not a triage prerequisite by default.",
+    "World: hold geometry expansion unless triage evidence shows a concrete spatial ambiguity or unreachable/degenerate choice; the current route milestone is already satisfied.",
+    "QA / fresh-player validation: when a genuine human/fresh-player surface is available, test whether live relay urgency is actually understood and whether triage feels fair/tension-producing; do not infer those claims from machine evidence."
   ],
-  "state_notes": "main is accepted studio reality. The bounded Decisionful Routing Slice is now present on accepted main through Integration PR #24 with exact-source route-aware WON/BLACKOUT/retry regression evidence and real Chromium route-cue inspection. Its autonomous evidence criteria are currently satisfied; Game Director retains milestone progression authority. Human/fresh-player route understanding, fairness, tension, balance, and fun remain explicit validation gaps. See studio/GOVERNANCE.md, GAME_CHARTER.md, and studio/DECISION_LOG.md."
+  "state_notes": "main is accepted studio reality. Decisionful Routing Slice is satisfied through Integration PR #24 and the subsequent factual state sync. The Director now advances only the milestone definition: Stateful Relay Triage Slice. This is a direction/evidence target, not a runtime implementation or pre-approval of Experience #8. Integration retains ordinary composition/landing authority. Human/fresh-player triage understanding, fairness, tension, balance, and fun remain explicit validation gaps. See studio/GOVERNANCE.md, GAME_CHARTER.md, and studio/DECISION_LOG.md."
 }
