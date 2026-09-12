@@ -73,3 +73,9 @@ Durable experiment decisions only. Keep entries concise and append rather than s
 **Decision:** if a single update both brings all four relays online and exhausts the runner's carried charge away from the core, Blackline Relay resolves that update as `WON`. This is a bounded clarification of core win/loss philosophy, so it requires this Game Director decision record, but it does not change the player fantasy, central verb, session structure, or genre and is not a major pivot.
 
 **Consequence:** ordinary charge exhaustion before network completion remains `BLACKOUT`. Systems PR #21 is directionally eligible to implement the clarification, but this decision does not merge it or bypass Integration's normal exact-head, regression, dependency, and overlap checks.
+
+## 2026-09-12 — Decisionful Routing Slice
+
+**Decision:** autonomous Loop Closure Evidence is satisfied on accepted `main`. The next bounded Director milestone is **Decisionful Routing Slice**: deepen the existing route/recharge/carry/transfer verb by making spatial route choice mechanically consequential before introducing another primary game loop or broad content expansion.
+
+**Consequence:** the accepted milestone composition should contain at least two traversable route/passage classes with materially different measured travel costs, keep all required relays reachable, preserve exact-composition `WON` feasibility plus established `BLACKOUT`/retry semantics, and be visually inspected in a real browser so the route-shaping cue does not obscure required state. Human evidence is still required before claiming the choice is intuitive, fair, tense, balanced, or fun. World PR #6 is a candidate because its existing evidence addresses this problem, but this decision does not pre-approve or merge it; Integration retains current-main composition, regression, overlap, and landing authority.
