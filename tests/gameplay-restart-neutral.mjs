@@ -81,6 +81,26 @@ assert.equal(run('state.mode'), 'RUNNING');
 assert.equal(run('state.player.x'), 480);
 assert.equal(run('state.elapsed'), 0);
 assert.equal(run('state.beacons[0].energy'), 34);
+
+// One uninterrupted Start hold must remain one edge across a temporary
+// controller absence. Reconnect-held must not silently retry a second time.
+run('state.player.x = 650; state.elapsed = 3');
+pad.connected = false;
+run('readGamepadIntent()');
+pad.connected = true;
+run('readGamepadIntent()');
+assert.equal(run('state.player.x'), 650);
+assert.equal(run('state.elapsed'), 3);
+
+// After an observed neutral state, a genuinely fresh Start press may retry again.
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 9");
+pad.buttons[9].pressed = true;
+run('update(0.5)');
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
 pad.buttons[9].pressed = false;
 run('readGamepadIntent()');
 
@@ -101,4 +121,4 @@ pad.axes = [0.6, 0];
 run('update(0.5)');
 closeTo(run('state.player.x'), 538.75);
 
-console.log('gameplay restart neutral passed: held movement waits for neutral, while fresh post-restart movement is accepted immediately and Start-only retry is atomic');
+console.log('gameplay restart neutral passed: held movement waits for neutral, Start retry is atomic, and reconnect-held does not create a duplicate Start edge');
