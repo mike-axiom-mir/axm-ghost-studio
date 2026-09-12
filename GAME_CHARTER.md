@@ -18,8 +18,8 @@ The intended early loop is:
 ## Camera and initial input
 - Single-screen top-down view.
 - Keyboard first: WASD or arrow keys to move.
-- `R` restarts immediately.
-- Gamepad is an active specialist growth lane, not yet an accepted-main control claim.
+- `R` restarts immediately; the on-screen retry button is also accepted.
+- Standard-mapped gamepad left stick / D-pad movement and Start retry are accepted on `main` by automated regression evidence. Physical hardware and cross-browser Gamepad API behavior remain unverified.
 
 ## Session goal
 Bring all four relay beacons online at the same time.
@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the **Decision Chain Slice** is accepted, do **not** require:
+Until the **Run Consequence Slice** is resolved, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -86,23 +86,33 @@ The accepted route/readability presentation exposes passage geometry and live re
 
 This is deterministic machine evidence, not a human quality claim. It does **not** prove that a fresh player notices the tradeoff, understands it, finds either branch fair, feels tension, or enjoys the decision.
 
-## Current milestone — Decision Chain Slice
-The studio has now proven a single coupled route-versus-urgency choice. The next bounded problem is to prove that **one service choice changes the next meaningful service decision**, so Blackline Relay behaves like an evolving maintenance problem rather than a set of isolated evidence snapshots or a static target order.
+## Completed milestone — Decision Chain Slice
+Accepted `main` now proves that one service choice can materially reshape the **next** meaningful service decision without adding a new mechanic.
 
-Start with the accepted geometry, decay/resource rules, and readability layer. Reuse the accepted 13.30 s tradeoff state when useful. Do not add a new resource, hazard, relay class, scoring layer, chamber, or primary verb merely to create a chain if the current model already produces one.
+Systems PR #41 is accepted as test-only evidence on the unchanged runtime. From the accepted 13.30 s R1-versus-R3 first decision, both branches use the same continuation policy: complete the same 1.00 s service horizon, return to the core, and fully recharge. Cheap-first R1 reaches its next decision at about 17.63 s with relay energies 79.63 / 31.50 / 0.00 / 0.00, one relay online, recovery burden 73.50, and a new R2-versus-R3 route/urgency pair at about 1.62 s / 1.75 s travel. Urgent-first R3 reaches its next decision at about 18.90 s with relay energies 29.86 / 26.17 / 29.49 / 0.00, zero relays currently online, recovery burden 54.48, and a different R3-versus-R4 pair at about 1.36 s / 1.61 s travel.
+
+Experience independently reproduced those second-decision measurements and visually inspected both states through the accepted Canvas presentation: relay IDs/percentages, core, player, bulkheads, and passages were present without obvious static occlusion. Fresh real-Chromium capture was blocked in that environment, and no fresh-player `PLAYTESTED` evidence exists.
+
+This establishes an autonomous **decision chain**: the first rescue choice changes what problem is presented next. It does not prove that humans notice the chain, read the small route differences, choose well, find the decisions fair, experience tension, or enjoy the loop.
+
+## Current milestone — Run Consequence Slice
+Blackline Relay now has route choice, live urgency, a route-versus-urgency tradeoff, and evidence that one rescue decision reshapes the next. The next bounded question is whether an early choice matters to the **later shape or margin of the run**, rather than only to the immediately following decision state.
+
+Test the accepted geometry, decay/resource rules, controls, and readability layer before adding another system. The goal is to characterize whether the existing loop already carries consequences forward or whether the branches quickly reconverge.
 
 The milestone is satisfied when one exact accepted composition demonstrates all of the following:
 
-1. **A shared first decision:** begin from one normal-run snapshot with at least two plausible, non-dominated relay-service choices. The accepted R1-versus-R3 tradeoff may serve as that starting point if it remains reproducible.
-2. **Comparable branch continuation:** execute both choices and continue each branch under the same bounded normal-run policy until the next meaningful service decision appears; do not stop only at the immediate fixed service horizon.
-3. **Decision-state divergence:** show that the first choice materially changes the next decision inputs — such as runner position/charge, relay energies, online/offline exposure, route cost, or recovery burden — enough that the two branches present meaningfully different next service pressures or plausible targets.
-4. **No immediate fake choice:** both branches must remain non-terminal long enough to expose that next decision. Record later `WON` / `BLACKOUT` outcomes when measured, but do not tune rules merely to force both branches to win.
-5. **Loop preservation:** exact accepted `WON`, ordinary `BLACKOUT`, retry, completion precedence, route geometry, and readable relay-state feedback remain protected. Any proposal that changes route/resource pressure still follows the composition-specific `WON` rule.
-6. **Identity restraint:** combat, meta-progression, another chamber, scoring, new relay classes, bespoke hazards, or a new primary verb are not required to satisfy this milestone.
+1. **Shared branch origin:** begin from the accepted 13.30 s R1-versus-R3 decision state, or an equivalently reproducible normal-run state with the same non-dominated route-versus-urgency structure.
+2. **Branch-neutral continuation:** after the first differing service choice, apply the same declared decision/recharge/service policy to both branches. Do not hand-script different follow-up rules to manufacture divergence.
+3. **Longer consequence horizon:** continue both branches beyond the accepted second-decision snapshot through at least one further meaningful service decision, and to `WON` / `BLACKOUT` when a fixed, reasonable step budget permits.
+4. **Trajectory evidence:** record comparable measures such as elapsed time, runner charge, relay energies, online count, recovery burden, cumulative travel/service cost, core returns, chosen targets, and terminal margin/outcome when reached.
+5. **Truthful persistence result:** either show that the first choice still materially changes a later decision or terminal margin, **or** show that the branches substantially reconverge. Reconvergence is valid evidence and must not be hidden or tuned away merely to preserve a preferred story.
+6. **No premature complexity:** if the existing rules already create persistent run consequences, do not add hazards, relay classes, scoring, another chamber, or another primary verb. If the evidence instead shows rapid reconvergence, that becomes the grounded reason for the relevant specialist to propose the smallest repair in a later lane.
+7. **Loop preservation:** accepted `WON`, ordinary `BLACKOUT`, retry, completion precedence, route geometry, input behavior, and readable relay-state feedback remain protected. Any proposal that changes route/resource pressure must still re-prove `WON` on its exact composition.
 
-Systems/QA are the natural first evidence lane because this milestone may already be satisfiable by extending the accepted deterministic branch harness through one more decision. World should hold geometry expansion unless evidence shows that the current chamber collapses both branches back into the same spatial choice. Experience should hold presentation expansion unless the next decision cannot be read with existing relay percentages and route cues. Gameplay PR #36 remains an independent input/retry reliability lane. Integration retains ordinary composition and landing authority.
+Systems/QA are the natural first evidence lane because the accepted Decision Chain harness can be extended without changing runtime. World should hold geometry changes unless persistence evidence shows the current chamber erases meaningful route consequence. Experience should hold new presentation unless later decision states expose a concrete readability failure. Gameplay/QA may continue physical-controller and cross-browser evidence independently; that lane is not a prerequisite for Run Consequence. Integration retains ordinary composition and landing authority.
 
-Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether the chain is actually noticed, understandable, fair, tense, or enjoyable. Those claims stay explicitly unknown rather than becoming autonomous completion requirements.
+Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether longer-run consequences are perceived, understandable, fair, tense, strategically interesting, balanced, or fun. Autonomous evidence may characterize state and outcomes, but it must not upgrade those human quality claims.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
