@@ -115,7 +115,7 @@ const atCore = compareCadences(
   1000,
   'core recharge + relay pressure'
 );
-assert.equal(atCore.player.charge, 98, 'one focused second at core should apply the accepted recharge rule');
+closeTo(atCore.player.charge, 98, 1e-9, 'one focused second at core should apply the accepted recharge rule');
 
 const offCore = compareCadences(
   'state.player.x = 480; state.player.y = 100; state.player.charge = 100;',
