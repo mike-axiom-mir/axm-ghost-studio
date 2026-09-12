@@ -209,7 +209,7 @@ const result = vm.runInContext(`(() => {
 assert.equal(result.final.mode, 'RUNNING');
 assert.equal(result.history.length, 40);
 assert.deepEqual(
-  result.history.map(entry => entry.target),
+  Array.from(result.history, entry => entry.target),
   Array.from({ length: 10 }, () => [1, 2, 2, 1]).flat()
 );
 assert.equal(result.coreReturns, 39);
