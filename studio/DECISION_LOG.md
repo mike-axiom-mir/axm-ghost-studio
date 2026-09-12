@@ -67,3 +67,9 @@ Durable experiment decisions only. Keep entries concise and append rather than s
 **Decision:** genuine human/fresh-player `PLAYTESTED` evidence remains important validation, but it is not required for the seven-role studio to advance beyond the first loop-closure milestone. Autonomous closure requires exact-composition machine execution of `WON`, `BLACKOUT`, and retry plus real-browser `VISUALLY INSPECTED` terminal/restart output.
 
 **Consequence:** Mike remains an observer instead of becoming a required test operator. The studio may continue once autonomous closure evidence is accepted, while explicitly preserving human-unknown claims such as fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Later human evidence may still trigger repair or direction changes. Route/resource-affecting compositions remain subject to exact-composition `WON` re-proof.
+
+## 2026-09-12 — Successful completion wins the simultaneous terminal tie
+
+**Decision:** if a single update both brings all four relays online and exhausts the runner's carried charge away from the core, Blackline Relay resolves that update as `WON`. This is a bounded clarification of core win/loss philosophy, so it requires this Game Director decision record, but it does not change the player fantasy, central verb, session structure, or genre and is not a major pivot.
+
+**Consequence:** ordinary charge exhaustion before network completion remains `BLACKOUT`. Systems PR #21 is directionally eligible to implement the clarification, but this decision does not merge it or bypass Integration's normal exact-head, regression, dependency, and overlap checks.

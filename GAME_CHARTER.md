@@ -27,7 +27,7 @@ Bring all four relay beacons online at the same time.
 Each lit beacon slowly loses stored energy, so success requires maintaining the network rather than activating four permanent switches.
 
 ## Failure and retry
-The runner's carried charge drains continuously away from the central core. If personal charge reaches zero, the chamber blacks out and the run ends. Press `R` or the on-screen retry button to restart.
+The runner's carried charge drains continuously away from the central core. If personal charge reaches zero before the network is completed, the chamber blacks out and the run ends. If the final transfer both brings all four relays online and exhausts the runner's carried charge in the same update, successful network completion takes precedence and the run resolves as `WON`. Press `R` or the on-screen retry button to restart.
 
 ## Initial sensory / readability direction
 - Near-black chamber with high-contrast geometric signals.
@@ -71,7 +71,7 @@ Changes that do not alter route/resource feasibility — for example isolated fe
 This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete autonomous session evidence is being established.
 
 ## First vertical-slice target
-A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge, and restart without reloading the page.
+A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
 
 ## Open evolution space
 The charter intentionally does not decide exact difficulty curve, advanced movement, encounter hazards, scoring, audio identity, accessibility options, world fiction, progression, or final art language. Those remain specialist growth lanes after evidence exists.
