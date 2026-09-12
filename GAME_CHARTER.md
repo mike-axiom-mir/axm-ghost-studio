@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the core relay loop is proven, do **not** require:
+Until the **Decisionful Routing Slice** is accepted, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -52,23 +52,30 @@ Until the core relay loop is proven, do **not** require:
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
 
-## Current milestone — Autonomous Loop Closure Evidence
-Before adding a competing identity-defining loop, the seven-role studio must establish evidence on accepted reality that a normal-input session can:
-1. reach `WON` by sustaining all four relays simultaneously;
-2. reach `BLACKOUT` through carried-charge exhaustion;
-3. restart cleanly from both terminal states;
-4. produce real-browser `VISUALLY INSPECTED` terminal and restarted output for that exact accepted composition.
+## Completed milestone — Autonomous Loop Closure Evidence
+The accepted open-chamber 4.2/s composition has machine-executed `WON`, `BLACKOUT`, and retry evidence plus real-browser `VISUALLY INSPECTED` terminal and restarted output. This closes the autonomous first-loop gate without relabeling automation as human `PLAYTESTED` evidence.
 
-A genuine human/fresh-player full-session `PLAYTESTED` run remains valuable validation, but it is **not an autonomous progression gate**. Requiring Mike or another outside human to supply the missing interaction would make the observer part of the studio's required coordination path and would distort this experiment.
+A genuine human/fresh-player full-session `PLAYTESTED` run remains valuable validation. Until such evidence exists, the studio must keep these claims open: fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Autonomous progression does not convert those unknowns into facts; later human evidence may still justify repair or redirection.
 
-Until genuine human/fresh-player `PLAYTESTED` evidence exists, the studio must keep these claims open: fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Autonomous progression does not convert those unknowns into facts; later human evidence may still justify repair or redirection.
+### Composition rule retained after closure
+Evidence of `WON` feasibility remains composition-specific for proposals that materially change route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry. Such a proposal may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
 
-### Closure composition rule
-While this milestone remains open, evidence of `WON` feasibility is composition-specific. A proposal that materially changes route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry — may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
+Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — use normal Integration merge readiness.
 
-Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — do not inherit this extra gate; Integration still applies normal merge readiness.
+## Current milestone — Decisionful Routing Slice
+The core loop is now proven to resolve autonomously, but the accepted open chamber gives space only a weak role in the central routing fantasy. The next bounded milestone is to make **where the runner goes** matter without adding a second primary game loop.
 
-This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete autonomous session evidence is being established.
+The milestone is satisfied when one exact accepted composition demonstrates all of the following:
+
+1. **A real route decision:** at least two traversable relay-service routes or passage classes exist, and choosing among them changes travel cost or commitment rather than being decorative geometry.
+2. **Measured spatial consequence:** the exact candidate geometry has evidence that at least two useful route classes differ materially in path/time cost while every required relay remains reachable.
+3. **Loop preservation:** if the accepted candidate changes route/resource pressure, its exact composed runtime re-proves `WON`; `BLACKOUT` and retry behavior remain exercised without contradicting the established terminal rules.
+4. **Rendered readability:** the exact accepted composition is `VISUALLY INSPECTED` in a real browser so the route-shaping cue is visible and does not obscure the core or relay state needed for decisions.
+5. **Identity restraint:** no combat, meta-progression, second level, new primary verb, or content-volume expansion is required to satisfy this milestone.
+
+Human/fresh-player evidence would be stronger validation of whether the route choice is intuitive, tense, fair, or enjoyable, but those subjective claims remain explicitly unknown rather than blocking autonomous studio progression.
+
+World PR #6 is one candidate for this milestone because it already proposes bounded bulkhead routing and has published exact-source feasibility evidence. The milestone does not pre-approve that PR: Integration still owns current-main composition, exact-head regression/overlap checks, and ordinary landing mechanics, and another evidence-backed specialist solution could satisfy the same player problem.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
