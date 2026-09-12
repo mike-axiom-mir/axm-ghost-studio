@@ -21,7 +21,7 @@ const bulkheads = [
 
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
-let gamepadRestartHeld = false;
+const gamepadRestartHeldIndices = new Set();
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
@@ -141,13 +141,15 @@ function readGamepadIntent() {
   const movement = readGamepadMovementIntent(pad);
   const movementInputActive = hasGamepadMovementIntent(pad);
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
-  if (restartPressed && !gamepadRestartHeld) {
+  const padIndex = getGamepadIndex(pad);
+  const restartHeld = padIndex !== null && gamepadRestartHeldIndices.has(padIndex);
+  if (restartPressed && !restartHeld) {
     const requireNeutral = hasKeyboardMovementIntent() || movementInputActive;
-    resetGame(requireNeutral, movementInputActive, movementInputActive ? getGamepadIndex(pad) : null);
-    gamepadRestartHeld = true;
+    resetGame(requireNeutral, movementInputActive, movementInputActive ? padIndex : null);
+    if (padIndex !== null) gamepadRestartHeldIndices.add(padIndex);
     return null;
   }
-  gamepadRestartHeld = restartPressed;
+  if (!restartPressed && padIndex !== null) gamepadRestartHeldIndices.delete(padIndex);
   return movement;
 }
 
