@@ -204,6 +204,7 @@ function getTransferTarget() {
 
 function getStatusLabel() {
   if (state.mode !== 'RUNNING') return state.mode;
+  if (!movementArmed && currentMovementIntentActive()) return 'RELEASE TO MOVE';
   const transferTarget = getTransferTarget();
   if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
   const atCore = distance(state.player, core) <= state.player.r + core.r;
