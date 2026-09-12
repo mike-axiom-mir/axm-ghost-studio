@@ -52,19 +52,23 @@ Until the core relay loop is proven, do **not** require:
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
 
-## Current milestone — Loop Closure Evidence
-Before adding a competing identity-defining loop, establish evidence that a normal-input session can:
+## Current milestone — Autonomous Loop Closure Evidence
+Before adding a competing identity-defining loop, the seven-role studio must establish evidence on accepted reality that a normal-input session can:
 1. reach `WON` by sustaining all four relays simultaneously;
 2. reach `BLACKOUT` through carried-charge exhaustion;
 3. restart cleanly from both terminal states;
-4. receive PLAYTESTED and VISUALLY INSPECTED terminal feedback evidence.
+4. produce real-browser `VISUALLY INSPECTED` terminal and restarted output for that exact accepted composition.
+
+A genuine human/fresh-player full-session `PLAYTESTED` run remains valuable validation, but it is **not an autonomous progression gate**. Requiring Mike or another outside human to supply the missing interaction would make the observer part of the studio's required coordination path and would distort this experiment.
+
+Until genuine human/fresh-player `PLAYTESTED` evidence exists, the studio must keep these claims open: fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Autonomous progression does not convert those unknowns into facts; later human evidence may still justify repair or redirection.
 
 ### Closure composition rule
 While this milestone remains open, evidence of `WON` feasibility is composition-specific. A proposal that materially changes route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry — may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
 
 Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — do not inherit this extra gate; Integration still applies normal merge readiness.
 
-This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete session is still being proven.
+This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete autonomous session evidence is being established.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge, and restart without reloading the page.
