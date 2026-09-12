@@ -103,8 +103,8 @@ assert.equal(state.mode, 'RUNNING');
 assert.equal(state.elapsed, 0);
 assert.deepEqual(state.beacons.map(beacon => beacon.energy), [34, 0, 0, 0]);
 
-// Current tie rule is explicit: if the last relay crosses online while runner charge reaches zero
-// in the same update, BLACKOUT wins because loss resolution follows win resolution.
+// Completion takes precedence when the final successful transfer both brings the last relay online
+// and exhausts the runner's remaining carried charge in the same update.
 run(`
   resetGame();
   state.beacons.forEach(beacon => { beacon.energy = 40; });
@@ -117,6 +117,6 @@ run(`
 state = snapshot();
 assert.ok(state.beacons.every(beacon => beacon.energy >= 35), 'all relays should be online in the tie scenario');
 assert.equal(state.player.charge, 0);
-assert.equal(state.mode, 'BLACKOUT');
+assert.equal(state.mode, 'WON');
 
-console.log('systems rules passed: reset, recharge, decay, idle drain, transfer, win, blackout, terminal freeze, tie precedence');
+console.log('systems rules passed: reset, recharge, decay, idle drain, transfer, win, blackout, terminal freeze, completion precedence');
