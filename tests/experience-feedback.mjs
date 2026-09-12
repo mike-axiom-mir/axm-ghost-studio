@@ -40,7 +40,7 @@ function makeElement() {
 
 const elements = {
   game: { width: 960, height: 600, getContext: () => ctx },
-  chargeText: makeElement(), relayText: makeElement(), stateText: makeElement(), restartButton: makeElement()
+  chargeText: makeElement(), relayText: makeElement(), relayDetail: makeElement(), stateText: makeElement(), restartButton: makeElement()
 };
 const context = vm.createContext({
   document: { getElementById: id => elements[id] },
@@ -51,6 +51,9 @@ const run = expression => vm.runInContext(expression, context);
 
 assert.doesNotMatch(htmlSource, /<section\b[^>]*class=["']status["'][^>]*aria-live=/i, 'rapidly changing charge/relay values should not make the whole status strip a live region');
 assert.match(htmlSource, /<strong\b(?=[^>]*\bid=["']stateText["'])(?=[^>]*\brole=["']status["'])(?=[^>]*\baria-atomic=["']true["'])[^>]*>/i, 'the concise state label should own the polite status announcement surface');
+assert.match(htmlSource, /<p\b(?=[^>]*\bid=["']relayDetail["'])(?=[^>]*\bclass=["'][^"']*sr-only[^"']*["'])[^>]*>/i, 'individual relay state should have a non-visual accessible text surface');
+assert.doesNotMatch(htmlSource, /<p\b(?=[^>]*\bid=["']relayDetail["'])[^>]*(?:aria-live|role=["']status["'])/i, 'rapid relay decay should not become an automatic live-announcement stream');
+assert.match(htmlSource, /<canvas\b(?=[^>]*\bid=["']game["'])(?=[^>]*\baria-describedby=["']relayDetail["'])[^>]*>/i, 'the canvas should reference the accessible relay-state description');
 
 pathCalls.length = 0;
 run('drawGrid();');
@@ -66,9 +69,9 @@ const expectedGridYs = Array.from({ length: Math.floor(600 / 48) + 1 }, (_, inde
 assert.deepEqual(horizontalGridYs, expectedGridYs, 'grid rows should remain horizontal instead of fanning diagonally toward the lower-right corner');
 
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'fresh run should identify the full core state');
-const initialWrites = { charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, state: elements.stateText.textWrites };
+const initialWrites = { charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, detail: elements.relayDetail.textWrites, state: elements.stateText.textWrites };
 run('updateHud(); updateHud();');
-assert.deepEqual({ charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, state: elements.stateText.textWrites }, initialWrites, 'unchanged HUD values should not be rewritten into the live accessibility surface');
+assert.deepEqual({ charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, detail: elements.relayDetail.textWrites, state: elements.stateText.textWrites }, initialWrites, 'unchanged HUD values should not be rewritten into accessibility surfaces');
 
 run('state.player.x = 145; state.player.y = 125; state.player.charge = 80; state.beacons[0].energy = 20; updateHud();');
 assert.equal(elements.stateText.textContent, 'TRANSFER R1', 'relay contact should identify the transfer target');
@@ -102,6 +105,7 @@ run(`
 `);
 assert.equal(elements.relayText.textContent, '2 / 4', 'accepted triage snapshot should report two relays online');
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'accepted triage snapshot should preserve the centered full-core state');
+assert.equal(elements.relayDetail.textContent, 'Relay status: R1 28%, R2 54%, R3 0%, R4 56%', 'accepted triage snapshot should expose each relay value through non-visual accessible text');
 for (const expected of ['R1', '28%', 'R2', '54%', 'R3', '0%', 'R4', '56%']) {
   assert.ok(textCalls.some(([text]) => text === expected), `accepted triage snapshot should expose ${expected}`);
 }
@@ -115,4 +119,4 @@ assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should r
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 
-console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo, accepted triage snapshot cues');
+console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, non-visual relay detail, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo, accepted triage snapshot cues');
