@@ -107,6 +107,7 @@ function getStandardGamepadByIndex(index) {
     (Number.isInteger(candidate.index) ? candidate.index : slot) === index
   ) || null;
 }
+
 function hasGamepadMovementIntent(pad = getStandardGamepad()) {
   if (!pad) return false;
 
