@@ -68,6 +68,22 @@ assert.equal(run('state.player.x'), 480);
 assert.equal(run('state.elapsed'), 0);
 handlers.keyup(keyEvent('a'));
 run('update(0.01)');
+
+// A gamepad Start edge with no movement held is an atomic retry. The frame that
+// observes Start belongs to the old run and must not immediately age the fresh run.
+run("state.mode = 'BLACKOUT'; state.player.x = 700; state.elapsed = 12; state.beacons[0].energy = 10");
+pad.axes = [0, 0];
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+pad.buttons[9].pressed = true;
+run('update(0.5)');
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
+assert.equal(run('state.beacons[0].energy'), 34);
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+
 run("state.mode = 'BLACKOUT'; state.player.x = 700");
 pad.axes = [0.6, 0];
 pad.buttons[9].pressed = true;
@@ -85,4 +101,4 @@ pad.axes = [0.6, 0];
 run('update(0.5)');
 closeTo(run('state.player.x'), 538.75);
 
-console.log('gameplay restart neutral passed: held movement waits for neutral, while fresh post-restart movement is accepted immediately');
+console.log('gameplay restart neutral passed: held movement waits for neutral, while fresh post-restart movement is accepted immediately and Start-only retry is atomic');
