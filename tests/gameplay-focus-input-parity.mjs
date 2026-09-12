@@ -31,7 +31,7 @@ const buttons = Array.from({ length: 16 }, () => ({ pressed: false }));
 const pad = { index: 0, connected: true, mapping: 'standard', axes: [0, 0], buttons };
 let now = 0;
 const sandbox = {
-  document: { getElementById: id => elements[id] },
+  document: { getElementById: id => elements[id], hasFocus: () => true },
   window: {
     addEventListener(type, handler) {
       const list = handlers.get(type) ?? [];
@@ -130,8 +130,63 @@ assert.equal(run('state.mode'), 'RUNNING');
 assert.equal(run('state.player.x'), 480);
 assert.equal(run('state.elapsed'), 0);
 
+// A page can execute while already unfocused without receiving a blur event
+// after its handlers are registered. Seed the latch from document.hasFocus()
+// so held gamepad movement/Start cannot act before the first focus transition.
+const startupHandlers = new Map();
+const startupButtons = Array.from({ length: 16 }, () => ({ pressed: false }));
+startupButtons[9].pressed = true;
+const startupPad = { index: 0, connected: true, mapping: 'standard', axes: [1, 0], buttons: startupButtons };
+const startupElements = {
+  game: { width: 960, height: 600, getContext: () => drawContext },
+  chargeText: { textContent: '' },
+  relayText: { textContent: '' },
+  stateText: { textContent: '' },
+  restartButton: { addEventListener: noop }
+};
+const startupSandbox = {
+  document: { getElementById: id => startupElements[id], hasFocus: () => false },
+  window: {
+    addEventListener(type, handler) {
+      const list = startupHandlers.get(type) ?? [];
+      list.push(handler);
+      startupHandlers.set(type, list);
+    }
+  },
+  navigator: { getGamepads: () => [startupPad] },
+  performance: { now: () => 0 },
+  requestAnimationFrame: noop,
+  console
+};
+startupSandbox.globalThis = startupSandbox;
+vm.createContext(startupSandbox);
+vm.runInContext(`${gameSource}\n;globalThis.__startupFocusTest = { get state(){ return state; }, update, get movementArmed(){ return movementArmed; }, get gamepadNeutralPending(){ return gamepadNeutralPending; }, get inputFocused(){ return inputFocused; } };`, startupSandbox, { filename: 'game.js' });
+const startupRun = source => vm.runInContext(source, startupSandbox);
+const startupDispatch = (type, event = {}) => {
+  for (const handler of startupHandlers.get(type) ?? []) handler(event);
+};
+assert.equal(startupRun('inputFocused'), false);
+startupRun('update(0.1)');
+assert.equal(startupRun('state.player.x'), 480);
+closeTo(startupRun('state.elapsed'), 0.1);
+startupDispatch('focus');
+assert.equal(startupRun('inputFocused'), true);
+assert.equal(startupRun('movementArmed'), false);
+assert.equal(startupRun('gamepadNeutralPending'), true);
+startupRun('update(0.1)');
+assert.equal(startupRun('state.player.x'), 480);
+closeTo(startupRun('state.elapsed'), 0.2);
+startupButtons[9].pressed = false;
+startupPad.axes = [0, 0];
+startupRun('update(0.01)');
+assert.equal(startupRun('movementArmed'), true);
+assert.equal(startupRun('gamepadNeutralPending'), false);
+startupPad.axes = [1, 0];
+startupRun('update(0.1)');
+closeTo(startupRun('state.player.x'), 503.5);
+
 // This Gameplay repair intentionally leaves frame-gap / wall-clock policy
 // unchanged; issue #55's timing half remains a separate direction decision.
 assert.ok(gameSource.includes('Math.min((now - previousTime) / 1000, 0.05)'), 'frame delta cap should remain unchanged by the input-parity repair');
 
-console.log('gameplay focus input parity passed: blur suppresses keyboard/gamepad input, held gamepad carry-over waits for neutral, and held Start cannot counterfeit a focus-return retry edge');
+console.log('gameplay focus input parity passed: initial unfocused state and blur suppress keyboard/gamepad input, held gamepad carry-over waits for neutral, and held Start cannot counterfeit a focus-return retry edge');
