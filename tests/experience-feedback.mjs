@@ -70,6 +70,11 @@ const initialWrites = { charge: elements.chargeText.textWrites, relay: elements.
 run('updateHud(); updateHud();');
 assert.deepEqual({ charge: elements.chargeText.textWrites, relay: elements.relayText.textWrites, state: elements.stateText.textWrites }, initialWrites, 'unchanged HUD values should not be rewritten into the live accessibility surface');
 
+run("movementArmed = false; keys.add('d'); updateHud();");
+assert.equal(elements.stateText.textContent, 'RELEASE TO MOVE', 'retry neutralization should explain why already-held movement is temporarily ignored');
+run("keys.delete('d'); update(0.01);");
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'neutral movement input should restore the ordinary fresh-run status');
+
 run('state.player.x = 145; state.player.y = 125; state.player.charge = 80; state.beacons[0].energy = 20; updateHud();');
 assert.equal(elements.stateText.textContent, 'TRANSFER R1', 'relay contact should identify the transfer target');
 
@@ -115,4 +120,4 @@ assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should r
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 
-console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo, accepted triage snapshot cues');
+console.log('experience feedback passed: orthogonal grid, scoped live status, stable HUD writes, retry-neutral release cue, core/recharge/low-charge/transfer/terminal status, relay numeric cue, transfer tether + target halo, accepted triage snapshot cues');
