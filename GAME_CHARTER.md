@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the core relay loop is proven, do **not** require:
+Until the **Stateful Relay Triage Slice** is accepted, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -47,28 +47,43 @@ Until the core relay loop is proven, do **not** require:
 - large asset pipeline;
 - combat system;
 - meta-progression;
-- multiple levels solely for content volume.
+- multiple levels solely for content volume;
+- new relay classes or hazards solely to manufacture complexity before the existing decay state is proven insufficient.
 
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
 
-## Current milestone — Autonomous Loop Closure Evidence
-Before adding a competing identity-defining loop, the seven-role studio must establish evidence on accepted reality that a normal-input session can:
-1. reach `WON` by sustaining all four relays simultaneously;
-2. reach `BLACKOUT` through carried-charge exhaustion;
-3. restart cleanly from both terminal states;
-4. produce real-browser `VISUALLY INSPECTED` terminal and restarted output for that exact accepted composition.
+## Completed milestone — Autonomous Loop Closure Evidence
+The accepted open-chamber 4.2/s composition has machine-executed `WON`, `BLACKOUT`, and retry evidence plus real-browser `VISUALLY INSPECTED` terminal and restarted output. This closes the autonomous first-loop gate without relabeling automation as human `PLAYTESTED` evidence.
 
-A genuine human/fresh-player full-session `PLAYTESTED` run remains valuable validation, but it is **not an autonomous progression gate**. Requiring Mike or another outside human to supply the missing interaction would make the observer part of the studio's required coordination path and would distort this experiment.
+A genuine human/fresh-player full-session `PLAYTESTED` run remains valuable validation. Until such evidence exists, the studio must keep these claims open: fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Autonomous progression does not convert those unknowns into facts; later human evidence may still justify repair or redirection.
 
-Until genuine human/fresh-player `PLAYTESTED` evidence exists, the studio must keep these claims open: fun, balance, intuitive route discovery, fresh-player clarity, subjective control feel, tension, and polish. Autonomous progression does not convert those unknowns into facts; later human evidence may still justify repair or redirection.
+### Composition rule retained after closure
+Evidence of `WON` feasibility remains composition-specific for proposals that materially change route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry. Such a proposal may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
 
-### Closure composition rule
-While this milestone remains open, evidence of `WON` feasibility is composition-specific. A proposal that materially changes route time or resource pressure — including relay decay/transfer/recharge, movement ceiling, beacon placement, or collision/obstacle geometry — may develop in parallel, but should not become accepted `main` unless the exact proposed composition re-proves a full `WON` path. Evidence from an earlier geometry/rule composition does not transfer automatically.
+Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — use normal Integration merge readiness.
 
-Changes that do not alter route/resource feasibility — for example isolated feedback, QA evidence, packaging/integration checks, or input parity that preserves the movement ceiling — do not inherit this extra gate; Integration still applies normal merge readiness.
+## Completed milestone — Decisionful Routing Slice
+The accepted route-shaped chamber now contains two visible upper/lower passage classes and materially different measured route costs while keeping every relay reachable. On the exact accepted composition, route-aware automated evidence reaches `WON` at about 35.53 s with 6.34% runner charge, ordinary `BLACKOUT` remains exercised at about 21.09 s, retry and completion precedence remain intact, and real Chromium inspection shows both bulkheads and both passages without obscuring the core or relays.
 
-This milestone does not freeze specialist work; it keeps additions aligned with the relay-maintenance fantasy while the first complete autonomous session evidence is being established.
+This proves that **where the runner goes** has spatial consequence. It does not prove that a fresh player understands the passages, prefers one route for a good reason, finds the layout fair, or experiences meaningful tension/fun.
+
+## Current milestone — Stateful Relay Triage Slice
+The chamber now makes route length matter. The next bounded problem is to make **which relay the runner rescues next** depend on the changing network state instead of only on a memorized static route order.
+
+Start by testing the existing rules. The studio should not invent a new relay type, hazard, or resource merely to satisfy this milestone if independent relay decay plus staggered service already creates a usable triage decision.
+
+The milestone is satisfied when one exact accepted composition demonstrates all of the following:
+
+1. **A live triage state:** during a normal run, at least two reachable relay-service choices exist from the same meaningful snapshot and their current energy/decay state makes their urgency materially different.
+2. **Measured choice consequence:** from that same or equivalently controlled snapshot, at least two plausible relay choices/sequences produce measurably different network consequences — for example different offline exposure, completion margin, preserved online count, or recovery burden. The evidence must show more than a fixed geometry distance difference.
+3. **Readable urgency:** the exact accepted browser composition exposes enough relay state at decision time for urgency to be visually inspected without relying on hidden debug data. Experience PR #8 is one candidate because it proposes explicit relay energy/status feedback, but it is not pre-approved and existing cues may satisfy the need if evidence proves they are sufficient.
+4. **Loop preservation:** `WON`, ordinary `BLACKOUT`, retry, completion precedence, and the accepted route-shaped chamber remain exercised on the exact accepted composition. Any proposal that changes route/resource pressure still follows the composition-specific `WON` rule.
+5. **Identity restraint:** no combat, meta-progression, second chamber, scoring layer, new primary verb, or bespoke hazard is required to satisfy this milestone.
+
+Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether the triage decision is actually understood, fair, tense, or enjoyable. Those subjective claims stay explicitly unknown rather than becoming autonomous completion requirements.
+
+Experience #8 may contribute the readability layer and Gameplay #15 may independently improve input parity, but neither is automatically required for milestone completion. Integration retains ordinary composition and landing authority; Systems/QA should prefer evidence on the existing decay model before proposing new pressure rules.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.

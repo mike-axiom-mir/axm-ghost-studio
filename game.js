@@ -14,6 +14,10 @@ const beaconSeed = [
   { x: 145, y: H - 125 },
   { x: W - 145, y: H - 125 }
 ];
+const bulkheads = [
+  { x: 300, y: 170, w: 42, h: 260 },
+  { x: W - 342, y: 170, w: 42, h: 260 }
+];
 
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
@@ -42,6 +46,26 @@ function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
+function circleIntersectsRect(circle, rect) {
+  const closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+  const closestY = clamp(circle.y, rect.y, rect.y + rect.h);
+  const dx = circle.x - closestX;
+  const dy = circle.y - closestY;
+  return dx * dx + dy * dy < circle.r * circle.r;
+}
+
+function positionBlocked(x, y, radius) {
+  return bulkheads.some(rect => circleIntersectsRect({ x, y, r: radius }, rect));
+}
+
+function movePlayer(player, moveX, moveY) {
+  const nextX = clamp(player.x + moveX, player.r, W - player.r);
+  if (!positionBlocked(nextX, player.y, player.r)) player.x = nextX;
+
+  const nextY = clamp(player.y + moveY, player.r, H - player.r);
+  if (!positionBlocked(player.x, nextY, player.r)) player.y = nextY;
+}
+
 function applyRadialDeadzone(x, y) {
   const rawLength = Math.hypot(x, y);
   if (rawLength <= GAMEPAD_DEADZONE) return { dx: 0, dy: 0 };
@@ -54,21 +78,17 @@ function applyRadialDeadzone(x, y) {
   };
 }
 
-function readGamepadIntent() {
-  if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') {
-    gamepadRestartHeld = false;
-    return { dx: 0, dy: 0 };
-  }
+function hasKeyboardMovementIntent() {
+  return ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].some(key => keys.has(key));
+}
 
-  const pad = Array.from(navigator.getGamepads() || []).find(candidate => candidate?.connected && candidate.mapping === 'standard');
-  if (!pad) {
-    gamepadRestartHeld = false;
-    return { dx: 0, dy: 0 };
-  }
+function getStandardGamepad() {
+  if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  return Array.from(navigator.getGamepads() || []).find(candidate => candidate?.connected && candidate.mapping === 'standard') || null;
+}
 
-  const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
-  if (restartPressed && !gamepadRestartHeld) resetGame(true);
-  gamepadRestartHeld = restartPressed;
+function readGamepadMovementIntent(pad = getStandardGamepad()) {
+  if (!pad) return { dx: 0, dy: 0 };
 
   const analog = applyRadialDeadzone(pad.axes?.[0] || 0, pad.axes?.[1] || 0);
   let dx = analog.dx;
@@ -83,6 +103,29 @@ function readGamepadIntent() {
     dy /= length;
   }
   return { dx, dy };
+}
+
+function readGamepadIntent() {
+  const pad = getStandardGamepad();
+  if (!pad) {
+    gamepadRestartHeld = false;
+    return { dx: 0, dy: 0 };
+  }
+
+  const movement = readGamepadMovementIntent(pad);
+  const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
+  if (restartPressed && !gamepadRestartHeld) {
+    const requireNeutral = hasKeyboardMovementIntent() || movement.dx !== 0 || movement.dy !== 0;
+    resetGame(requireNeutral);
+  }
+  gamepadRestartHeld = restartPressed;
+  return movement;
+}
+
+function currentMovementIntentActive() {
+  if (hasKeyboardMovementIntent()) return true;
+  const gamepad = readGamepadMovementIntent();
+  return gamepad.dx !== 0 || gamepad.dy !== 0;
 }
 
 function update(dt) {
@@ -114,18 +157,22 @@ function update(dt) {
 
   state.elapsed += dt;
   const movementMagnitude = Math.hypot(dx, dy);
-  const moving = movementMagnitude > 0;
-  if (moving) {
+  let realizedMovementMagnitude = 0;
+  if (movementMagnitude > 0) {
     const speed = 235;
-    p.x = clamp(p.x + dx * speed * dt, p.r, W - p.r);
-    p.y = clamp(p.y + dy * speed * dt, p.r, H - p.r);
+    const startX = p.x;
+    const startY = p.y;
+    movePlayer(p, dx * speed * dt, dy * speed * dt);
+    const maximumDistance = speed * dt;
+    const actualDistance = Math.hypot(p.x - startX, p.y - startY);
+    if (maximumDistance > 0) realizedMovementMagnitude = clamp(actualDistance / maximumDistance, 0, 1);
   }
 
   const atCore = distance(p, core) <= p.r + core.r;
   if (atCore) {
     p.charge = Math.min(100, p.charge + 58 * dt);
   } else {
-    const drainRate = 3.0 + (4.8 - 3.0) * movementMagnitude;
+    const drainRate = 3.0 + (4.8 - 3.0) * realizedMovementMagnitude;
     p.charge = Math.max(0, p.charge - drainRate * dt);
   }
 
@@ -160,6 +207,25 @@ function drawGrid() {
   }
   for (let y = 0; y <= H; y += 48) {
     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+}
+
+function drawBulkheads() {
+  for (const rect of bulkheads) {
+    ctx.fillStyle = '#141b23';
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+    ctx.strokeStyle = '#40515f';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+
+    ctx.strokeStyle = '#263440';
+    ctx.lineWidth = 1;
+    for (let y = rect.y + 14; y < rect.y + rect.h; y += 22) {
+      ctx.beginPath();
+      ctx.moveTo(rect.x + 6, y);
+      ctx.lineTo(rect.x + rect.w - 6, y);
+      ctx.stroke();
+    }
   }
 }
 
@@ -234,6 +300,7 @@ function render() {
   ctx.fillStyle = '#090d12';
   ctx.fillRect(0, 0, W, H);
   drawGrid();
+  drawBulkheads();
   drawCore();
   state.beacons.forEach(drawBeacon);
   drawPlayer();
@@ -251,12 +318,12 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
-  if (key === 'r') resetGame(true);
+  if (key === 'r') resetGame(currentMovementIntentActive());
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => keys.clear());
-restartButton.addEventListener('click', () => resetGame(true));
+restartButton.addEventListener('click', () => resetGame(currentMovementIntentActive()));
 
 resetGame();
 requestAnimationFrame(frame);

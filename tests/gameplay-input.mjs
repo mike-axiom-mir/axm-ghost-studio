@@ -86,6 +86,20 @@ run('resetGame(); state.player.y = 100; update(1)');
 closeTo(run('state.player.x'), 715);
 closeTo(run('state.player.charge'), 95.2);
 
+// Accepted bulkhead collision: fully blocked input pays only the 3.0/s stationary drain.
+pad.axes = [-1, 0];
+run('resetGame(); state.player.x = 360; state.player.y = 300; state.player.charge = 100; update(0.05)');
+closeTo(run('state.player.x'), 360);
+closeTo(run('state.player.y'), 300);
+closeTo(run('state.player.charge'), 99.85);
+
+// Sliding along a bulkhead pays a premium proportional to realized translation.
+pad.axes = [-1, -1];
+run('resetGame(); state.player.x = 355; state.player.y = 300; state.player.charge = 100; update(0.05)');
+closeTo(run('state.player.x'), 355);
+closeTo(run('state.player.y'), 300 - Math.SQRT1_2 * 235 * 0.05);
+closeTo(run('state.player.charge'), 100 - (3.0 + 1.8 * Math.SQRT1_2) * 0.05);
+
 // Neutral analog input preserves the accepted 3.0/s off-core idle drain.
 pad.axes = [0, 0];
 run('resetGame(); state.player.y = 100; update(1)');
@@ -102,4 +116,4 @@ assert.equal(run('state.player.x'), 500);
 pad.buttons[9].pressed = false;
 run('readGamepadIntent()');
 
-console.log('gameplay input passed: radial response, input parity, proportional analog drain, and restart edge');
+console.log('gameplay input passed: radial response, input parity, realized-motion drain, collision sliding, and restart edge');

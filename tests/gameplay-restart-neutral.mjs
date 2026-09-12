@@ -49,6 +49,18 @@ handlers.keydown(keyEvent('d'));
 run('update(0.5)');
 closeTo(run('state.player.x'), 597.5);
 handlers.keyup(keyEvent('d'));
+
+// A restart with no movement held must accept a fresh movement press immediately;
+// the neutral gate exists only to stop already-held input from carrying into the new run.
+run("state.mode = 'BLACKOUT'");
+handlers.keydown(keyEvent('r'));
+handlers.keyup(keyEvent('r'));
+handlers.keydown(keyEvent('d'));
+run('update(0.05)');
+closeTo(run('state.player.x'), 491.75);
+assert.equal(run('state.elapsed'), 0.05);
+handlers.keyup(keyEvent('d'));
+
 handlers.keydown(keyEvent('a'));
 restartClick();
 run('update(0.5)');
@@ -73,4 +85,4 @@ pad.axes = [0.6, 0];
 run('update(0.5)');
 closeTo(run('state.player.x'), 538.75);
 
-console.log('gameplay restart neutral passed: keyboard R, Restart button, and gamepad Start wait for neutral movement before the new run advances');
+console.log('gameplay restart neutral passed: held movement waits for neutral, while fresh post-restart movement is accepted immediately');

@@ -77,7 +77,46 @@ const result = vm.runInContext(`(() => {
     held = [...next];
   }
 
+  // Preserve the accepted registered-keyboard closure test while making its test
+  // driver respect the bounded upper/lower passages introduced by World routing.
+  function routeTarget(target) {
+    const p = state.player;
+    const isCore = target === core;
+    const targetLeft = target.x < 287;
+    const targetRight = target.x > 673;
+    const playerLeft = p.x < 287;
+    const playerRight = p.x > 673;
+    const passageY = y => y < core.y ? 150 : 450;
+
+    if (targetLeft && !playerLeft) {
+      const y = passageY(target.y);
+      if (p.x > 360 && Math.abs(p.y - y) > 5) return { x: 360, y };
+      if (p.x > 280) return { x: 280, y };
+    }
+
+    if (targetRight && !playerRight) {
+      const y = passageY(target.y);
+      if (p.x < 600 && Math.abs(p.y - y) > 5) return { x: 600, y };
+      if (p.x < 680) return { x: 680, y };
+    }
+
+    if (isCore && playerLeft) {
+      const y = passageY(p.y);
+      if (Math.abs(p.y - y) > 5) return { x: 280, y };
+      if (p.x < 360) return { x: 360, y };
+    }
+
+    if (isCore && playerRight) {
+      const y = passageY(p.y);
+      if (Math.abs(p.y - y) > 5) return { x: 680, y };
+      if (p.x > 600) return { x: 600, y };
+    }
+
+    return target;
+  }
+
   function chooseDirection(target) {
+    target = routeTarget(target);
     let best = null;
     for (const [dx, dy, inputKeys] of directions) {
       const length = Math.hypot(dx, dy);
@@ -166,7 +205,7 @@ const result = vm.runInContext(`(() => {
   };
 })()`, sandbox);
 
-assert.equal(result.won.mode, 'WON', 'normal keyboard-event route should reach WON');
+assert.equal(result.won.mode, 'WON', 'normal registered-keyboard route should reach WON through the routing slice');
 assert.ok(result.won.player.charge > 5, `expected >5% runner charge at WON, got ${result.won.player.charge}`);
 assert.ok(result.won.beacons.every(beacon => beacon.energy >= 35), 'all relays should be online at WON');
 assert.ok(result.wonTexts.includes('NETWORK STABLE'), 'WON overlay should emit NETWORK STABLE');
