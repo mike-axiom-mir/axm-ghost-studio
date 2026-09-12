@@ -113,7 +113,8 @@ function update(dt) {
   }
 
   state.elapsed += dt;
-  const moving = dx !== 0 || dy !== 0;
+  const movementMagnitude = Math.hypot(dx, dy);
+  const moving = movementMagnitude > 0;
   if (moving) {
     const speed = 235;
     p.x = clamp(p.x + dx * speed * dt, p.r, W - p.r);
@@ -124,7 +125,8 @@ function update(dt) {
   if (atCore) {
     p.charge = Math.min(100, p.charge + 58 * dt);
   } else {
-    p.charge = Math.max(0, p.charge - (moving ? 4.8 : 3.0) * dt);
+    const drainRate = 3.0 + (4.8 - 3.0) * movementMagnitude;
+    p.charge = Math.max(0, p.charge - drainRate * dt);
   }
 
   for (const beacon of state.beacons) {

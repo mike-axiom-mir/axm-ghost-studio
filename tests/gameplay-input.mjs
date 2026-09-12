@@ -73,7 +73,24 @@ pad.axes = [0.6, 0];
 run('resetGame(); update(1)');
 closeTo(run('state.player.x'), 597.5);
 closeTo(run('state.player.y'), 300);
+
+// Partial analog travel pays only the proportional premium above the accepted 3.0/s idle drain.
+pad.axes = [0.21, 0];
+run('resetGame(); state.player.y = 100; update(1)');
+closeTo(run('state.player.x'), 482.9375);
+closeTo(run('state.player.charge'), 96.9775);
+
+// Full analog travel preserves the accepted full-motion 4.8/s drain.
+pad.axes = [1, 0];
+run('resetGame(); state.player.y = 100; update(1)');
+closeTo(run('state.player.x'), 715);
+closeTo(run('state.player.charge'), 95.2);
+
+// Neutral analog input preserves the accepted 3.0/s off-core idle drain.
 pad.axes = [0, 0];
+run('resetGame(); state.player.y = 100; update(1)');
+closeTo(run('state.player.charge'), 97);
+
 run("state.mode = 'BLACKOUT'; state.player.x = 700");
 pad.buttons[9].pressed = true;
 run('readGamepadIntent()');
@@ -85,4 +102,4 @@ assert.equal(run('state.player.x'), 500);
 pad.buttons[9].pressed = false;
 run('readGamepadIntent()');
 
-console.log('gameplay input passed: radial deadzone, smooth edge ramp, full deflection, D-pad parity, analog movement, restart edge');
+console.log('gameplay input passed: radial response, input parity, proportional analog drain, and restart edge');
