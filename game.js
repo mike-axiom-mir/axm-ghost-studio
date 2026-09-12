@@ -20,16 +20,20 @@ const bulkheads = [
 ];
 
 const keys = new Set();
+const GAMEPAD_DEADZONE = 0.2;
+let gamepadRestartHeld = false;
+let movementArmed = true;
 let state;
 let previousTime = performance.now();
 
-function resetGame() {
+function resetGame(requireNeutralMovement = false) {
   state = {
     mode: 'RUNNING',
     player: { x: core.x, y: core.y, r: 13, charge: 100 },
     beacons: beaconSeed.map((b, i) => ({ ...b, r: 29, energy: i === 0 ? 34 : 0 })),
     elapsed: 0
   };
+  movementArmed = !requireNeutralMovement;
   previousTime = performance.now();
   updateHud();
 }
@@ -62,30 +66,114 @@ function movePlayer(player, moveX, moveY) {
   if (!positionBlocked(player.x, nextY, player.r)) player.y = nextY;
 }
 
+function applyRadialDeadzone(x, y) {
+  const rawLength = Math.hypot(x, y);
+  if (rawLength <= GAMEPAD_DEADZONE) return { dx: 0, dy: 0 };
+
+  const clampedLength = Math.min(rawLength, 1);
+  const scaledLength = (clampedLength - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE);
+  return {
+    dx: (x / rawLength) * scaledLength,
+    dy: (y / rawLength) * scaledLength
+  };
+}
+
+function hasKeyboardMovementIntent() {
+  return ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].some(key => keys.has(key));
+}
+
+function getStandardGamepad() {
+  if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  return Array.from(navigator.getGamepads() || []).find(candidate => candidate?.connected && candidate.mapping === 'standard') || null;
+}
+
+function readGamepadMovementIntent(pad = getStandardGamepad()) {
+  if (!pad) return { dx: 0, dy: 0 };
+
+  const analog = applyRadialDeadzone(pad.axes?.[0] || 0, pad.axes?.[1] || 0);
+  let dx = analog.dx;
+  let dy = analog.dy;
+  if (pad.buttons?.[14]?.pressed) dx -= 1;
+  if (pad.buttons?.[15]?.pressed) dx += 1;
+  if (pad.buttons?.[12]?.pressed) dy -= 1;
+  if (pad.buttons?.[13]?.pressed) dy += 1;
+  const length = Math.hypot(dx, dy);
+  if (length > 1) {
+    dx /= length;
+    dy /= length;
+  }
+  return { dx, dy };
+}
+
+function readGamepadIntent() {
+  const pad = getStandardGamepad();
+  if (!pad) {
+    gamepadRestartHeld = false;
+    return { dx: 0, dy: 0 };
+  }
+
+  const movement = readGamepadMovementIntent(pad);
+  const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
+  if (restartPressed && !gamepadRestartHeld) {
+    const requireNeutral = hasKeyboardMovementIntent() || movement.dx !== 0 || movement.dy !== 0;
+    resetGame(requireNeutral);
+  }
+  gamepadRestartHeld = restartPressed;
+  return movement;
+}
+
+function currentMovementIntentActive() {
+  if (hasKeyboardMovementIntent()) return true;
+  const gamepad = readGamepadMovementIntent();
+  return gamepad.dx !== 0 || gamepad.dy !== 0;
+}
+
 function update(dt) {
+  const gamepad = readGamepadIntent();
   if (state.mode !== 'RUNNING') return;
 
-  state.elapsed += dt;
   const p = state.player;
-  let dx = 0;
-  let dy = 0;
+  let dx = gamepad.dx;
+  let dy = gamepad.dy;
   if (keys.has('arrowleft') || keys.has('a')) dx -= 1;
   if (keys.has('arrowright') || keys.has('d')) dx += 1;
   if (keys.has('arrowup') || keys.has('w')) dy -= 1;
   if (keys.has('arrowdown') || keys.has('s')) dy += 1;
 
-  const moving = dx !== 0 || dy !== 0;
-  if (moving) {
-    const length = Math.hypot(dx, dy);
+  const inputLength = Math.hypot(dx, dy);
+  if (inputLength > 1) {
+    dx /= inputLength;
+    dy /= inputLength;
+  }
+
+  const hasMovementIntent = dx !== 0 || dy !== 0;
+  if (!movementArmed) {
+    if (hasMovementIntent) {
+      updateHud();
+      return;
+    }
+    movementArmed = true;
+  }
+
+  state.elapsed += dt;
+  const movementMagnitude = Math.hypot(dx, dy);
+  let realizedMovementMagnitude = 0;
+  if (movementMagnitude > 0) {
     const speed = 235;
-    movePlayer(p, (dx / length) * speed * dt, (dy / length) * speed * dt);
+    const startX = p.x;
+    const startY = p.y;
+    movePlayer(p, dx * speed * dt, dy * speed * dt);
+    const maximumDistance = speed * dt;
+    const actualDistance = Math.hypot(p.x - startX, p.y - startY);
+    if (maximumDistance > 0) realizedMovementMagnitude = clamp(actualDistance / maximumDistance, 0, 1);
   }
 
   const atCore = distance(p, core) <= p.r + core.r;
   if (atCore) {
     p.charge = Math.min(100, p.charge + 58 * dt);
   } else {
-    p.charge = Math.max(0, p.charge - (moving ? 4.8 : 3.0) * dt);
+    const drainRate = 3.0 + (4.8 - 3.0) * realizedMovementMagnitude;
+    p.charge = Math.max(0, p.charge - drainRate * dt);
   }
 
   for (const beacon of state.beacons) {
@@ -280,12 +368,12 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
-  if (key === 'r') resetGame();
+  if (key === 'r') resetGame(currentMovementIntentActive());
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => keys.clear());
-restartButton.addEventListener('click', resetGame);
+restartButton.addEventListener('click', () => resetGame(currentMovementIntentActive()));
 
 resetGame();
 requestAnimationFrame(frame);
