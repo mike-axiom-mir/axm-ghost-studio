@@ -1,0 +1,87 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import vm from 'node:vm';
+
+const testsDir = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(testsDir, '..');
+const gameSource = readFileSync(path.join(root, 'game.js'), 'utf8');
+
+function noop() {}
+const drawContext = { beginPath: noop, moveTo: noop, lineTo: noop, stroke: noop, arc: noop, fill: noop, fillText: noop, clearRect: noop, fillRect: noop };
+const handlers = {};
+let restartClick = noop;
+const elements = {
+  game: { width: 960, height: 600, getContext: () => drawContext },
+  chargeText: { textContent: '' }, relayText: { textContent: '' }, stateText: { textContent: '' },
+  restartButton: { addEventListener: (type, handler) => { if (type === 'click') restartClick = handler; } }
+};
+const buttons = Array.from({ length: 16 }, () => ({ pressed: false }));
+const pad = { connected: true, mapping: 'standard', axes: [0, 0], buttons };
+const sandbox = {
+  document: { getElementById: id => elements[id] },
+  window: { addEventListener: (type, handler) => { handlers[type] = handler; } },
+  navigator: { getGamepads: () => [pad] },
+  performance: { now: () => 0 },
+  requestAnimationFrame: noop,
+  console
+};
+vm.createContext(sandbox);
+vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+const run = source => vm.runInContext(source, sandbox);
+const keyEvent = key => ({ key, repeat: false, preventDefault: noop });
+const closeTo = (actual, expected, epsilon = 1e-9) => assert.ok(Math.abs(actual - expected) <= epsilon, `expected ${actual} to be within ${epsilon} of ${expected}`);
+
+// Cross-device cancellation is not neutral: keyboard Right + gamepad Left cancel
+// the motion vector, but both physical movement inputs remain held across retry.
+pad.axes = [-1, 0];
+handlers.keydown(keyEvent('d'));
+run("state.mode = 'BLACKOUT'");
+restartClick();
+assert.equal(run('movementArmed'), false);
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+closeTo(run('state.elapsed'), 0.1);
+handlers.keyup(keyEvent('d'));
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+closeTo(run('state.elapsed'), 0.2);
+pad.axes = [0, 0];
+run('update(0.01)');
+assert.equal(run('movementArmed'), true);
+pad.axes = [-1, 0];
+run('update(0.1)');
+closeTo(run('state.player.x'), 456.5);
+
+// Same-device cancellation is also not neutral: analog Right + D-pad Left have
+// zero net vector, but Start retry must still require an observed all-neutral frame.
+pad.axes = [1, 0];
+pad.buttons[14].pressed = true;
+pad.buttons[9].pressed = false;
+run('readGamepadIntent()');
+run("state.mode = 'BLACKOUT'");
+pad.buttons[9].pressed = true;
+run('update(0.1)');
+assert.equal(run('state.mode'), 'RUNNING');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('state.elapsed'), 0);
+assert.equal(run('movementArmed'), false);
+pad.buttons[9].pressed = false;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+pad.buttons[14].pressed = false;
+run('update(0.1)');
+assert.equal(run('state.player.x'), 480);
+assert.equal(run('movementArmed'), false);
+pad.axes = [0, 0];
+run('update(0.01)');
+assert.equal(run('movementArmed'), true);
+pad.axes = [1, 0];
+run('update(0.1)');
+closeTo(run('state.player.x'), 503.5);
+
+console.log('gameplay retry input neutrality passed: opposing held inputs cannot counterfeit the neutral recovery edge');
