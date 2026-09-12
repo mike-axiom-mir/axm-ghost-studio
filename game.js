@@ -21,12 +21,14 @@ const bulkheads = [
 
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
-let gamepadRestartHeld = false;
+const gamepadRestartHeldIndices = new Set();
 let movementArmed = true;
+let gamepadNeutralPending = false;
+let gamepadNeutralPendingIndex = null;
 let state;
 let previousTime = performance.now();
 
-function resetGame(requireNeutralMovement = false) {
+function resetGame(requireNeutralMovement = false, requireGamepadNeutral = false, neutralGamepadIndex = null) {
   state = {
     mode: 'RUNNING',
     player: { x: core.x, y: core.y, r: 13, charge: 100 },
@@ -34,6 +36,8 @@ function resetGame(requireNeutralMovement = false) {
     elapsed: 0
   };
   movementArmed = !requireNeutralMovement;
+  gamepadNeutralPending = requireNeutralMovement && requireGamepadNeutral;
+  gamepadNeutralPendingIndex = gamepadNeutralPending ? neutralGamepadIndex : null;
   previousTime = performance.now();
   updateHud();
 }
@@ -87,6 +91,29 @@ function getStandardGamepad() {
   return Array.from(navigator.getGamepads() || []).find(candidate => candidate?.connected && candidate.mapping === 'standard') || null;
 }
 
+function getGamepadIndex(pad) {
+  if (!pad || typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  if (Number.isInteger(pad.index)) return pad.index;
+  const slot = Array.from(navigator.getGamepads() || []).indexOf(pad);
+  return slot >= 0 ? slot : null;
+}
+
+function getStandardGamepadByIndex(index) {
+  if (index === null || typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return null;
+  return Array.from(navigator.getGamepads() || []).find((candidate, slot) =>
+    candidate?.connected &&
+    candidate.mapping === 'standard' &&
+    (Number.isInteger(candidate.index) ? candidate.index : slot) === index
+  ) || null;
+}
+
+function hasGamepadMovementIntent(pad = getStandardGamepad()) {
+  if (!pad) return false;
+
+  const analog = applyRadialDeadzone(pad.axes?.[0] || 0, pad.axes?.[1] || 0);
+  return analog.dx !== 0 || analog.dy !== 0 || [12, 13, 14, 15].some(index => pad.buttons?.[index]?.pressed);
+}
+
 function readGamepadMovementIntent(pad = getStandardGamepad()) {
   if (!pad) return { dx: 0, dy: 0 };
 
@@ -112,21 +139,28 @@ function readGamepadIntent() {
   }
 
   const movement = readGamepadMovementIntent(pad);
+  const movementInputActive = hasGamepadMovementIntent(pad);
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
-  if (restartPressed && !gamepadRestartHeld) {
-    const requireNeutral = hasKeyboardMovementIntent() || movement.dx !== 0 || movement.dy !== 0;
-    resetGame(requireNeutral);
-    gamepadRestartHeld = true;
+  const padIndex = getGamepadIndex(pad);
+  const restartHeld = padIndex !== null && gamepadRestartHeldIndices.has(padIndex);
+  if (restartPressed && !restartHeld) {
+    const requireNeutral = hasKeyboardMovementIntent() || movementInputActive;
+    resetGame(requireNeutral, movementInputActive, movementInputActive ? padIndex : null);
+    if (padIndex !== null) gamepadRestartHeldIndices.add(padIndex);
     return null;
   }
-  gamepadRestartHeld = restartPressed;
+  if (!restartPressed && padIndex !== null) gamepadRestartHeldIndices.delete(padIndex);
   return movement;
 }
 
 function currentMovementIntentActive() {
-  if (hasKeyboardMovementIntent()) return true;
-  const gamepad = readGamepadMovementIntent();
-  return gamepad.dx !== 0 || gamepad.dy !== 0;
+  return hasKeyboardMovementIntent() || hasGamepadMovementIntent();
+}
+
+function resetForCurrentMovementIntent() {
+  const pad = getStandardGamepad();
+  const gamepadMovementActive = hasGamepadMovementIntent(pad);
+  resetGame(hasKeyboardMovementIntent() || gamepadMovementActive, gamepadMovementActive, gamepadMovementActive ? getGamepadIndex(pad) : null);
 }
 
 function update(dt) {
@@ -147,9 +181,16 @@ function update(dt) {
     dy /= inputLength;
   }
 
-  const hasMovementIntent = dx !== 0 || dy !== 0;
+  const movementPad = getStandardGamepad();
+  const gamepadMovementActive = hasGamepadMovementIntent(movementPad);
+  const movementInputActive = hasKeyboardMovementIntent() || gamepadMovementActive;
   if (!movementArmed) {
-    if (hasMovementIntent) {
+    const pendingPad = gamepadNeutralPending ? getStandardGamepadByIndex(gamepadNeutralPendingIndex) : null;
+    if (gamepadNeutralPending && pendingPad && !hasGamepadMovementIntent(pendingPad)) {
+      gamepadNeutralPending = false;
+      gamepadNeutralPendingIndex = null;
+    }
+    if (movementInputActive || gamepadNeutralPending) {
       dx = 0;
       dy = 0;
     } else {
@@ -370,12 +411,12 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
-  if (key === 'r' && !event.repeat) resetGame(currentMovementIntentActive());
+  if (key === 'r' && !event.repeat) resetForCurrentMovementIntent();
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => keys.clear());
-restartButton.addEventListener('click', () => resetGame(currentMovementIntentActive()));
+restartButton.addEventListener('click', resetForCurrentMovementIntent);
 
 resetGame();
 requestAnimationFrame(frame);
