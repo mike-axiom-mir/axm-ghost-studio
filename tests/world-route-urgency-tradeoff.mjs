@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical route-urgency replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -34,7 +38,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -121,9 +125,8 @@ const result = vm.runInContext(`(() => {
     for (let step = 0; step < MAX_STEPS && state.mode === 'RUNNING' && beacon.energy < targetEnergy; step += 1) update(DT);
   }
 
-  // Follow the already-accepted route-aware normal-run sequence far enough to produce
-  // a live decision on the upper passage: continuing to nearby R1 is cheap, while
-  // diverting to offline R3 is materially more urgent but farther away.
+  // Historical accepted route-aware normal-run sequence far enough to produce
+  // the route-versus-urgency tradeoff under the constant-decay model.
   resetGame();
   chargeRelay(0, 95);
   chargeCore(100);
@@ -196,7 +199,7 @@ assert.ok(
 );
 
 console.log(
-  `world route-urgency tradeoff passed: snapshot ${result.snapshot.elapsed.toFixed(2)}s ` +
+  `world historical constant-decay route-urgency tradeoff passed: snapshot ${result.snapshot.elapsed.toFixed(2)}s ` +
   `at (${result.snapshot.player.x.toFixed(1)},${result.snapshot.player.y.toFixed(1)}), ` +
   `energies ${result.snapshot.beacons.map(beacon => beacon.energy.toFixed(2)).join('/')}; ` +
   `R1 travel ${r1Travel.toFixed(2)}s -> ${result.cheapR1.online} online / ${result.cheapR1.endCharge.toFixed(2)}% charge, ` +
