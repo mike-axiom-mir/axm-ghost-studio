@@ -25,6 +25,7 @@ const gamepadRestartHeldIndices = new Set();
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
+let inputFocused = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
 let state;
 let previousTime = performance.now();
 
@@ -133,6 +134,8 @@ function readGamepadMovementIntent(pad = getStandardGamepad()) {
 }
 
 function readGamepadIntent() {
+  if (!inputFocused) return { dx: 0, dy: 0 };
+
   const pad = getStandardGamepad();
   if (!pad) {
     return { dx: 0, dy: 0 };
@@ -151,6 +154,19 @@ function readGamepadIntent() {
   }
   if (!restartPressed && padIndex !== null) gamepadRestartHeldIndices.delete(padIndex);
   return movement;
+}
+
+function guardFocusedGamepadCarryover() {
+  const pad = getStandardGamepad();
+  if (!pad) return;
+
+  const padIndex = getGamepadIndex(pad);
+  if (!gamepadNeutralPending && hasGamepadMovementIntent(pad)) {
+    movementArmed = false;
+    gamepadNeutralPending = true;
+    gamepadNeutralPendingIndex = padIndex;
+  }
+  if (padIndex !== null && pad.buttons?.[9]?.pressed) gamepadRestartHeldIndices.add(padIndex);
 }
 
 function currentMovementIntentActive() {
@@ -415,7 +431,14 @@ window.addEventListener('keydown', event => {
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
-window.addEventListener('blur', () => keys.clear());
+window.addEventListener('blur', () => {
+  keys.clear();
+  inputFocused = false;
+});
+window.addEventListener('focus', () => {
+  inputFocused = true;
+  guardFocusedGamepadCarryover();
+});
 restartButton.addEventListener('click', resetForCurrentMovementIntent);
 
 resetGame();
