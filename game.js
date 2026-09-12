@@ -25,7 +25,7 @@ const gamepadRestartHeldIndices = new Set();
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
-let inputFocused = true;
+let inputFocused = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
 let state;
 let previousTime = performance.now();
 
@@ -107,7 +107,6 @@ function getStandardGamepadByIndex(index) {
     (Number.isInteger(candidate.index) ? candidate.index : slot) === index
   ) || null;
 }
-
 function hasGamepadMovementIntent(pad = getStandardGamepad()) {
   if (!pad) return false;
 
