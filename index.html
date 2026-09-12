@@ -16,10 +16,10 @@
       <button id="restartButton" type="button">Restart</button>
     </header>
 
-    <section class="status" aria-live="polite">
+    <section class="status">
       <div><span>Runner charge</span><strong id="chargeText">100%</strong></div>
       <div><span>Relays online</span><strong id="relayText">0 / 4</strong></div>
-      <div><span>Status</span><strong id="stateText">RUNNING</strong></div>
+      <div><span>Status</span><strong id="stateText" role="status" aria-atomic="true">RUNNING</strong></div>
     </section>
 
     <canvas id="game" width="960" height="600" aria-label="Top-down relay chamber"></canvas>

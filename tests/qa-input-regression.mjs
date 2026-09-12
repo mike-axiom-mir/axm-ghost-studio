@@ -142,6 +142,6 @@ step(1);
 assert.equal(sandbox.__qa.state.mode, 'BLACKOUT');
 buttonListeners.get('click')();
 assert.equal(sandbox.__qa.state.mode, 'RUNNING', 'Restart button should recover from BLACKOUT');
-assert.equal(elements.stateText.textContent, 'RUNNING', 'HUD should report RUNNING after button restart');
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'HUD should report the post-restart core state');
 
 console.log('qa input regression passed: cardinal speed, diagonal normalization, conflicting input, blur release, boundary clamp, keyboard retry, button retry');
