@@ -180,6 +180,12 @@ function drawTransferFeedback() {
   ctx.arc(midpointX, midpointY, 4 + Math.sin(state.elapsed * 12) * 1.5, 0, Math.PI * 2);
   ctx.fillStyle = '#fff1ae';
   ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(target.x, target.y, target.r + 14 + Math.sin(state.elapsed * 10) * 2, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 228, 122, .65)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
 }
 
 function drawPlayer() {
