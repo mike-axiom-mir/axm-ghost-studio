@@ -431,7 +431,7 @@ function drawOverlay() {
   ctx.fillText(state.mode === 'WON' ? 'NETWORK STABLE' : 'BLACKOUT', W / 2, H / 2 - 10);
   ctx.fillStyle = '#d4e0e8';
   ctx.font = '18px system-ui';
-  ctx.fillText('Press R or Restart to run the chamber again', W / 2, H / 2 + 34);
+  ctx.fillText('Press R, Restart, or gamepad Start to run the chamber again', W / 2, H / 2 + 34);
 }
 
 function render() {
