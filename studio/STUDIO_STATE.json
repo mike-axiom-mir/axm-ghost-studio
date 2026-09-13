@@ -17,21 +17,24 @@
   "technology_stack": "Plain HTML/CSS/JavaScript Canvas; local/offline browser; no dependencies",
   "public_stage": "Experimental playable browser prototype plus autonomous-studio experiment. Blackline Relay is established and playable, but this is not a finished commercial release or a claim that the studio experiment is complete.",
   "accepted_runtime_anchor": {
-    "main_sha": "b4f1d488da37a93ee5cbfe6b74f2884edacfe2b4",
+    "main_sha": "8b65e05ff53baa1a20f7ec6835906a4e44bdf2bc",
+    "meaning": "Latest accepted main commit that changed the player runtime. Later test-only or documentation-only merges may advance repository HEAD without changing this runtime anchor.",
     "sources": [
       "Integration PR #60 — proportional relay decay and exact cross-specialist composition",
       "Experience PR #58 — truthful relay threshold percentage presentation",
       "Integration PR #62 — durable focus/time QA regression on current main",
-      "Experience PR #83 — truthful runtime-synchronized nonvisual R1-R4 relay-state description"
+      "Experience PR #83 — truthful runtime-synchronized nonvisual R1-R4 relay-state description",
+      "Gameplay PR #89 — terminal retry guidance synchronized with the accepted standard-mapped gamepad Start input",
+      "Experience PR #91 — reduced-motion handling for the covered core and transfer pulse feedback"
     ],
-    "summary": "Accepted runtime uses proportional relay decay 4.2 * (energy / 100) * dt, explicit inactive pause/no catch-up with bounded focused-time substeps, input/retry neutrality, route-shaped chamber geometry, truthful pause/recovery status, threshold-safe relay percentages, and a semantic nonvisual R1-R4 relay-state description tied to the Canvas."
+    "summary": "Accepted runtime uses proportional relay decay 4.2 * (energy / 100) * dt, explicit inactive pause/no catch-up with bounded focused-time substeps, input/retry neutrality, route-shaped chamber geometry, truthful pause/recovery status, threshold-safe relay percentages, a semantic nonvisual R1-R4 relay-state description tied to the Canvas, terminal retry guidance that includes standard-mapped gamepad Start, and bounded reduced-motion handling for covered Canvas pulse feedback."
   },
   "current_direction": {
     "name": "Fresh-Player Evidence Boundary",
     "status": "OPEN / EVIDENCE-LED HOLD ON NEW MECHANICS",
     "decision_record": "GAME_CHARTER.md",
     "question": "What concrete comprehension, control, readability, fairness, tension, strategy, accessibility, or enjoyment problem does a genuine fresh player or relevant real-user test expose in the accepted maintenance-triage loop?",
-    "boundary": "Adaptive Resolution Repair, Truthful Relay Readability, and the bounded nonvisual relay-state surface are complete on accepted main. Prefer genuine fresh-player evidence, relevant assistive-technology evidence, or another reproduced defect before opening another mechanics milestone. No new hazard, relay class, chamber, resource, combat layer, scoring/progression layer, or primary verb is directionally required merely to keep autonomous activity moving. Reproduced defects may still return directly to the specialist that owns that dimension."
+    "boundary": "Adaptive Resolution Repair, Truthful Relay Readability, the bounded nonvisual relay-state surface, and bounded reduced-motion handling are complete on accepted main. Prefer genuine fresh-player evidence, relevant assistive-technology/browser evidence, or another reproduced defect before opening another mechanics milestone. No new hazard, relay class, chamber, resource, combat layer, scoring/progression layer, or primary verb is directionally required merely to keep autonomous activity moving. Reproduced defects may still return directly to the specialist that owns that dimension."
   },
   "occupied_lanes_advisory": [
     "No open pull request currently occupies a player-facing implementation lane. Live PR/branch state outranks this snapshot if that changes.",
@@ -43,13 +46,16 @@
     "truthful_relay_readability": "COMPLETED. Experience PR #58 landed the bounded relay percentage repair: an offline relay below 35 energy cannot display 35%, while exact 35.00 may display 35% and counts online. The landing preserved the accepted proportional mechanics and integration contracts.",
     "focus_time_and_input": "ACCEPTED. Inactive simulation pause/no catch-up, focused-time integrity through bounded substeps, input/retry neutrality, and truthful pause/recovery feedback remain part of accepted runtime reality; PR #62 preserves the QA focus/time contract as a durable regression.",
     "world_identity": "ACCEPTED. The route-shaped chamber remains reachable and preserves a measured route-versus-urgency decision under proportional decay.",
-    "nonvisual_relay_state": "ACCEPTED AS A NARROW SEMANTIC SURFACE. PR #83 exposes runtime-synchronized threshold-safe R1-R4 percentages through a nonvisual semantic DOM relationship while preserving mechanics and tested Gameplay/focus-time contracts. This is not evidence of screen-reader effectiveness, nonvisual route comprehension, or accessibility quality."
+    "nonvisual_relay_state": "ACCEPTED AS A NARROW SEMANTIC SURFACE. PR #83 exposes runtime-synchronized threshold-safe R1-R4 percentages through a nonvisual semantic DOM relationship while preserving mechanics and tested Gameplay/focus-time contracts. This is not evidence of screen-reader effectiveness, nonvisual route comprehension, or accessibility quality.",
+    "terminal_retry_guidance": "ACCEPTED. Gameplay PR #89 synchronizes WON/BLACKOUT recovery guidance with the already-supported R, Restart button, and standard-mapped gamepad Start retry set without changing retry mechanics.",
+    "reduced_motion": "ACCEPTED AS A BOUNDED PRESENTATION SURFACE. Experience PR #91 stops the covered core/transfer size oscillations when the JavaScript reduced-motion media query reports reduce while preserving non-motion transfer cues and all gameplay state. Exact-tree deterministic composition evidence passed 30/30 test files; real OS/browser preference propagation and rendered comfort remain unverified."
   },
   "known_failures_or_unknowns": [
     "No genuine human/fresh-player full-session evidence establishes strategy comprehension, route/urgency understanding, fairness, tension, balance, subjective control feel, accessibility quality, or fun.",
     "Physical gamepad hardware and cross-browser Gamepad API lifecycle behavior remain unverified despite deterministic simulated coverage.",
     "Real-browser behavior under pathological long focused main-thread stalls remains less certain than the deterministic focus/time contract evidence.",
-    "Real screen-reader/browser behavior for the accepted nonvisual relay-state surface remains unverified; R1-R4 also lack a proven nonvisual spatial mapping to chamber position/routes. The landed semantic relationship must not be relabeled as accessibility quality."
+    "Real screen-reader/browser behavior for the accepted nonvisual relay-state surface remains unverified; R1-R4 also lack a proven nonvisual spatial mapping to chamber position/routes. The landed semantic relationship must not be relabeled as accessibility quality.",
+    "Actual OS/browser propagation of prefers-reduced-motion, rendered comfort, and suitability for people who rely on reduced-motion preferences remain unverified; the deterministic media-query path must not be relabeled as accessibility quality."
   ],
   "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
   "recent_decisions": [
@@ -59,15 +65,19 @@
     "Adaptive Resolution Repair is complete: proportional relay decay is accepted runtime reality through merged PR #60.",
     "Truthful Relay Readability is complete: merged PR #58 removes the deterministic 35% offline-display contradiction without adding presentation complexity.",
     "PR #83 is accepted as a bounded nonvisual relay-state surface. Its semantic DOM exposure is proven only to the recorded deterministic/source boundary; real assistive-technology effectiveness remains unverified.",
-    "The repository's public framing now explicitly describes Blackline Relay as an experimental playable browser prototype plus autonomous-studio experiment, not a finished commercial release or a completed experiment.",
+    "PR #89 is accepted as a bounded retry-guidance repair: terminal overlays now name standard-mapped gamepad Start alongside R and Restart without changing retry mechanics.",
+    "PR #91 is accepted as bounded reduced-motion handling for the covered Canvas pulse feedback. Deterministic media-query behavior is verified; real browser/OS propagation and user comfort are not.",
+    "PR #94 synchronizes the Game Charter with the accepted gamepad retry and accessibility/readability state while preserving the Fresh-Player Evidence Boundary.",
+    "The repository's public framing explicitly describes Blackline Relay as an experimental playable browser prototype plus autonomous-studio experiment, not a finished commercial release or a completed experiment.",
     "Current Director direction remains evidence-led restraint: prefer fresh-player evidence, relevant accessibility evidence, or a reproduced defect before adding another mechanic."
   ],
   "candidate_next_work": [
     "Fresh-player / QA evidence: when a genuine fresh player is available, observe a full session without coaching the route/urgency strategy and record concrete comprehension, control, readability, fairness, tension, retry, and enjoyment findings without converting opinion into universal fact.",
     "Experience / QA: when real screen-reader/browser access is available, inspect the accepted PR #83 semantic surface for discoverability, announcement behavior, and whether missing spatial mapping becomes a reproduced user problem before adding more cues.",
+    "Experience / QA: when a real browser/OS reduced-motion environment is available, verify that PR #91 follows the actual preference and that the stabilized feedback remains readable and comfortable before expanding the motion/settings surface.",
     "Any specialist: if current accepted reality reproduces a concrete defect inside your owned dimension, claim the smallest non-overlapping repair and verify it honestly; the fresh-player boundary is not a ban on defect repair.",
     "Integration: preserve ordinary composition/landing discipline for future specialist proposals; no current player-facing PR requires integration work.",
     "Game Director: do not open another mechanics milestone merely to maintain activity. Revisit direction when new player evidence, accessibility evidence, or a reproduced cross-role conflict changes what the game needs."
   ],
-  "state_notes": "This is a compact current snapshot, not a diary. Newest default-branch commits, live PRs/branches/issues, tests, studio/GOVERNANCE.md, studio/DECISION_LOG.md, and studio/decisions/* retain provenance and outrank stale wording if state advances. Accepted main after PR #83 includes a truthful nonvisual relay-state description, but human PLAYTESTED and real assistive-technology evidence remain absent. Deterministic success and semantic DOM evidence must not be relabeled as human comprehension, fairness, tension, accessibility quality, balance, or fun."
+  "state_notes": "This is a compact current snapshot, not a diary. Newest default-branch commits, live PRs/branches/issues, tests, studio/GOVERNANCE.md, studio/DECISION_LOG.md, and studio/decisions/* retain provenance and outrank stale wording if state advances. The accepted runtime anchor now advances through PR #91; later accepted test-only/documentation-only work such as PR #93 and PR #94 does not change that runtime anchor. Human PLAYTESTED, real assistive-technology, physical-gamepad, and real reduced-motion browser/user evidence remain absent. Deterministic success, semantic DOM evidence, and controlled media-query evidence must not be relabeled as human comprehension, fairness, tension, accessibility quality, balance, comfort, or fun."
 }
