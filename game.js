@@ -2,6 +2,7 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const chargeText = document.getElementById('chargeText');
 const relayText = document.getElementById('relayText');
+const relayDetail = document.getElementById('relayDetail');
 const stateText = document.getElementById('stateText');
 const restartButton = document.getElementById('restartButton');
 
@@ -291,10 +292,21 @@ function setTextIfChanged(element, value) {
   if (element.textContent !== value) element.textContent = value;
 }
 
+function getDisplayedBeaconEnergy(beacon) {
+  const online = beacon.energy >= 35;
+  return online ? Math.round(beacon.energy) : Math.min(34, Math.round(beacon.energy));
+}
+
 function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
   setTextIfChanged(chargeText, `${Math.round(state.player.charge)}%`);
   setTextIfChanged(relayText, `${online} / ${state.beacons.length}`);
+  if (relayDetail) {
+    const relaySummary = state.beacons
+      .map((beacon, index) => `R${index + 1} ${getDisplayedBeaconEnergy(beacon)}%`)
+      .join(', ');
+    setTextIfChanged(relayDetail, `Relay status: ${relaySummary}`);
+  }
   setTextIfChanged(stateText, getStatusLabel());
 }
 
@@ -348,7 +360,7 @@ function drawCore() {
 function drawBeacon(beacon, index) {
   const pct = beacon.energy / 100;
   const online = beacon.energy >= 35;
-  const displayedEnergy = online ? Math.round(beacon.energy) : Math.min(34, Math.round(beacon.energy));
+  const displayedEnergy = getDisplayedBeaconEnergy(beacon);
   ctx.beginPath();
   ctx.arc(beacon.x, beacon.y, beacon.r, 0, Math.PI * 2);
   ctx.fillStyle = online ? '#16382f' : '#221a20';
