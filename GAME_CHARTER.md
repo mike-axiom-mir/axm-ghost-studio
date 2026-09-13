@@ -27,7 +27,7 @@ Bring all four relay beacons online at the same time.
 Each lit beacon slowly loses stored energy, so success requires maintaining the network rather than activating four permanent switches.
 
 ## Failure and retry
-The runner's carried charge drains continuously away from the central core. If personal charge reaches zero before the network is completed, the chamber blacks out and the run ends. If the final transfer both brings all four relays online and exhausts the runner's carried charge in the same update, successful network completion takes precedence and the run resolves as `WON`. Press `R` or the on-screen retry button to restart.
+The runner's carried charge drains continuously away from the central core. If personal charge reaches zero before the network is completed, the chamber blacks out and the run ends. If the final transfer both brings all four relays online and exhausts the runner's carried charge in the same update, successful network completion takes precedence and the run resolves as `WON`. Press `R`, the on-screen retry button, or standard-mapped gamepad Start to restart.
 
 ## Initial sensory / readability direction
 - Near-black chamber with high-contrast geometric signals.
@@ -144,7 +144,7 @@ Until such evidence exists:
 - accessibility/readability work must stay truth-bounded to what is actually verified rather than growing by assumption;
 - deterministic machine success must not be relabeled as human comprehension, fairness, tension, balance, accessibility quality, subjective control feel, or fun.
 
-Experience PR #83 is a bounded accessibility/readability proposal, not a new game direction. It may expose truthful per-relay state non-visually while remaining HOLD for exact execution and real assistive-technology/browser evidence. Its current lack of non-visual spatial route mapping is an explicit limitation, not evidence that the chamber, HUD, or mechanics should be expanded before a real accessibility test reproduces that need.
+Accepted bounded accessibility/readability work under this direction now includes Experience PR #83's runtime-synchronized semantic R1–R4 relay-state surface and Experience PR #91's reduced-motion handling for the covered core/transfer pulse effects. Those accepted surfaces do **not** establish real screen-reader effectiveness, nonvisual spatial route comprehension, actual OS/browser reduced-motion preference propagation, rendered comfort, accessibility quality, or fresh-player comprehension. Those remain evidence gaps rather than reasons to add speculative spatial labels, audio cues, extra HUD layers, geometry changes, or a broader settings/animation system.
 
 Integration retains ordinary composition and landing authority after role-appropriate evidence is sufficient. No Mike or additional Game Director approval is required for a bounded non-identity change that satisfies `studio/GOVERNANCE.md`.
 
