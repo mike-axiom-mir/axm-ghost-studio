@@ -49,8 +49,9 @@ vm.createContext(sandbox);
 vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
 const run = source => vm.runInContext(source, sandbox);
 const expectedRetryGuidance = 'Press R, Restart, or gamepad Start to run the chamber again';
+const indexVisibleText = indexSource.replace(/<[^>]+>/g, ' ');
 
-assert.match(indexSource, /Retry:\s*R, Restart, or gamepad Start/);
+assert.match(indexVisibleText, /Retry:\s*R, Restart, or gamepad Start/);
 assert.match(gameSource, /pad\.buttons\?\.\[9\]\?\.pressed/);
 
 for (const terminalMode of ['WON', 'BLACKOUT']) {
