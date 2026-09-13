@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical decision-chain replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -34,7 +38,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -145,7 +149,7 @@ const result = vm.runInContext(`(() => {
     });
   }
 
-  // Recreate the accepted Route-Urgency first-decision snapshot.
+  // Recreate the accepted historical Route-Urgency first-decision snapshot.
   resetGame();
   chargeRelay(0, 95);
   chargeCore(100);
@@ -173,8 +177,7 @@ const result = vm.runInContext(`(() => {
     }
     const afterFirstService = snapshotState();
 
-    // Comparable continuation policy for both branches: return to the core and fully recharge.
-    // The next decision is then evaluated from the live relay state produced by the first choice.
+    // Comparable continuation policy for both historical branches: return to the core and fully recharge.
     chargeCore(100);
     const secondDecision = snapshotState();
     const travel = travelTimesFrom(secondDecision);
@@ -251,7 +254,7 @@ assert.ok(
 );
 
 console.log(
-  `systems decision-chain passed: first ${first.elapsed.toFixed(2)}s ` +
+  `systems historical constant-decay decision-chain passed: first ${first.elapsed.toFixed(2)}s ` +
   `energies ${first.beacons.map(beacon => beacon.energy.toFixed(2)).join('/')}; ` +
   `cheap-first next ${cheapSecond.elapsed.toFixed(2)}s -> ` +
   `${cheapOnline} online, burden ${cheap.secondRecoveryBurden.toFixed(2)}, ` +

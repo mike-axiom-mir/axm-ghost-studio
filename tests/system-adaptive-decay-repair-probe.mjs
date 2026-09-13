@@ -2,18 +2,21 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const acceptedSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
-const currentDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
-const proposedDecayRule =
+const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+const runtimeDecayRule =
   'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
 
 assert.equal(
-  acceptedSource.split(currentDecayRule).length - 1,
+  gameSource.split(runtimeDecayRule).length - 1,
   1,
-  'probe must apply to exactly the accepted constant-decay rule'
+  'runtime contract must contain exactly one proportional relay-decay rule'
 );
-
-const gameSource = acceptedSource.replace(currentDecayRule, proposedDecayRule);
+assert.equal(
+  gameSource.includes(historicalDecayRule),
+  false,
+  'runtime contract must not silently retain the historical constant-decay rule'
+);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -45,7 +48,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js#proportional-decay-probe' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#proportional-decay-runtime' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -194,7 +197,7 @@ const result = vm.runInContext(`(() => {
   }
 
   // Re-run accepted Systems #52 policy without changing its 45 reserve, 25 runner
-  // reserve, route/deficit score, or 39.8 conservative fill estimate.
+  // reserve, route/deficit score, or historical 39.8 conservative fill estimate.
   function runCostAwarePolicy() {
     const MAX_DECISIONS = 40;
     const STABILITY_RESERVE = 45;
@@ -317,9 +320,9 @@ assert.ok(result.scripted.elapsed < 40);
 assert.equal(result.blackout.mode, 'BLACKOUT');
 assert.ok(Math.abs(result.blackout.elapsed - 33.42) < 0.05);
 
-console.log('Systems proportional-decay repair probe passed.');
+console.log('Systems proportional-decay runtime contract passed.');
 console.log(JSON.stringify({
-  proposedRule: proposedDecayRule,
+  runtimeRule: runtimeDecayRule,
   lowestEnergyAdaptive: {
     mode: result.lowest.final.mode,
     elapsed: result.lowest.final.elapsed,
