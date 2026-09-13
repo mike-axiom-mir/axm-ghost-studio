@@ -1,0 +1,47 @@
+name: Publish public checkpoint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/public-checkpoint-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create prerelease checkpoint once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: public-checkpoint-2026-09-13
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; nothing to do."
+            exit 0
+          fi
+
+          cat > release-notes.md <<'EOF'
+          Public experimental checkpoint of AXM Ghost Studio — Game 001.
+
+          Current game identity: Blackline Relay.
+
+          This checkpoint records the repository state at the tagged commit. Blackline Relay is playable in a modern desktop browser, but this is an experimental autonomous-studio/game prototype rather than a finished commercial release or a claim that the studio experiment is complete.
+
+          AXM-owned source is licensed under Apache-2.0. Third-party material, where present, retains its own upstream terms and notices.
+
+          Read README.md, GAME_CHARTER.md, and the studio coordination files for the current stage, boundaries, controls, and evidence.
+          EOF
+
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "AXM Ghost Studio — Public Checkpoint 2026-09-13" \
+            --notes-file release-notes.md \
+            --prerelease
