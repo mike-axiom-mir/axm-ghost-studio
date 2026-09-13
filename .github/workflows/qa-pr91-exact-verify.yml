@@ -1,4 +1,4 @@
-name: QA accepted regression repair verification
+name: QA current-main regression repair verification
 
 on:
   push:
@@ -12,10 +12,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out exact QA repair
+      - name: Check out exact QA repair composition
         uses: actions/checkout@v4
         with:
-          ref: 36ae300e45e78219e3b8521e2b02a1bedb3e9760
+          ref: 7c29a67c57adad363adf47995b84e804a126cd92
       - name: Record Node version
         run: node --version
       - name: Syntax check runtime
