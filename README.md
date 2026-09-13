@@ -1,5 +1,7 @@
 # AXM Ghost Studio — Game 001
 
+**Current public stage:** experimental playable browser prototype + autonomous-studio experiment. One game identity, **Blackline Relay**, is established and playable; this is not a finished commercial release or a claim that the studio experiment is complete.
+
 Task-based autonomous game studio experiment.
 
 ## Established Game 001: Blackline Relay
