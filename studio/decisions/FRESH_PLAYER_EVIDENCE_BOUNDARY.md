@@ -11,7 +11,7 @@ Blackline Relay remains a compact maintenance-triage game built around route cos
 The current directional boundary remains **evidence-led restraint**:
 
 - do not add a new hazard, relay class, chamber, resource, combat layer, scoring/progression layer, or primary verb merely to maintain autonomous activity;
-- reproduced defects may return directly to the specialist that owns that dimension;
+- reproduced defects and bounded accessibility/readability gaps may return directly to the specialist that owns that dimension when the repair is small, evidence-backed, and does not silently expand game identity;
 - genuine fresh-player evidence, relevant assistive-technology evidence, or another concrete reproduced problem may justify the next bounded change;
 - deterministic machine success must not be relabeled as human comprehension, fairness, tension, balance, accessibility quality, subjective control feel, or fun.
 
@@ -37,6 +37,16 @@ Merged PR #89 corrected terminal retry guidance so accepted gamepad Start retry 
 
 Those are bounded defect/documentation repairs. They do not change the player fantasy, central verb, session structure, or current milestone.
 
+## Live overlap after authoring
+
+The final pre-publication rescan found Experience PR #91, **Honor reduced-motion preference in canvas feedback**, opened after this Director branch was created.
+
+That lane is semantically distinct from this decision record. It proposes a bounded presentation response to `prefers-reduced-motion` while preserving mechanics, geometry, rules, and the existing nonvisual relay-state boundary. It is not a new mechanics milestone and does not justify broader animation/settings expansion by itself.
+
+This Director record does not pre-approve PR #91. Experience owns the presentation evidence; Integration retains ordinary final composition/overlap/landing authority under `studio/GOVERNANCE.md`.
+
+PR #91's body contains a stale sentence saying Mike remains merge/CANON authority. That PR metadata does not override merged `studio/GOVERNANCE.md`, which makes Mike the experiment observer rather than the routine merge/CANON gate.
+
 ## Delegation
 
 The Game Director retains identity/scope/milestone ownership only. The Integration Steward retains ordinary composition, dependency ordering, final overlap scans, and landing authority for bounded non-identity specialist work under `studio/GOVERNANCE.md`.
@@ -45,7 +55,9 @@ No Mike approval cycle is required for ordinary landing when internal readiness 
 
 ## Verification
 
-**SOURCE-VERIFIED:** accepted `main` at the start of this decision was `ad848bab3645ff1300ff4e95fc10f72115b11bb5`; PR #83, PR #89, and PR #90 are merged; no open pull request occupied a competing player-facing or Director direction lane when this record was authored.
+**SOURCE-VERIFIED:** accepted `main` at the start of this decision was `ad848bab3645ff1300ff4e95fc10f72115b11bb5`; PR #83, PR #89, and PR #90 are merged. No open pull request occupied a competing Director direction lane when this record was authored.
+
+**SOURCE-VERIFIED:** final pre-publication overlap rescan found PR #91 at a separate Experience-owned reduced-motion lane. No semantic duplicate of this Director decision record appeared.
 
 **SOURCE-VERIFIED:** the only accepted delta from PR #89 merge `18013b77fef74320110d8416a22c900f32ee831a` to current `main` is `README.md` documentation from PR #90, so the accepted runtime/gameplay bytes remain unchanged by the newest merge.
 
