@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -34,7 +38,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -139,11 +143,9 @@ const result = vm.runInContext(`(() => {
     return state.elapsed - startElapsed;
   }
 
-  // Declared before execution: choose the currently lowest-energy relay; ties use
-  // shortest measured route from the exact current snapshot, then relay index.
-  // Before every service, return to core and fully recharge. Service the chosen
-  // relay for exactly 1.00 s, then recompute from current state. No future order,
-  // branch script, or future-state lookahead is encoded here.
+  // Historical accepted policy under the constant-decay model: choose the currently
+  // lowest-energy relay; ties use shortest measured route, then relay index. Before
+  // every service, return to core and fully recharge. Service exactly 1.00 s.
   function chooseCurrentTarget() {
     const snapshot = snapshotState();
     const minEnergy = Math.min(...snapshot.beacons.map(beacon => beacon.energy));
@@ -209,16 +211,15 @@ const result = vm.runInContext(`(() => {
 
 const expectedCycle = [2, 4, 3, 1];
 const targets = result.history.map(entry => entry.target);
-assert.equal(result.history.length, 24, 'fixed generous budget should complete all 24 service decisions');
-assert.equal(result.final.mode, 'RUNNING', 'this declared policy should expose a non-terminal stall/cycle, not a hidden terminal');
+assert.equal(result.history.length, 24, 'historical fixed generous budget should complete all 24 service decisions');
+assert.equal(result.final.mode, 'RUNNING', 'historical constant-decay policy should reproduce its non-terminal cycle');
 assert.equal(result.coreReturns, 24);
 assert.ok(Math.abs(result.cumulativeService - 24) < 0.02);
 for (let offset = 0; offset < targets.length; offset += expectedCycle.length) {
   assert.equal(JSON.stringify(Array.from(targets.slice(offset, offset + expectedCycle.length))), JSON.stringify(expectedCycle));
 }
 
-// After the first cycle, every fourth service returns to the same live mechanical
-// state (excluding elapsed/history), proving a repeatable non-terminal limit cycle.
+// Under the historical constant-decay model, every fourth service returns to the same live mechanical state.
 const anchors = [4, 8, 12, 16, 20, 24].map(round => result.history[round - 1]);
 const reference = anchors[0];
 for (const anchor of anchors.slice(1)) {
@@ -244,7 +245,7 @@ assert.equal(
 );
 
 console.log(
-  `qa adaptive completion passed: ${targets.join('>')}; ` +
+  `qa historical constant-decay adaptive completion passed: ${targets.join('>')}; ` +
   `non-terminal 4-service cycle through ${result.final.elapsed.toFixed(2)}s, ` +
   `charge ${result.final.player.charge.toFixed(3)}, ` +
   `energies ${result.final.beacons.map(beacon => beacon.energy.toFixed(3)).join('/')}, ` +

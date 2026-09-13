@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
-const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
-const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
-assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical route-urgency replay expects the proportional runtime rule');
-const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
+const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const proportionalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+assert.equal(
+  gameSource.split(proportionalDecayRule).length - 1,
+  1,
+  'current World route-urgency contract expects the proportional relay-decay runtime'
+);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -38,7 +40,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#current-proportional-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -125,8 +127,8 @@ const result = vm.runInContext(`(() => {
     for (let step = 0; step < MAX_STEPS && state.mode === 'RUNNING' && beacon.energy < targetEnergy; step += 1) update(DT);
   }
 
-  // Historical accepted route-aware normal-run sequence far enough to produce
-  // the route-versus-urgency tradeoff under the constant-decay model.
+  // Reuse the accepted normal-run setup, but execute it directly on the
+  // current proportional-decay runtime instead of replaying historical rules.
   resetGame();
   chargeRelay(0, 95);
   chargeCore(100);
@@ -158,7 +160,6 @@ const result = vm.runInContext(`(() => {
     return {
       mode: state.mode,
       travel: arrivalElapsed - startElapsed,
-      total: state.elapsed - startElapsed,
       chargeUsed: startCharge - state.player.charge,
       endCharge: state.player.charge,
       online: state.beacons.filter(beacon => beacon.energy >= 35).length,
@@ -182,11 +183,11 @@ assert.equal(result.snapshot.beacons[2].energy, 0, 'R3 should be fully offline/u
 const r1Travel = result.travelOnly[0].travel;
 const r3Travel = result.travelOnly[2].travel;
 const r4Travel = result.travelOnly[3].travel;
-assert.ok(r1Travel < r3Travel - 0.8, `R1 should have a meaningful route advantage: ${r1Travel} vs ${r3Travel}`);
+assert.ok(r1Travel < r3Travel - 0.8, `R1 should retain a meaningful route advantage: ${r1Travel} vs ${r3Travel}`);
 assert.ok(r3Travel <= r4Travel + 0.05, 'offline R3 should not be dominated by the equally urgent R4 on route cost');
 assert.ok(
   result.snapshot.beacons[0].energy - result.snapshot.beacons[2].energy > 45,
-  'R3 should have a meaningful live-urgency advantage over nearby R1'
+  'R3 should retain a meaningful live-urgency advantage over nearby R1'
 );
 
 assert.equal(result.cheapR1.mode, 'RUNNING');
@@ -195,11 +196,11 @@ assert.equal(result.cheapR1.online, 2, 'cheap R1 continuation should preserve tw
 assert.equal(result.urgentR3.online, 3, 'urgent R3 continuation should recover a third online relay after the equal service window');
 assert.ok(
   result.cheapR1.endCharge > result.urgentR3.endCharge + 4,
-  'the farther urgent continuation should pay a measurable runner-charge cost'
+  'the farther urgent continuation should retain a measurable runner-charge cost'
 );
 
 console.log(
-  `world historical constant-decay route-urgency tradeoff passed: snapshot ${result.snapshot.elapsed.toFixed(2)}s ` +
+  `world current proportional route-urgency tradeoff passed: snapshot ${result.snapshot.elapsed.toFixed(2)}s ` +
   `at (${result.snapshot.player.x.toFixed(1)},${result.snapshot.player.y.toFixed(1)}), ` +
   `energies ${result.snapshot.beacons.map(beacon => beacon.energy.toFixed(2)).join('/')}; ` +
   `R1 travel ${r1Travel.toFixed(2)}s -> ${result.cheapR1.online} online / ${result.cheapR1.endCharge.toFixed(2)}% charge, ` +

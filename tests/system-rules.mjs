@@ -51,11 +51,11 @@ assert.deepEqual(snapshot().beacons.map(beacon => beacon.energy), [34, 0, 0, 0])
 assert.equal(snapshot().player.charge, 100);
 assert.equal(snapshot().mode, 'RUNNING');
 
-// At the core, runner charge replenishes while every relay still decays.
+// At the core, runner charge replenishes while relay leakage scales with stored energy.
 run('state.player.charge = 50; update(1)');
 let state = snapshot();
 assert.equal(state.player.charge, 100);
-closeTo(state.beacons[0].energy, 29.8);
+closeTo(state.beacons[0].energy, 32.572);
 
 // Away from the core and standing still, charge drains at the founded idle rate.
 run('resetGame(); state.player.x = 480; state.player.y = 100; update(1)');
@@ -119,4 +119,4 @@ assert.ok(state.beacons.every(beacon => beacon.energy >= 35), 'all relays should
 assert.equal(state.player.charge, 0);
 assert.equal(state.mode, 'WON');
 
-console.log('systems rules passed: reset, recharge, decay, idle drain, transfer, win, blackout, terminal freeze, completion precedence');
+console.log('systems rules passed: reset, recharge, proportional decay, idle drain, transfer, win, blackout, terminal freeze, completion precedence');

@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const gameSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeSource = readFileSync(new URL('../game.js', import.meta.url), 'utf8');
+const runtimeDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);';
+const historicalDecayRule = 'beacon.energy = Math.max(0, beacon.energy - 4.2 * dt);';
+assert.equal(runtimeSource.split(runtimeDecayRule).length - 1, 1, 'historical replay expects the proportional runtime rule');
+const gameSource = runtimeSource.replace(runtimeDecayRule, historicalDecayRule);
 
 function noop() {}
 const drawContext = new Proxy({}, {
@@ -34,7 +38,7 @@ const sandbox = {
   window: { addEventListener: noop }
 };
 vm.createContext(sandbox);
-vm.runInContext(gameSource, sandbox, { filename: 'game.js' });
+vm.runInContext(gameSource, sandbox, { filename: 'game.js#historical-constant-decay' });
 
 const result = vm.runInContext(`(() => {
   const DT = 0.01;
@@ -152,15 +156,8 @@ const result = vm.runInContext(`(() => {
     return candidates;
   }
 
-  // Predeclared policy contrast:
-  // - consider current offline relays only;
-  // - choose the relay with the lowest estimated time-to-45, combining measured current route time
-  //   with current energy deficit; relay index is the final deterministic tie-break;
-  // - preserve the existing 25% LOW CHARGE cue as a reserve;
-  // - if current charge cannot cover conservative full-motion travel plus transfer-to-45 while
-  //   keeping that reserve, return to core, fully recharge, then recompute from current state;
-  // - service the chosen relay until 45 energy or the runner reaches 25%, then recompute.
-  // No future target order, branch script, or future-state lookahead is encoded.
+  // Historical predeclared policy under the constant-decay model. The original
+  // 39.8 net-fill estimate is retained deliberately so this test preserves #52's evidence.
   resetGame();
   const history = [];
   let coreReturns = 0;
@@ -234,7 +231,7 @@ for (let i = 0; i < 4; i += 1) {
 }
 assert.ok(Math.abs((cycleB.elapsed - cycleA.elapsed) - 18.04) < 0.05);
 
-console.log('Systems adaptive policy contrast evidence passed.');
+console.log('Systems historical constant-decay adaptive policy evidence passed.');
 console.log(JSON.stringify({
   targetHistory: result.history.map(entry => `R${entry.target}`).join(' > '),
   final: {
