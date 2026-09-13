@@ -28,8 +28,10 @@ Then open `http://localhost:8000`.
 
 ## Current controls
 
-- Move: **WASD** or **arrow keys**
-- Restart: **R** or the **Restart** button
+- Move: **WASD**, **arrow keys**, or a standard-mapped gamepad **left stick / D-pad**
+- Restart: **R**, the **Restart** button, or standard-mapped gamepad **Start**
+
+Automated regressions cover the standard-mapped gamepad bindings; physical gamepad hardware and cross-browser Gamepad API lifecycle behavior remain unverified.
 
 ## Current playable target
 
