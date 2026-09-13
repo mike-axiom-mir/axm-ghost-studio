@@ -348,6 +348,7 @@ function drawCore() {
 function drawBeacon(beacon, index) {
   const pct = beacon.energy / 100;
   const online = beacon.energy >= 35;
+  const displayedEnergy = online ? Math.round(beacon.energy) : Math.min(34, Math.round(beacon.energy));
   ctx.beginPath();
   ctx.arc(beacon.x, beacon.y, beacon.r, 0, Math.PI * 2);
   ctx.fillStyle = online ? '#16382f' : '#221a20';
@@ -367,7 +368,7 @@ function drawBeacon(beacon, index) {
   ctx.font = '12px system-ui';
   ctx.fillText(`R${index + 1}`, beacon.x, beacon.y - 2);
   ctx.font = '11px system-ui';
-  ctx.fillText(`${Math.round(beacon.energy)}%`, beacon.x, beacon.y + 13);
+  ctx.fillText(`${displayedEnergy}%`, beacon.x, beacon.y + 13);
 }
 
 function drawTransferFeedback() {
