@@ -1,4 +1,4 @@
-name: QA PR 91 main regression control
+name: QA input regression focus repair verification
 
 on:
   push:
@@ -12,13 +12,22 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out exact accepted main
+      - name: Check out exact QA repair
         uses: actions/checkout@v4
         with:
-          ref: ad848bab3645ff1300ff4e95fc10f72115b11bb5
+          ref: 20fbd9396e93ddb280f7fab637ca99e9a5493c94
       - name: Record Node version
         run: node --version
       - name: Syntax check runtime
         run: node --check game.js
-      - name: Run QA input regression control
-        run: node tests/qa-input-regression.mjs
+      - name: Run complete deterministic test inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          count=0
+          for test_file in tests/*.mjs; do
+            echo "=== $test_file ==="
+            node "$test_file"
+            count=$((count + 1))
+          done
+          echo "Executed $count test files"
