@@ -1,4 +1,4 @@
-name: QA input regression focus repair verification
+name: QA accepted regression repair verification
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       - name: Check out exact QA repair
         uses: actions/checkout@v4
         with:
-          ref: 20fbd9396e93ddb280f7fab637ca99e9a5493c94
+          ref: 36ae300e45e78219e3b8521e2b02a1bedb3e9760
       - name: Record Node version
         run: node --version
       - name: Syntax check runtime
