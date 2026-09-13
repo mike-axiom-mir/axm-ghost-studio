@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the **Adaptive Completion Slice** is resolved, do **not** require:
+Until the **Adaptive Resolution Repair Slice** is resolved, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -106,24 +106,42 @@ Director interpretation: **recoverable consequence is coherent with Blackline Re
 
 This remains deterministic evidence under one reasonable policy. It does not prove every reasonable policy reconverges, nor does it establish human perception, optimal strategy, fairness, tension, balance, or fun.
 
-## Current milestone — Adaptive Completion Slice
-Blackline Relay now has accepted evidence for route choice, live urgency, a non-dominated route-versus-urgency tradeoff, chained decisions, and recoverable longer-run consequence. The next bounded question is whether the information and rules already exposed to the player can drive a **full successful run adaptively**, rather than only producing interesting mid-run states.
+## Completed milestone — Adaptive Completion Characterization
+Accepted `main` now contains enough evidence to characterize the current flat-decay adaptive-completion failure without pretending that every possible policy has been exhausted.
 
-The accepted full `WON` regression currently uses a fixed prewritten relay-service sequence. That is valid solvability evidence, but it does not yet show that a state-driven maintenance policy — repeatedly reading the current chamber and deciding what to rescue next — can carry the same game from a fresh start to resolution.
+QA PR #48 starts from the normal reset state with one predeclared lowest-energy/full-recharge policy and reaches a repeatable non-terminal `R2 > R4 > R3 > R1` service cycle. Systems PR #52 starts from the same accepted game with a materially different route/deficit-aware policy and reaches a distinct repeatable R1/R2 starvation structure. Both are accepted test-only evidence; neither result proves that no state-driven policy can ever win.
 
-The milestone is satisfied when one exact accepted composition demonstrates all of the following:
+Together they are sufficient to stop broad heuristic shopping as the next studio direction. The game has now exposed a more specific pressure problem: under flat `4.2 energy/s` relay decay, low partial repairs lose energy at the same absolute rate as full relays, so useful maintenance progress can be aggressively erased while the runner routes or recharges elsewhere.
 
-1. **Fresh normal origin:** begin from the normal accepted reset state, not from a hand-prepared decision snapshot.
-2. **Declared state-driven policy:** define the decision/recharge/service policy before execution and recompute each next action from the current state. It may use only accepted player-visible or mechanically explicit information such as runner charge, relay energies/online state, player position, route geometry, fixed thresholds, and deterministic tie-breaks. Do not encode a prewritten future relay order, branch-specific script, or future-state lookahead to force success.
-3. **Resolution horizon:** continue until `WON`, `BLACKOUT`, or a fixed generous budget that can demonstrate a repeatable non-terminal cycle/stall. Do not stop merely because an intermediate state looks favorable.
-4. **Trajectory evidence:** record the chosen target history, core returns, elapsed time, runner charge, relay energies/online count, route/service/recharge costs where practical, and terminal margin/outcome or bounded cycle evidence.
-5. **Truthful result:** a reasonable state-driven policy reaching `WON` proves that the current visible maintenance loop can close adaptively. A `BLACKOUT`, stable cycle, or other failure to complete is equally valid evidence and may ground the smallest later repair. Do not retune the policy or game mid-run to preserve a preferred result.
-6. **No premature complexity:** test current accepted rules first. Do not add hazards, relay classes, scoring, another chamber, another resource, or a new primary verb merely to force adaptive completion.
-7. **Preserve composition truth:** any later proposal that changes route/resource pressure still requires exact-composition `WON` re-proof before landing. Input/retry reliability work that preserves those pressures remains an independent Integration lane.
+Accepted Systems PR #53 tests one bounded candidate repair against exact accepted source without changing runtime: proportional relay decay `4.2 * (energy / 100) energy/s`. In that probe, the unchanged #48 policy reaches `WON`, the unchanged #52 policy reaches ordinary terminal `BLACKOUT` instead of another endless trap, scripted `WON` remains feasible, and ordinary `BLACKOUT` remains feasible. This is accepted candidate evidence, **not an accepted runtime rule**.
 
-Systems/QA are the natural first evidence lane because they can extend existing deterministic routing/state harnesses without changing runtime. World and Experience should hold expansion unless adaptive-completion evidence exposes a concrete spatial or readability deficiency. Gameplay PR #46 remains an independent retry-recovery reliability lane for Integration/QA composition and is not a prerequisite for this milestone.
+Director interpretation: Adaptive Completion is closed as a **diagnostic milestone**, not as proof that the flat-decay game already supports a useful adaptive win. The smallest coherent next move is to validate the already-evidenced proportional repair on current accepted reality before inventing another heuristic family or another game system.
 
-Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether a person can actually infer a useful adaptive strategy, understand the state, feel fair pressure, and enjoy the loop. Autonomous success must not be relabeled as those human quality claims.
+## Current milestone — Adaptive Resolution Repair Slice
+Blackline Relay is emerging as a compact maintenance-triage game in which route cost, live urgency, recoverable consequence, and partial maintenance progress should combine into terminal outcomes. The bounded question is now whether the existing maintenance state can accumulate enough useful partial repair to resolve under reasonable state-driven play **without changing the game's verbs or chamber**.
+
+The candidate is already defined by accepted PR #53: replace flat relay decay with proportional decay `4.2 * (energy / 100) * dt`. The exact accepted runtime anchor is now PR #69, which adds the focus/time contract, input/retry neutrality, and truthful pause/recovery status while retaining flat relay decay. Existing Integration PR #60 contains useful proportional Systems/World provenance but its current head predates PR #69, so it must be rebuilt/retargeted rather than landed by overwriting newer accepted behavior.
+
+The milestone is satisfied only when an exact current-main proportional composition demonstrates all of the following:
+
+1. **Bounded rule change:** the live gameplay change remains the proportional relay-decay behavior plus the minimum regression/evidence re-characterization required by that rule. No unrelated new mechanic is folded in to make the evidence pass.
+2. **Current accepted behavior preserved:** PR #69 focus/visibility pause, focused-time integrity, input/retry neutrality, truthful pause/recovery status, route geometry, movement ceiling, recharge, transfer, online threshold, and terminal precedence remain intact unless a separately reproduced defect justifies a bounded follow-up.
+3. **Adaptive escape:** the unchanged accepted #48 policy reaches `WON` on the exact final proportional composition. Do not inherit the PR #53 probe result by assumption.
+4. **Honest contrasting outcome:** record the unchanged accepted #52 policy result on the exact composition. Ordinary `BLACKOUT` remains valid; the goal is to remove the demonstrated non-terminal trap, not make every heuristic win.
+5. **Terminal feasibility preserved:** re-prove scripted route-aware `WON`, ordinary `BLACKOUT`, retry, and completion precedence on the exact composition.
+6. **Spatial/decision identity preserved:** accepted reachability and the route-versus-urgency relationship remain valid through the existing World proportional contract plus current focus-time spatial continuity evidence; do not move relays or add geometry pre-emptively.
+7. **Focused-time resource integrity re-proved:** the current cadence/resource/terminal equivalence contract must pass with the proportional rule on the exact final runtime rather than being inherited from flat-decay PR #69.
+8. **Input/presentation/integration compatibility:** accepted Gameplay focus/retry/input regressions, Experience focus/recovery feedback regressions, and local/offline Integration smoke remain green on the exact final head.
+9. **Historical source integrity:** constant-decay numeric evidence remains historical. Re-characterize current-rule tests explicitly rather than silently rewriting old measurements into proportional-rule claims.
+10. **No premature complexity:** do not add hazards, relay classes, scoring, another chamber, another resource, combat, progression, or a new primary verb merely to force resolution.
+
+Integration owns the current-main rebuild/retarget, dependency ordering, exact-head verification, final semantic-overlap scan, and ordinary landing under `studio/GOVERNANCE.md`. Systems owns the rule contract; QA owns exact reproduction and failure/cycle truth; World owns spatial/route preservation; Gameplay and Experience retain their existing behavior/readability boundaries. No further Mike or Game Director approval is required if the exact final composition satisfies the accepted direction and governance gates.
+
+If the proportional candidate fails those gates on current accepted reality, that failure is valid evidence. Return the reproduced problem to the owning specialist lane rather than tuning until a preferred result appears.
+
+Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether a person can infer a useful maintenance strategy, understand the state, feel fair pressure, and enjoy the loop. Deterministic adaptive success must not be relabeled as those human quality claims.
+
+See `studio/decisions/ADAPTIVE_RESOLUTION_REPAIR.md` for the durable Director boundary and evidence labels.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
