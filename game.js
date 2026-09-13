@@ -21,11 +21,13 @@ const bulkheads = [
 
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
+const MAX_SIMULATION_STEP = 0.05;
 const gamepadRestartHeldIndices = new Set();
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
 let inputFocused = typeof document.hasFocus === 'function' ? document.hasFocus() : true;
+let pageVisible = typeof document.visibilityState === 'string' ? document.visibilityState !== 'hidden' : true;
 let state;
 let previousTime = performance.now();
 
@@ -108,6 +110,14 @@ function getStandardGamepadByIndex(index) {
   ) || null;
 }
 
+function hasActiveGameplayFocus() {
+  return inputFocused && pageVisible;
+}
+
+function syncSimulationClock() {
+  previousTime = performance.now();
+}
+
 function hasGamepadMovementIntent(pad = getStandardGamepad()) {
   if (!pad) return false;
 
@@ -134,7 +144,7 @@ function readGamepadMovementIntent(pad = getStandardGamepad()) {
 }
 
 function readGamepadIntent() {
-  if (!inputFocused) return { dx: 0, dy: 0 };
+  if (!hasActiveGameplayFocus()) return { dx: 0, dy: 0 };
 
   const pad = getStandardGamepad();
   if (!pad) {
@@ -180,8 +190,10 @@ function resetForCurrentMovementIntent() {
 }
 
 function update(dt) {
+  if (!hasActiveGameplayFocus()) return false;
+
   const gamepad = readGamepadIntent();
-  if (!gamepad || state.mode !== 'RUNNING') return;
+  if (!gamepad || state.mode !== 'RUNNING') return false;
 
   const p = state.player;
   let dx = gamepad.dx;
@@ -249,6 +261,7 @@ function update(dt) {
   if (online === state.beacons.length) state.mode = 'WON';
   else if (p.charge <= 0.001 && !atCore) state.mode = 'BLACKOUT';
   updateHud();
+  return true;
 }
 
 function getTransferTarget() {
@@ -261,6 +274,11 @@ function getTransferTarget() {
 
 function getStatusLabel() {
   if (state.mode !== 'RUNNING') return state.mode;
+  if (!hasActiveGameplayFocus()) return 'PAUSED — RETURN TO GAME';
+  if (!movementArmed) {
+    if (gamepadNeutralPending && !getStandardGamepadByIndex(gamepadNeutralPendingIndex)) return 'RECONNECT CONTROLLER';
+    return 'RELEASE TO MOVE';
+  }
   const transferTarget = getTransferTarget();
   if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
   const atCore = distance(state.player, core) <= state.player.r + core.r;
@@ -416,15 +434,26 @@ function render() {
   drawOverlay();
 }
 
+function advanceFocusedSimulation(dt) {
+  let remaining = Math.max(0, dt);
+  while (remaining > 1e-9) {
+    const step = Math.min(remaining, MAX_SIMULATION_STEP);
+    if (!update(step)) break;
+    remaining -= step;
+    if (state.mode !== 'RUNNING') break;
+  }
+}
+
 function frame(now) {
-  const dt = Math.min((now - previousTime) / 1000, 0.05);
+  const dt = Math.max(0, (now - previousTime) / 1000);
   previousTime = now;
-  update(dt);
+  if (hasActiveGameplayFocus()) advanceFocusedSimulation(dt);
   render();
   requestAnimationFrame(frame);
 }
 
 window.addEventListener('keydown', event => {
+  if (!hasActiveGameplayFocus()) return;
   const key = event.key.toLowerCase();
   if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
   if (key === 'r' && !event.repeat) resetForCurrentMovementIntent();
@@ -434,12 +463,27 @@ window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => {
   keys.clear();
   inputFocused = false;
+  syncSimulationClock();
+  updateHud();
 });
 window.addEventListener('focus', () => {
   inputFocused = true;
-  guardFocusedGamepadCarryover();
+  syncSimulationClock();
+  if (hasActiveGameplayFocus()) guardFocusedGamepadCarryover();
+  updateHud();
 });
-restartButton.addEventListener('click', resetForCurrentMovementIntent);
+if (typeof document.addEventListener === 'function') {
+  document.addEventListener('visibilitychange', () => {
+    pageVisible = document.visibilityState !== 'hidden';
+    keys.clear();
+    syncSimulationClock();
+    if (hasActiveGameplayFocus()) guardFocusedGamepadCarryover();
+    updateHud();
+  });
+}
+restartButton.addEventListener('click', () => {
+  if (hasActiveGameplayFocus()) resetForCurrentMovementIntent();
+});
 
 resetGame();
 requestAnimationFrame(frame);
