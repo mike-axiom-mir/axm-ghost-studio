@@ -1,0 +1,33 @@
+name: QA PR 91 exact verification
+
+on:
+  push:
+    branches:
+      - qa/pr91-exact-verification
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: fd8c65cbdb55926c2d3952d9cdcd69a4558f5998
+      - name: Record Node version
+        run: node --version
+      - name: Syntax check runtime
+        run: node --check game.js
+      - name: Run complete deterministic test inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          count=0
+          for test_file in tests/*.mjs; do
+            echo "=== $test_file ==="
+            node "$test_file"
+            count=$((count + 1))
+          done
+          echo "Executed $count test files"
