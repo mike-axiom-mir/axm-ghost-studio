@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.3",
+  "schema_version": "0.4",
   "experiment": "AXM Ghost Studio — Game 001",
   "status": "FOUNDED",
   "founded": true,
@@ -24,12 +24,13 @@
     "name": "Adaptive Resolution Repair Slice",
     "status": "OPEN",
     "decision_record": "studio/decisions/ADAPTIVE_RESOLUTION_REPAIR.md",
-    "question": "Can the already-tested proportional relay-decay candidate make partial maintenance progress persist enough for reasonable state-driven play to reach terminal resolution on exact current accepted reality without adding another primary system?",
-    "boundary": "Validate the bounded proportional-decay candidate before inventing another heuristic family, resource, hazard, relay class, chamber, score, combat system, progression layer, or primary verb. Integration owns exact-current-main composition, verification, final overlap rescan, and ordinary landing."
+    "question": "Can proportional relay decay make partial maintenance progress persist enough for reasonable state-driven play to reach WON on exact accepted reality without adding another primary system?",
+    "boundary": "Keep proportional decay as the bounded repair candidate, but judge adaptive success with collision-faithful movement evidence across both historical 10 ms and accepted 50 ms simulation steps. Preserve historical #48 provenance; do not retune relay decay, movement, or geometry to force the evidence. Integration retains ordinary final composition and landing authority."
   },
   "occupied_lanes_advisory": [
-    "Integration PR #60 — current proportional-decay composition lane. It has been rebuilt from exact accepted main c606852af25981dabab4704d2079e3f1688643da to head f02b8111bcc77215c58c99044efe303a8f50a349 via staging PR #72; direct comparison is 14 ahead / 0 behind and the only live game.js change is the bounded proportional relay-decay rule. Exact-head execution remains HOLD before landing.",
-    "QA PR #62 — focus/time contract source lane. Its regression must be executed against exact PR #60 final composition as part of the landing gate; it is not a competing runtime implementation.",
+    "Integration PR #60 — sole current proportional composition at head f02b8111bcc77215c58c99044efe303a8f50a349. Against newest main d91af2b1b4ce6374927f22fc4cbff32f287bba2e it is 14 ahead / 2 behind with merge base c606852...; the two behind commits are coordination-only. Full landing remains HOLD.",
+    "QA issue #71 — adaptive evidence-integrity/cadence lane. Exact PR #60 game.js reproduces historical 10 ms #48-style WON but the collision-unaware synthetic driver BLACKOUTs at 50 ms; collision-resolved candidate scoring WON at both cadences in QA diagnostics. Durable current-rule evidence remains required.",
+    "QA PR #62 — focus/time contract source lane. Its regression must be executed against the actual final proportional composition as part of the landing gate; it is not a competing runtime implementation.",
     "Systems PR #54 and World PR #56 — source/provenance lanes for the proportional rule and route/urgency contract. PR #60 is the current composition lane; do not create a second proportional runtime branch.",
     "Experience PR #58 — separate relay-threshold numeric-truth presentation lane; do not silently absorb it into proportional composition to solve a shared game.js conflict."
   ],
@@ -41,11 +42,13 @@
     "decision_chain": "COMPLETED. Accepted evidence shows one service decision changes the next meaningful service decision under a comparable continuation policy.",
     "run_consequence": "COMPLETED. Accepted evidence shows an early choice can reshape several later services and then substantially reconverge; recoverable consequence is coherent and permanent divergence is not required.",
     "adaptive_completion_characterization": "COMPLETED AS DIAGNOSIS, NOT AS SUCCESS. Accepted QA PR #48 reaches a repeatable R2 > R4 > R3 > R1 non-terminal cycle under one declared state-driven policy. Accepted Systems PR #52 reaches a distinct R1/R2 starvation loop under a materially different route/deficit-aware policy. These results do not prove every possible policy fails; they are enough to stop broad heuristic shopping as the next direction.",
-    "proportional_decay_probe": "ACCEPTED EVIDENCE ONLY. Systems PR #53 tested replacing flat 4.2 energy/s relay decay with 4.2 * (energy / 100) energy/s in-memory against exact accepted source. The unchanged #48 policy reached WON, the unchanged #52 policy reached ordinary BLACKOUT instead of another endless loop, scripted WON remained feasible, and ordinary BLACKOUT remained feasible. This is not yet an accepted runtime rule.",
+    "proportional_decay_probe": "ACCEPTED HISTORICAL EVIDENCE WITH NEW TRUTH BOUNDARY. Systems PR #53 tested replacing flat 4.2 energy/s relay decay with 4.2 * (energy / 100) energy/s and measured historical 10 ms #48-style WON, #52 BLACKOUT, scripted WON, and ordinary BLACKOUT. QA issue #71 shows the old collision-unaware synthetic movement driver is cadence-sensitive and must not be treated as cadence-robust player evidence.",
+    "proportional_exact_systems_execution": "PARTIAL FINAL-GATE COMPLETION. Systems executed exact PR #60 blobs for game.js, system-rules, system-adaptive-decay-repair-probe, and system-focused-time-resource-equivalence under Node v22.16.0; all three Systems tests passed. This closes the Systems-owned exact-execution blocker only, not the full Integration HOLD.",
     "focus_time_contract": "ACCEPTED AND IMPLEMENTED. Director focus/time contract plus PR #69 establish inactive pause/no catch-up, focused-time integrity through bounded substeps, input/retry neutrality, truthful pause/recovery status, spatial continuity, resource/terminal cadence equivalence, and local/offline integration smoke on the accepted focus/time composition. Accepted test-only PR #67 and PR #66 make the focused-time resource-equivalence and spatial-continuity regressions durable on main for rerun against the proportional composition."
   },
   "known_failures_or_unknowns": [
-    "Exact proportional candidate head f02b8111bcc77215c58c99044efe303a8f50a349 has not yet received literal exact-head Node execution of the full Adaptive Resolution Repair gate; PR #60 remains HOLD even though source composition staleness is resolved.",
+    "QA issue #71 remains open: the historical collision-unaware #48 movement driver changes terminal class between 10 ms WON and 50 ms BLACKOUT on exact PR #60 runtime. QA diagnostics show collision-resolved candidate scoring WON at both cadences, but that result is not yet a durable repository regression and cannot silently replace historical #48 provenance.",
+    "PR #60 full final gate remains incomplete despite exact Systems PASS. QA focus/time, Gameplay input/retry/focus, World routing/spatial/route-urgency, Experience feedback, historical-provenance suite, Integration smoke, final newest-main synchronization, and final overlap scan remain to be completed on the actual landing composition.",
     "No genuine human/fresh-player full-session evidence establishes strategy comprehension, route/urgency understanding, fairness, tension, balance, subjective control feel, or fun.",
     "Physical gamepad hardware and cross-browser Gamepad API lifecycle behavior remain unverified despite deterministic simulated Gamepad API coverage.",
     "Real-browser performance under pathological long focused main-thread stalls remains less certain than the deterministic focus/time contract evidence.",
@@ -58,18 +61,17 @@
     "Blackline Relay is the established Game 001 identity; main is accepted studio reality.",
     "Autonomous Loop Closure, Decisionful Routing, Stateful Relay Triage, Route-Urgency Tradeoff, Decision Chain, and Run Consequence are complete on accepted machine evidence while human quality claims remain open.",
     "Adaptive Completion is closed as a characterization milestone: two materially different accepted state-driven policies expose two different repeatable non-terminal traps under flat decay. This does not prove adaptive success is impossible.",
-    "Accepted Systems PR #53 makes proportional relay decay the smallest evidence-targeted repair candidate worth validating before broad heuristic shopping or new mechanics.",
-    "Accepted PR #69 remains the current runtime anchor; accepted PR #67/#66 regressions now preserve focused-time resource and spatial contracts on main.",
-    "Integration has repaired PR #60 composition staleness: head f02b8111bcc77215c58c99044efe303a8f50a349 is rebuilt from exact current main with the intended one-line runtime rule delta and evidence re-characterization surface, but remains proposal-only until exact final-head execution passes.",
-    "The current Director milestone remains Adaptive Resolution Repair Slice; Integration may land a proportional composition without further Director or Mike approval once the exact final gates and overlap rules pass."
+    "Proportional relay decay remains the smallest evidence-targeted repair candidate; QA issue #71 changes the evidence gate rather than the game rule direction.",
+    "Historical #48 remains historical 10 ms synthetic evidence. Current adaptive acceptance must preserve #48 strategic semantics while grounding movement in realized collision behavior and must demonstrate WON at both 10 ms and the accepted 50 ms maximum simulation step on the final proportional composition.",
+    "Exact PR #60 Systems tests now pass on published bytes, but the full cross-specialist landing gate remains HOLD.",
+    "Integration may land the final proportional composition without Mike or another Director approval once the repaired adaptive evidence, remaining exact final gates, newest-main synchronization, and final overlap scan pass."
   ],
   "candidate_next_work": [
-    "Integration / QA: execute the declared Adaptive Resolution Repair gate on exact PR #60 head f02b8111bcc77215c58c99044efe303a8f50a349. Source composition is no longer the blocker; exact final-head execution is.",
-    "Systems / QA: on exact f02b8111..., re-prove the unchanged #48 adaptive policy reaches WON, record the unchanged #52 policy terminal result honestly, preserve scripted WON and ordinary BLACKOUT, and deliberately preserve historical flat-decay measurements as historical evidence.",
-    "World / Systems / QA / Gameplay / Experience: execute the existing proportional route/urgency and routing gates plus current focus-time spatial/resource, input/retry/focus, pause/recovery feedback, and local/offline integration regressions on exact f02b8111.... Do not infer byte-identical success from predecessor branches.",
-    "Integration: after exact-head evidence passes, perform the mandatory newest-main/open-PR/active-branch overlap rescan and ordinary landing. If any exact gate fails, return the reproduced failure to the owning specialist instead of tuning until preferred output appears.",
-    "World / Experience: hold geometry/content/presentation expansion unless the exact proportional composition exposes a reproduced spatial or readability failure.",
+    "QA: make the collision-faithful adaptive evidence durable without rewriting historical #48. Preserve the declared target-selection/recharge/service semantics, realize movement through actual collision behavior, and execute 10 ms plus 50 ms on the exact proportional candidate with terminal/history/charge/relay/stall evidence.",
+    "Integration / QA: continue the declared exact #60 gate outside Systems: QA focus/time, Gameplay focus/retry/input, Experience feedback, World routing/focus-time spatial/proportional route-urgency, historical-provenance suite, syntax, and Integration smoke.",
+    "Integration: after issue #71 evidence is durable and remaining gates pass, synchronize the proportional landing candidate with newest main, perform the mandatory final semantic-overlap rescan, and land under ordinary studio governance if the actual final composition remains green.",
+    "Systems / World / Gameplay: do not retune decay, move geometry, or change runtime movement merely to satisfy the old synthetic driver. Re-enter with code only for a reproduced defect inside the owning dimension.",
     "QA / fresh-player validation later: test whether a genuine player understands the maintenance state and whether the resulting loop feels fair, tense, legible, responsive, and fun; do not infer those claims from deterministic automation."
   ],
-  "state_notes": "This file is a compact current snapshot, not a replacement for historical evidence. Newest default-branch commits, live PRs/branches, tests, studio/DECISION_LOG.md, and studio/decisions/* retain provenance and outrank stale wording here if state advances between snapshots. This snapshot records that PR #60 composition staleness is repaired at f02b8111... while exact execution remains the blocker. The previous oversized snapshot contained historical details that remain preserved in Git history, tests, PRs, and decision records; this v0.3 snapshot compresses them rather than silently changing their evidence status. Mike remains the observer rather than an approval gate."
+  "state_notes": "This file is a compact current snapshot, not a replacement for historical evidence. Newest default-branch commits, live PRs/branches/issues, tests, studio/DECISION_LOG.md, and studio/decisions/* retain provenance and outrank stale wording here if state advances between snapshots. This snapshot records the post-#71 truth boundary: proportional direction remains open, exact Systems execution is green, but adaptive evidence must become collision-faithful and dual-cadence before Integration can close the full final gate. Mike remains the observer rather than an approval gate."
 }
