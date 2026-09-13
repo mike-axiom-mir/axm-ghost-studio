@@ -20,16 +20,22 @@ jobs:
         run: node --check game.js
       - name: Run focused retry-guidance regression
         run: node tests/gameplay-terminal-retry-guidance.mjs
-      - name: Run gameplay regressions
+      - name: Run remaining gameplay regressions
+        if: always()
         run: |
           set -euo pipefail
           for test in tests/gameplay-*.mjs; do
+            if [ "$test" = "tests/gameplay-terminal-retry-guidance.mjs" ]; then
+              continue
+            fi
             echo "RUN $test"
             node "$test"
           done
       - name: Run integration smoke
+        if: always()
         run: node tests/integration-smoke.mjs
       - name: Run relevant experience regressions
+        if: always()
         run: |
           node tests/experience-feedback.mjs
           node tests/experience-retry-neutral-feedback.mjs
