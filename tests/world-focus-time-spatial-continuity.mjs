@@ -123,10 +123,14 @@ assert.ok(
   'near-relay arrival position should remain cadence-equivalent over the same focused 100 ms'
 );
 // World owns whether the route/contact affordance survives cadence changes, not
-// exact resource integration across different simulation-step partitions.
+// exact relay-energy integration across different simulation-step partitions.
 // Proportional decay is state-dependent, so 20 ms updates and bounded 50 ms
 // substeps can produce tiny relay-energy differences even when contact/position
-// are equivalent. Systems owns resource-equivalence policy at its declared step boundary.
+// are equivalent. Systems owns relay-resource equivalence at its declared step boundary.
+assert.ok(
+  Math.abs(ordinaryContact.playerCharge - slowContact.playerCharge) < 1e-9,
+  'representative relay contact should preserve the same carried-charge service cost'
+);
 
 console.log(
   `world focus-time spatial continuity passed: blocked=${ordinaryBlocked.x.toFixed(2)}/${slowBlocked.x.toFixed(2)}, ` +
