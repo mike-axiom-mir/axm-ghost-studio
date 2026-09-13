@@ -112,6 +112,10 @@ for (const handler of listeners.get('blur') ?? []) handler();
 step(6);
 assert.equal(sandbox.__qa.state.player.x, beforeBlur, 'blur should clear held movement keys');
 
+// The blur case intentionally leaves the runtime unfocused. Restore the synthetic
+// page focus before the independent boundary/retry scenarios that follow.
+for (const handler of listeners.get('focus') ?? []) handler();
+
 // Boundary clamping still prevents leaving the canvas when exercised through an open passage.
 reset();
 sandbox.__qa.state.player.y = 145;

@@ -31,6 +31,9 @@ let inputFocused = typeof document.hasFocus === 'function' ? document.hasFocus()
 let pageVisible = typeof document.visibilityState === 'string' ? document.visibilityState !== 'hidden' : true;
 let state;
 let previousTime = performance.now();
+const reducedMotionMedia = typeof window.matchMedia === 'function'
+  ? window.matchMedia('(prefers-reduced-motion: reduce)')
+  : null;
 
 function resetGame(requireNeutralMovement = false, requireGamepadNeutral = false, neutralGamepadIndex = null) {
   state = {
@@ -340,8 +343,12 @@ function drawBulkheads() {
   }
 }
 
+function motionPulse(amplitude, speed) {
+  return reducedMotionMedia?.matches ? 0 : Math.sin(state.elapsed * speed) * amplitude;
+}
+
 function drawCore() {
-  const pulse = 4 + Math.sin(state.elapsed * 4) * 2;
+  const pulse = 4 + motionPulse(2, 4);
   ctx.beginPath();
   ctx.arc(core.x, core.y, core.r + pulse, 0, Math.PI * 2);
   ctx.strokeStyle = '#55e6ff';
@@ -397,12 +404,12 @@ function drawTransferFeedback() {
   const midpointX = (p.x + target.x) / 2;
   const midpointY = (p.y + target.y) / 2;
   ctx.beginPath();
-  ctx.arc(midpointX, midpointY, 4 + Math.sin(state.elapsed * 12) * 1.5, 0, Math.PI * 2);
+  ctx.arc(midpointX, midpointY, 4 + motionPulse(1.5, 12), 0, Math.PI * 2);
   ctx.fillStyle = '#fff1ae';
   ctx.fill();
 
   ctx.beginPath();
-  ctx.arc(target.x, target.y, target.r + 14 + Math.sin(state.elapsed * 10) * 2, 0, Math.PI * 2);
+  ctx.arc(target.x, target.y, target.r + 14 + motionPulse(2, 10), 0, Math.PI * 2);
   ctx.strokeStyle = 'rgba(255, 228, 122, .65)';
   ctx.lineWidth = 2;
   ctx.stroke();
