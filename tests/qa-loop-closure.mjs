@@ -205,11 +205,13 @@ const result = vm.runInContext(`(() => {
   };
 })()`, sandbox);
 
+const retryInstruction = 'Press R, Restart, or gamepad Start to run the chamber again';
+
 assert.equal(result.won.mode, 'WON', 'normal registered-keyboard route should reach WON through the routing slice');
 assert.ok(result.won.player.charge > 5, `expected >5% runner charge at WON, got ${result.won.player.charge}`);
 assert.ok(result.won.beacons.every(beacon => beacon.energy >= 35), 'all relays should be online at WON');
 assert.ok(result.wonTexts.includes('NETWORK STABLE'), 'WON overlay should emit NETWORK STABLE');
-assert.ok(result.wonTexts.includes('Press R or Restart to run the chamber again'), 'WON overlay should emit retry instruction');
+assert.ok(result.wonTexts.includes(retryInstruction), 'WON overlay should emit every accepted retry control');
 assert.equal(result.afterWonRetry.mode, 'RUNNING');
 assert.equal(result.afterWonRetry.player.charge, 100);
 assert.equal(result.afterWonRetry.beacons.map(beacon => beacon.energy).join(','), '34,0,0,0');
@@ -217,7 +219,7 @@ assert.equal(result.afterWonRetry.beacons.map(beacon => beacon.energy).join(',')
 assert.equal(result.blackout.mode, 'BLACKOUT', 'held normal movement should eventually BLACKOUT');
 assert.equal(result.blackout.player.charge, 0);
 assert.ok(result.blackoutTexts.includes('BLACKOUT'), 'BLACKOUT overlay should emit BLACKOUT');
-assert.ok(result.blackoutTexts.includes('Press R or Restart to run the chamber again'), 'BLACKOUT overlay should emit retry instruction');
+assert.ok(result.blackoutTexts.includes(retryInstruction), 'BLACKOUT overlay should emit every accepted retry control');
 assert.equal(result.afterBlackoutRetry.mode, 'RUNNING');
 assert.equal(result.afterBlackoutRetry.player.charge, 100);
 assert.equal(result.afterBlackoutRetry.beacons.map(beacon => beacon.energy).join(','), '34,0,0,0');
