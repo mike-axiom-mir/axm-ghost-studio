@@ -38,7 +38,7 @@ The runner's carried charge drains continuously away from the central core. If p
 This is a direction, not a claim that the current visuals are polished.
 
 ## Near-term scope exclusions
-Until the **Adaptive Resolution Repair Slice** is resolved, do **not** require:
+Under the current **Fresh-Player Evidence Boundary**, do **not** require:
 - story campaign or dialogue tree;
 - inventory/equipment system;
 - procedural world generation;
@@ -48,7 +48,7 @@ Until the **Adaptive Resolution Repair Slice** is resolved, do **not** require:
 - combat system;
 - meta-progression;
 - multiple levels solely for content volume;
-- new relay classes or hazards solely to manufacture complexity before the existing route/decay interaction is proven insufficient.
+- new relay classes or hazards solely to manufacture complexity without a reproduced player problem.
 
 ## Originality and provenance
 Game code and founding visuals are original for this repository and built from simple browser primitives. Do not copy proprietary game code, maps, characters, dialogue, logos, music, or protected visual identity. Only add external assets when provenance and compatible licensing are explicit.
@@ -107,44 +107,49 @@ Director interpretation: **recoverable consequence is coherent with Blackline Re
 This remains deterministic evidence under one reasonable policy. It does not prove every reasonable policy reconverges, nor does it establish human perception, optimal strategy, fairness, tension, balance, or fun.
 
 ## Completed milestone — Adaptive Completion Characterization
-Accepted `main` now contains enough evidence to characterize the current flat-decay adaptive-completion failure without pretending that every possible policy has been exhausted.
+Accepted `main` now contains enough evidence to characterize the historical flat-decay adaptive-completion failure without pretending that every possible policy has been exhausted.
 
-QA PR #48 starts from the normal reset state with one predeclared lowest-energy/full-recharge policy and reaches a repeatable non-terminal `R2 > R4 > R3 > R1` service cycle. Systems PR #52 starts from the same accepted game with a materially different route/deficit-aware policy and reaches a distinct repeatable R1/R2 starvation structure. Both are accepted test-only evidence; neither result proves that no state-driven policy can ever win.
+QA PR #48 starts from the normal reset state with one predeclared lowest-energy/full-recharge policy and reaches a repeatable non-terminal `R2 > R4 > R3 > R1` service cycle. Systems PR #52 starts from the same historical flat-decay game with a materially different route/deficit-aware policy and reaches a distinct repeatable R1/R2 starvation structure. Both remain accepted test-only provenance; neither result proved that no state-driven policy could ever win.
 
-Together they are sufficient to stop broad heuristic shopping as the next studio direction. The game has now exposed a more specific pressure problem: under flat `4.2 energy/s` relay decay, low partial repairs lose energy at the same absolute rate as full relays, so useful maintenance progress can be aggressively erased while the runner routes or recharges elsewhere.
+Together they were sufficient to stop broad heuristic shopping and isolate a more specific pressure problem: under flat `4.2 energy/s` relay decay, low partial repairs lost energy at the same absolute rate as full relays, so useful maintenance progress could be aggressively erased while the runner routed or recharged elsewhere.
 
-Accepted Systems PR #53 tests one bounded candidate repair against exact accepted source without changing runtime: proportional relay decay `4.2 * (energy / 100) energy/s`. In that probe, the unchanged #48 policy reaches `WON`, the unchanged #52 policy reaches ordinary terminal `BLACKOUT` instead of another endless trap, scripted `WON` remains feasible, and ordinary `BLACKOUT` remains feasible. This is accepted candidate evidence, **not an accepted runtime rule**.
+Systems PR #53 then tested one bounded candidate repair against exact accepted source without changing runtime: proportional relay decay `4.2 * (energy / 100) energy/s`. That candidate evidence led into the completed Adaptive Resolution Repair milestone below. Historical flat-decay measurements remain provenance and must not be silently relabeled as current-rule evidence.
 
-Director interpretation: Adaptive Completion is closed as a **diagnostic milestone**, not as proof that the flat-decay game already supports a useful adaptive win. The smallest coherent next move is to validate the already-evidenced proportional repair on current accepted reality before inventing another heuristic family or another game system.
+## Completed milestone — Adaptive Resolution Repair Slice
+Integration PR #60 landed proportional relay decay `4.2 * (energy / 100) * dt` on accepted `main` after the exact composed QA, Systems, Gameplay, World, Experience, focus/time, integration, source-integrity, and final overlap gates were satisfied under studio governance.
 
-## Current milestone — Adaptive Resolution Repair Slice
-Blackline Relay is emerging as a compact maintenance-triage game in which route cost, live urgency, recoverable consequence, and partial maintenance progress should combine into terminal outcomes. The bounded question is now whether the existing maintenance state can accumulate enough useful partial repair to resolve under reasonable state-driven play **without changing the game's verbs or chamber**.
+That landing established the current maintenance-triage rule without adding another verb, chamber, hazard, resource, progression layer, or scoring system. Collision-faithful adaptive evidence reaches `WON` at both the historical 10 ms control and the accepted 50 ms maximum simulation step while contrasting state-driven evidence still preserves ordinary `BLACKOUT`, scripted terminal feasibility, retry, completion precedence, route/urgency structure, focus/time integrity, and local/offline operation.
 
-The candidate is already defined by accepted PR #53: replace flat relay decay with proportional decay `4.2 * (energy / 100) * dt`. Accepted `main` still runs the PR #69 focus/time runtime with flat relay decay, while Director PR #74 repaired the adaptive evidence gate after QA issue #71. Live Integration PR #60 is now synchronized to current accepted reality and carries the bounded proportional runtime candidate together with the durable collision-faithful QA regression and the World spatial-scope correction. Treat live GitHub state as truth for its exact head and remaining gate status rather than freezing another volatile proposal SHA into this charter.
-
-The milestone is satisfied only when an exact current-main proportional composition demonstrates all of the following:
-
-1. **Bounded rule change:** the live gameplay change remains the proportional relay-decay behavior plus the minimum regression/evidence re-characterization required by that rule. No unrelated new mechanic is folded in to make the evidence pass.
-2. **Current accepted behavior preserved:** PR #69 focus/visibility pause, focused-time integrity, input/retry neutrality, truthful pause/recovery status, route geometry, movement ceiling, recharge, transfer, online threshold, and terminal precedence remain intact unless a separately reproduced defect justifies a bounded follow-up.
-3. **Collision-faithful adaptive escape:** preserve the accepted #48 strategic semantics — state-driven relay selection, full recharge behavior, and declared service duration — but evaluate movement through realized runtime collision behavior (or an equivalently grounded method that cannot repeatedly prefer blocked intended motion). On the exact final proportional composition, that current-rule evidence must reach `WON` at both the historical 10 ms control and the accepted 50 ms maximum simulation step. Historical #48 itself remains untouched provenance and is not silently redefined.
-4. **Honest contrasting outcome:** record the unchanged accepted #52 policy result on the exact composition. Ordinary `BLACKOUT` remains valid; the goal is to remove the demonstrated non-terminal trap, not make every heuristic win.
-5. **Terminal feasibility preserved:** re-prove scripted route-aware `WON`, ordinary `BLACKOUT`, retry, and completion precedence on the exact composition.
-6. **Spatial/decision identity preserved:** accepted reachability and the route-versus-urgency relationship remain valid through the existing World proportional contract plus current focus-time spatial continuity evidence; do not move relays or add geometry pre-emptively.
-7. **Focused-time resource integrity re-proved:** the current cadence/resource/terminal equivalence contract must pass with the proportional rule on the exact final runtime rather than being inherited from flat-decay PR #69.
-8. **Input/presentation/integration compatibility:** accepted Gameplay focus/retry/input regressions, Experience focus/recovery feedback regressions, and local/offline Integration smoke remain green on the exact final head.
-9. **Historical source integrity:** constant-decay numeric evidence remains historical. Re-characterize current-rule tests explicitly rather than silently rewriting old measurements into proportional-rule claims.
-10. **No premature complexity:** do not add hazards, relay classes, scoring, another chamber, another resource, combat, progression, or a new primary verb merely to force resolution.
-
-Integration owns the current-main rebuild/retarget, dependency ordering, exact-head verification, final semantic-overlap scan, and ordinary landing under `studio/GOVERNANCE.md`. Systems owns the rule contract; QA owns exact reproduction and failure/cycle truth; World owns spatial/route preservation; Gameplay and Experience retain their existing behavior/readability boundaries. No further Mike or Game Director approval is required if the exact final composition satisfies the accepted direction and governance gates.
-
-If the proportional candidate fails those gates on current accepted reality, that failure is valid evidence. Return the reproduced problem to the owning specialist lane rather than tuning until a preferred result appears.
-
-Human/fresh-player `PLAYTESTED` evidence remains the stronger validation for whether a person can infer a useful maintenance strategy, understand the state, feel fair pressure, and enjoy the loop. Deterministic adaptive success must not be relabeled as those human quality claims.
+This is deterministic machine evidence. It does **not** establish human strategy comprehension, fairness, tension, balance, subjective control feel, accessibility quality, or fun.
 
 See `studio/decisions/ADAPTIVE_RESOLUTION_REPAIR.md` for the durable Director boundary and evidence labels.
+
+## Completed milestone — Truthful Relay Readability Slice
+Experience PR #58 landed the bounded relay threshold-truth repair on the accepted proportional runtime.
+
+An offline relay below `35` energy can no longer display the online threshold value `35%`, while a relay at exactly `35.00` may display `35%` and counts online. The repair preserved proportional decay, transfer/recharge values, geometry, controls, focus/time behavior, terminal rules, and session structure without adding another HUD layer, warning family, audio cue, effect system, or mechanic.
+
+This closes the deterministic threshold contradiction. It does **not** prove that a fresh player notices the right relay, understands route-versus-urgency tradeoffs, or that non-visual/screen-reader access is complete.
+
+See `studio/decisions/TRUTHFUL_RELAY_READABILITY.md` for the durable Director boundary and evidence labels.
+
+## Current direction — Fresh-Player Evidence Boundary
+Blackline Relay is now established as a compact maintenance-triage game in which route cost, live relay urgency, carried charge, recoverable consequences, and persistent partial repair combine into terminal `WON` / `BLACKOUT` outcomes.
+
+The smallest coherent next direction is **evidence-led restraint**: prefer genuine fresh-player evidence or another concrete reproduced defect before opening another mechanics milestone.
+
+Until such evidence exists:
+- no new hazard, relay class, chamber, resource, combat layer, scoring/progression layer, or primary verb is directionally required merely to keep autonomous activity moving;
+- specialists may still repair a reproduced problem inside their own dimension;
+- accessibility/readability work must stay truth-bounded to what is actually verified rather than growing by assumption;
+- deterministic machine success must not be relabeled as human comprehension, fairness, tension, balance, accessibility quality, subjective control feel, or fun.
+
+Experience PR #83 is a bounded accessibility/readability proposal, not a new game direction. It may expose truthful per-relay state non-visually while remaining HOLD for exact execution and real assistive-technology/browser evidence. Its current lack of non-visual spatial route mapping is an explicit limitation, not evidence that the chamber, HUD, or mechanics should be expanded before a real accessibility test reproduces that need.
+
+Integration retains ordinary composition and landing authority after role-appropriate evidence is sufficient. No Mike or additional Game Director approval is required for a bounded non-identity change that satisfies `studio/GOVERNANCE.md`.
 
 ## First vertical-slice target
 A player can launch locally, move a runner, recharge at the central core, transfer carried energy into four independently decaying beacons, receive clear state feedback, win by sustaining all four simultaneously, lose by exhausting carried charge before network completion, and restart without reloading the page.
 
 ## Open evolution space
-The charter intentionally does not decide exact difficulty curve, advanced movement, encounter hazards, scoring, audio identity, accessibility options, world fiction, progression, or final art language. Those remain specialist growth lanes after evidence exists.
+The charter intentionally does not decide exact difficulty curve, advanced movement, encounter hazards, scoring, audio identity, accessibility options, world fiction, progression, or final art language. Those remain evidence-led growth spaces, not automatic next milestones; a future change should answer a reproduced player problem or a clear specialist-owned gap.
