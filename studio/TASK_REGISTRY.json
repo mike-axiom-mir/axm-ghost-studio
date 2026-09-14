@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.3",
+  "schema_version": "0.4",
   "timezone": "Europe/Amsterdam",
   "minimum_recurrence": "PT1H",
   "schedule_authority": "externally-configured ChatGPT Task schedule",
@@ -11,8 +11,58 @@
     "All later roles are staggered relative to the Director start to reduce collision.",
     "Every role must rescan newest GitHub state before claiming work and immediately before publishing or merging.",
     "Semantic overlap counts as overlap even when files differ.",
-    "Mike is the experiment observer, not the routine merge/CANON gate; internal authority is defined in studio/GOVERNANCE.md."
+    "Mike is the experiment observer, not the routine merge/CANON gate; internal authority is defined in studio/GOVERNANCE.md.",
+    "Standing role files are external task/chat artifacts, not repository-local files. Authenticate them against role_spec_provenance before use.",
+    "Where historical role-file shared-root authority wording conflicts with accepted studio/GOVERNANCE.md or studio/STUDIO_PROTOCOL.md, accepted repository governance takes precedence; do not silently rewrite the source artifact."
   ],
+  "role_spec_provenance": {
+    "source_kind": "externally supplied ChatGPT task/chat artifacts",
+    "source_pack": "AXM Ghost Studio Task Pack",
+    "source_pack_version": "0.1",
+    "source_pack_date": "2026-09-11",
+    "repository_local": false,
+    "governance_precedence": [
+      "studio/GOVERNANCE.md",
+      "studio/STUDIO_PROTOCOL.md"
+    ],
+    "artifacts": {
+      "01_GAME_DIRECTOR.txt": {
+        "bytes": 11433,
+        "lines": 312,
+        "sha256": "13b182e6628322eccac6334d0849144e48f36096fd7e3cea2dd10b1ae1df17ca"
+      },
+      "02_INTEGRATION_STEWARD.txt": {
+        "bytes": 10136,
+        "lines": 296,
+        "sha256": "1f77fd580ccb765a1d8343114792c258ac0a5143c1e3c5e35c13d26b4b35eeaf"
+      },
+      "03_GAMEPLAY_ENGINEER.txt": {
+        "bytes": 10256,
+        "lines": 304,
+        "sha256": "ad8e1b2ad5df5e825cf127c49744dbfb426775a56584a219e6d5138421018a5c"
+      },
+      "04_SYSTEMS_DESIGNER.txt": {
+        "bytes": 9814,
+        "lines": 293,
+        "sha256": "bbb363533cffa96309609e45a1c38fe5d4c250891524233b299777dd60fb9de8"
+      },
+      "05_WORLD_ENCOUNTER_DESIGNER.txt": {
+        "bytes": 9696,
+        "lines": 285,
+        "sha256": "868c9b85c57e4155283e913835b6dfc6200057aa3741cd6b6f2997d53e1a90ab"
+      },
+      "06_EXPERIENCE_ART_AUDIO_DIRECTOR.txt": {
+        "bytes": 10060,
+        "lines": 295,
+        "sha256": "38426c3c41fca6292a87299beeda4c18a205124a4e4b7e172130f4209c030a06"
+      },
+      "07_QA_PLAYTEST_SPECIALIST.txt": {
+        "bytes": 10017,
+        "lines": 300,
+        "sha256": "a10c393e960e75335db7823478237034cba8a76ca8ee08b853dac0a0b85fc58f"
+      }
+    }
+  },
   "relative_schedule": {
     "director": "T+0:00 then hourly",
     "integration": "T+1:08 then hourly",
