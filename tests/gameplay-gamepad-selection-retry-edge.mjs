@@ -56,6 +56,7 @@ vm.createContext(sandbox);
 vm.runInContext(`${source}\n;globalThis.__gamepadSelectionRetry = { get state(){ return state; }, update };`, sandbox);
 
 const game = sandbox.__gamepadSelectionRetry;
+const resetPosition = { x: game.state.player.x, y: game.state.player.y };
 
 // Establish a non-reset run state while controller 0 is the selected standard pad.
 game.state.player.x = 600;
@@ -83,6 +84,7 @@ game.state.elapsed = 3;
 secondPad.buttons[9].pressed = true;
 game.update(0.01);
 assert.equal(game.state.elapsed, 0, 'release followed by a fresh Start edge must still restart the run');
-assert.equal(game.state.player.x, 480, 'fresh Start retry should return the runner to the core');
+assert.equal(game.state.player.x, resetPosition.x, 'fresh Start retry should restore the normal reset x position');
+assert.equal(game.state.player.y, resetPosition.y, 'fresh Start retry should restore the normal reset y position');
 
 console.log('gameplay gamepad selection retry edge passed: held Start cannot become a fresh retry solely through controller takeover');
