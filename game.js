@@ -190,7 +190,16 @@ function currentMovementIntentActive() {
 function resetForCurrentMovementIntent() {
   const pad = getStandardGamepad();
   const gamepadMovementActive = hasGamepadMovementIntent(pad);
-  resetGame(hasKeyboardMovementIntent() || gamepadMovementActive, gamepadMovementActive, gamepadMovementActive ? getGamepadIndex(pad) : null);
+  const pendingGamepadNeutral = gamepadNeutralPending;
+  const requireGamepadNeutral = gamepadMovementActive || pendingGamepadNeutral;
+  const neutralGamepadIndex = pendingGamepadNeutral
+    ? gamepadNeutralPendingIndex
+    : (gamepadMovementActive ? getGamepadIndex(pad) : null);
+  resetGame(
+    hasKeyboardMovementIntent() || requireGamepadNeutral,
+    requireGamepadNeutral,
+    neutralGamepadIndex
+  );
 }
 
 function update(dt) {
