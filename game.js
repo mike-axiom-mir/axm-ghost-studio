@@ -162,7 +162,14 @@ function readGamepadIntent() {
   const padIndex = getGamepadIndex(pad);
   const selectionChanged = selectedGamepadIndex !== undefined && padIndex !== selectedGamepadIndex;
   selectedGamepadIndex = padIndex;
-  if (selectionChanged && restartPressed && padIndex !== null) gamepadRestartHeldIndices.add(padIndex);
+  if (selectionChanged && padIndex !== null) {
+    if (!gamepadNeutralPending && hasGamepadMovementIntent(pad)) {
+      movementArmed = false;
+      gamepadNeutralPending = true;
+      gamepadNeutralPendingIndex = padIndex;
+    }
+    if (restartPressed) gamepadRestartHeldIndices.add(padIndex);
+  }
   const restartHeld = padIndex !== null && gamepadRestartHeldIndices.has(padIndex);
   if (restartPressed && !restartHeld) {
     resetForCurrentMovementIntent();
