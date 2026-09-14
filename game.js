@@ -156,13 +156,11 @@ function readGamepadIntent() {
   }
 
   const movement = readGamepadMovementIntent(pad);
-  const movementInputActive = hasGamepadMovementIntent(pad);
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
   const padIndex = getGamepadIndex(pad);
   const restartHeld = padIndex !== null && gamepadRestartHeldIndices.has(padIndex);
   if (restartPressed && !restartHeld) {
-    const requireNeutral = hasKeyboardMovementIntent() || movementInputActive;
-    resetGame(requireNeutral, movementInputActive, movementInputActive ? padIndex : null);
+    resetForCurrentMovementIntent();
     if (padIndex !== null) gamepadRestartHeldIndices.add(padIndex);
     return null;
   }
