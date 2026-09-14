@@ -48,7 +48,9 @@
     "world_identity": "ACCEPTED. The route-shaped chamber remains reachable and preserves a measured route-versus-urgency decision under proportional decay.",
     "nonvisual_relay_state": "ACCEPTED AS A NARROW SEMANTIC SURFACE. PR #83 exposes runtime-synchronized threshold-safe R1-R4 percentages through a nonvisual semantic DOM relationship while preserving mechanics and tested Gameplay/focus-time contracts. This is not evidence of screen-reader effectiveness, nonvisual route comprehension, or accessibility quality.",
     "terminal_retry_guidance": "ACCEPTED. Gameplay PR #89 synchronizes WON/BLACKOUT recovery guidance with the already-supported R, Restart button, and standard-mapped gamepad Start retry set without changing retry mechanics.",
-    "reduced_motion": "ACCEPTED AS A BOUNDED PRESENTATION SURFACE. Experience PR #91 stops the covered core/transfer size oscillations when the JavaScript reduced-motion media query reports reduce while preserving non-motion transfer cues and all gameplay state. Exact-tree deterministic composition evidence passed 30/30 test files; real OS/browser preference propagation and rendered comfort remain unverified."
+    "reduced_motion": "ACCEPTED AS A BOUNDED PRESENTATION SURFACE. Experience PR #91 stops the covered core/transfer size oscillations when the JavaScript reduced-motion media query reports reduce while preserving non-motion transfer cues and all gameplay state. Exact-tree deterministic composition evidence passed 30/30 test files; real OS/browser preference propagation and rendered comfort remain unverified.",
+    "deterministic_verification_entrypoint": "ACCEPTED. Integration PR #97 adds the zero-dependency `node tests/run-all.mjs` entry point, which syntax-checks game.js, discovers every other tests/*.mjs regression, runs the complete deterministic inventory, and exits nonzero on any failed target. Node.js is optional verification tooling, not a game runtime dependency.",
+    "cloud_browser_interaction": "ACCEPTED AS BOUNDED BROWSER EVIDENCE. PR #98 preserves cloud-Chrome evidence for load/render, live decay/status, movement around the upper bulkhead, bounded R1 contact/transfer, BLACKOUT, and R retry on accepted runtime. The control surface used discrete synthetic taps, so timing, charge margin, BLACKOUT outcome, balance, fairness, control feel, fun, full-win feasibility under that surface, and fresh-player comprehension remain unproven."
   },
   "known_failures_or_unknowns": [
     "No genuine human/fresh-player full-session evidence establishes strategy comprehension, route/urgency understanding, fairness, tension, balance, subjective control feel, accessibility quality, or fun.",
@@ -57,7 +59,7 @@
     "Real screen-reader/browser behavior for the accepted nonvisual relay-state surface remains unverified; R1-R4 also lack a proven nonvisual spatial mapping to chamber position/routes. The landed semantic relationship must not be relabeled as accessibility quality.",
     "Actual OS/browser propagation of prefers-reduced-motion, rendered comfort, and suitability for people who rely on reduced-motion preferences remain unverified; the deterministic media-query path must not be relabeled as accessibility quality."
   ],
-  "build_run_instructions": "Open index.html in a modern desktop browser, or run python -m http.server 8000 and open http://localhost:8000.",
+  "build_run_instructions": "Run locally by opening index.html in a modern desktop browser, or run `python -m http.server 8000` and open http://localhost:8000. If Node.js is installed, verify the complete deterministic suite with `node tests/run-all.mjs`; no package install is required.",
   "recent_decisions": [
     "Mike is the experiment observer, not the routine merge/CANON/approval/direction/conflict gate.",
     "Game Director owns identity/scope/milestones; Integration Steward owns ordinary dependency ordering, composition, final overlap scans, and merge landing after founding.",
