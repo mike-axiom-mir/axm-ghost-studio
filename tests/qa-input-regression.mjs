@@ -30,6 +30,8 @@ const elements = {
   }
 };
 
+const gamepadButtons = Array.from({ length: 16 }, () => ({ pressed: false }));
+const gamepad = { index: 0, connected: true, mapping: 'standard', axes: [0, 0], buttons: gamepadButtons };
 let now = 0;
 const sandbox = {
   document: { getElementById: id => elements[id] },
@@ -40,6 +42,7 @@ const sandbox = {
       listeners.set(type, handlers);
     }
   },
+  navigator: { getGamepads: () => [gamepad] },
   performance: { now: () => now },
   requestAnimationFrame: noop,
   Math,
@@ -70,6 +73,8 @@ function releaseMovement() {
 
 function reset() {
   releaseMovement();
+  gamepad.axes = [0, 0];
+  for (const button of gamepadButtons) button.pressed = false;
   sandbox.__qa.resetGame();
 }
 
@@ -94,7 +99,7 @@ const diagonalDistance = Math.hypot(
 );
 assert.ok(Math.abs(diagonalDistance - 47) < 1e-9, 'diagonal movement should preserve the same speed ceiling');
 
-// Opposing inputs cancel cleanly instead of producing drift.
+// Opposing keyboard inputs cancel cleanly instead of producing drift.
 reset();
 const conflictStartX = sandbox.__qa.state.player.x;
 dispatch('keydown', 'a');
@@ -102,6 +107,19 @@ dispatch('keydown', 'd');
 step(6);
 releaseMovement();
 assert.equal(sandbox.__qa.state.player.x, conflictStartX, 'left + right should cancel horizontal movement');
+
+// Opposing keyboard and gamepad intent must cancel as one combined control surface.
+// A cancelled off-core input also pays only the accepted stationary drain, not the motion premium.
+reset();
+sandbox.__qa.state.player.y = 100;
+const crossDeviceStartX = sandbox.__qa.state.player.x;
+gamepad.axes = [1, 0];
+dispatch('keydown', 'a');
+step(1);
+dispatch('keyup', 'a');
+gamepad.axes = [0, 0];
+assert.equal(sandbox.__qa.state.player.x, crossDeviceStartX, 'keyboard left + gamepad right should cancel horizontal movement');
+assert.ok(Math.abs(sandbox.__qa.state.player.charge - 99.85) < 1e-9, 'cancelled cross-device input should pay only stationary drain');
 
 // Losing browser focus clears held movement so the runner cannot keep drifting.
 reset();
@@ -148,4 +166,4 @@ buttonListeners.get('click')();
 assert.equal(sandbox.__qa.state.mode, 'RUNNING', 'Restart button should recover from BLACKOUT');
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'HUD should report the post-restart core state');
 
-console.log('qa input regression passed: cardinal speed, diagonal normalization, conflicting input, blur release, boundary clamp, keyboard retry, button retry');
+console.log('qa input regression passed: cardinal speed, diagonal normalization, keyboard/cross-device conflicting input, blur release, boundary clamp, keyboard retry, button retry');
