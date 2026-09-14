@@ -26,6 +26,16 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
+## Verify deterministic regressions
+
+If Node.js is installed, run the complete local deterministic suite with no package install:
+
+```bash
+node tests/run-all.mjs
+```
+
+The runner syntax-checks `game.js`, discovers every other `tests/*.mjs` regression in alphabetical order, runs all of them, and exits nonzero if any verification target fails.
+
 ## Current controls
 
 - Move: **WASD**, **arrow keys**, or a standard-mapped gamepad **left stick / D-pad**
