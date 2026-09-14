@@ -62,6 +62,18 @@ run('resetGame(); state.player.x = 480; state.player.y = 100; update(1)');
 state = snapshot();
 closeTo(state.player.charge, 97);
 
+// Away from the core, fully realized movement reaches the founded movement-drain ceiling.
+run("resetGame(); state.player.x = 480; state.player.y = 100; keys.add('d'); update(1); keys.clear()");
+state = snapshot();
+closeTo(state.player.x, 715);
+closeTo(state.player.charge, 95.2);
+
+// Movement input that is fully blocked by a bulkhead must not be charged as realized movement.
+run("resetGame(); state.player.x = 604; state.player.y = 300; keys.add('d'); update(0.05); keys.clear()");
+state = snapshot();
+closeTo(state.player.x, 604);
+closeTo(state.player.charge, 99.85);
+
 // Touching an empty relay applies decay first, then bounded transfer, while off-core idle drain still applies.
 run('resetGame(); state.player.x = state.beacons[1].x; state.player.y = state.beacons[1].y; update(1)');
 state = snapshot();
@@ -119,4 +131,4 @@ assert.ok(state.beacons.every(beacon => beacon.energy >= 35), 'all relays should
 assert.equal(state.player.charge, 0);
 assert.equal(state.mode, 'WON');
 
-console.log('systems rules passed: reset, recharge, proportional decay, idle drain, transfer, win, blackout, terminal freeze, completion precedence');
+console.log('systems rules passed: reset, recharge, proportional decay, idle drain, realized-movement drain, transfer, win, blackout, terminal freeze, completion precedence');
