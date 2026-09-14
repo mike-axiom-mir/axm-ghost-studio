@@ -314,6 +314,14 @@ function setTextIfChanged(element, value) {
   if (element.textContent !== value) element.textContent = value;
 }
 
+function getDisplayedPlayerCharge() {
+  const charge = state.player.charge;
+  const rounded = Math.round(charge);
+  if (charge > 25 && rounded <= 25) return 26;
+  if (charge > 0 && rounded <= 0) return 1;
+  return rounded;
+}
+
 function getDisplayedBeaconEnergy(beacon) {
   const online = beacon.energy >= 35;
   return online ? Math.round(beacon.energy) : Math.min(34, Math.round(beacon.energy));
@@ -321,7 +329,7 @@ function getDisplayedBeaconEnergy(beacon) {
 
 function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
-  setTextIfChanged(chargeText, `${Math.round(state.player.charge)}%`);
+  setTextIfChanged(chargeText, `${getDisplayedPlayerCharge()}%`);
   setTextIfChanged(relayText, `${online} / ${state.beacons.length}`);
   if (relayDetail) {
     const relaySummary = state.beacons
