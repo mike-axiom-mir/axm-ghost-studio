@@ -36,10 +36,10 @@ const context = vm.createContext({
 vm.runInContext(gameSource, context, { filename: 'game.js' });
 const run = expression => vm.runInContext(expression, context);
 
-const makePad = ({ movement = false } = {}) => ({
-  connected: true,
+const makePad = ({ movement = false, index = 0, connected = true } = {}) => ({
+  connected,
   mapping: 'standard',
-  index: 0,
+  index,
   axes: movement ? [0.8, 0] : [0, 0],
   buttons: Array.from({ length: 16 }, () => ({ pressed: false }))
 });
@@ -89,4 +89,24 @@ pads = [makePad({ movement: false })];
 run('update(0.01);');
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'neutral input after focus return should resume the normal status hierarchy');
 
-console.log('experience retry-neutral feedback passed: keyboard release cue, gamepad release cue, disconnected-controller reconnect cue, repeated-retry reconnect guidance, reconnect-held release cue, neutral recovery, focus-return carryover cue');
+// Recent controller-takeover gameplay repair: when a different standard controller becomes
+// selected while already holding movement, the HUD should explain the neutral-release guard
+// rather than leaving the player with unexplained non-response.
+const firstPad = makePad({ index: 0, movement: false });
+const secondPad = makePad({ index: 1, movement: true });
+pads = [firstPad, secondPad];
+run('selectedGamepadIndex = undefined; movementArmed = true; gamepadNeutralPending = false; gamepadNeutralPendingIndex = null; resetGame(); update(0.01);');
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'ordinary selected-controller state should retain normal core status before takeover');
+
+firstPad.connected = false;
+run('update(0.05);');
+assert.equal(run('movementArmed'), false, 'held movement on controller takeover should enter the accepted neutral-release guard');
+assert.equal(run('gamepadNeutralPendingIndex'), 1, 'the newly selected controller should own the neutral-release obligation');
+assert.equal(elements.stateText.textContent, 'RELEASE TO MOVE', 'controller takeover with held movement should explain why movement is temporarily suppressed');
+
+secondPad.axes = [0, 0];
+run('update(0.01);');
+assert.equal(run('movementArmed'), true, 'neutral input from the newly selected controller should re-arm movement');
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'neutral recovery after controller takeover should restore ordinary status');
+
+console.log('experience retry-neutral feedback passed: keyboard release cue, gamepad release cue, disconnected-controller reconnect cue, repeated-retry reconnect guidance, reconnect-held release cue, neutral recovery, focus-return carryover cue, controller-takeover release cue');
