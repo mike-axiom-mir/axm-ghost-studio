@@ -24,6 +24,7 @@ const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
 const MAX_SIMULATION_STEP = 0.05;
 const gamepadRestartHeldIndices = new Set();
+let selectedGamepadIndex;
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
@@ -152,12 +153,16 @@ function readGamepadIntent() {
 
   const pad = getStandardGamepad();
   if (!pad) {
+    if (selectedGamepadIndex !== undefined) selectedGamepadIndex = null;
     return { dx: 0, dy: 0 };
   }
 
   const movement = readGamepadMovementIntent(pad);
   const restartPressed = Boolean(pad.buttons?.[9]?.pressed);
   const padIndex = getGamepadIndex(pad);
+  const selectionChanged = selectedGamepadIndex !== undefined && padIndex !== selectedGamepadIndex;
+  selectedGamepadIndex = padIndex;
+  if (selectionChanged && restartPressed && padIndex !== null) gamepadRestartHeldIndices.add(padIndex);
   const restartHeld = padIndex !== null && gamepadRestartHeldIndices.has(padIndex);
   if (restartPressed && !restartHeld) {
     resetForCurrentMovementIntent();
