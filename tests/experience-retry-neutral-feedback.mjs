@@ -65,6 +65,16 @@ assert.equal(elements.stateText.textContent, 'RECONNECT CONTROLLER', 'an absent 
 assert.equal(run('movementArmed'), false, 'controller absence must not counterfeit a neutral movement edge');
 assert.ok(run('state.elapsed') > elapsedBeforeDisconnectWait, 'the accepted retry-neutral wait should continue simulation while movement remains suppressed');
 
+run('resetForCurrentMovementIntent();');
+assert.equal(elements.stateText.textContent, 'RECONNECT CONTROLLER', 'repeating retry while the pending controller is absent should preserve the reconnect cue');
+assert.equal(run('movementArmed'), false, 'repeating retry while the controller is absent must keep movement disarmed');
+assert.equal(run('gamepadNeutralPending'), true, 'repeating retry must preserve the pending controller-neutral requirement');
+
+pads = [makePad({ movement: true })];
+run('update(0.01);');
+assert.equal(elements.stateText.textContent, 'RELEASE TO MOVE', 'reconnecting while still held should switch from reconnect guidance to the neutral-release cue');
+assert.equal(run('movementArmed'), false, 'reconnect-held movement must remain disarmed until a neutral observation');
+
 pads = [makePad({ movement: false })];
 run('update(0.01);');
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'observed neutral controller input should restore ordinary status');
@@ -79,4 +89,4 @@ pads = [makePad({ movement: false })];
 run('update(0.01);');
 assert.equal(elements.stateText.textContent, 'CORE FULL', 'neutral input after focus return should resume the normal status hierarchy');
 
-console.log('experience retry-neutral feedback passed: keyboard release cue, gamepad release cue, disconnected-controller reconnect cue, neutral recovery, focus-return carryover cue');
+console.log('experience retry-neutral feedback passed: keyboard release cue, gamepad release cue, disconnected-controller reconnect cue, repeated-retry reconnect guidance, reconnect-held release cue, neutral recovery, focus-return carryover cue');
