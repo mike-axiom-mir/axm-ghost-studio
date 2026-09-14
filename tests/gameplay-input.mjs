@@ -85,6 +85,16 @@ pad.axes = [1, 0];
 run('resetGame(); state.player.y = 100; update(1)');
 closeTo(run('state.player.x'), 715);
 closeTo(run('state.player.charge'), 95.2);
+const gamepadFullTravel = JSON.parse(run('JSON.stringify({ x: state.player.x, y: state.player.y, charge: state.player.charge })'));
+
+// Equal full movement through keyboard and standard-mapped gamepad must produce
+// the same realized position and carried-charge consequence.
+pad.axes = [0, 0];
+run("resetGame(); state.player.y = 100; keys.add('d'); update(1); keys.clear()");
+const keyboardFullTravel = JSON.parse(run('JSON.stringify({ x: state.player.x, y: state.player.y, charge: state.player.charge })'));
+closeTo(keyboardFullTravel.x, gamepadFullTravel.x);
+closeTo(keyboardFullTravel.y, gamepadFullTravel.y);
+closeTo(keyboardFullTravel.charge, gamepadFullTravel.charge);
 
 // Accepted bulkhead collision: fully blocked input pays only the 3.0/s stationary drain.
 pad.axes = [-1, 0];
@@ -116,4 +126,4 @@ assert.equal(run('state.player.x'), 500);
 pad.buttons[9].pressed = false;
 run('readGamepadIntent()');
 
-console.log('gameplay input passed: radial response, input parity, realized-motion drain, collision sliding, and restart edge');
+console.log('gameplay input passed: radial response, keyboard/gamepad input parity, realized-motion drain, collision sliding, and restart edge');
