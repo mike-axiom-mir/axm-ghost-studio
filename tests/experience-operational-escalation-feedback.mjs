@@ -88,15 +88,42 @@ assert.equal(elements.stateText.textContent, 'REINFORCE R1 TO 70%');
 drawLog.length = 0;
 run('render()');
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'TARGET 70%'));
-assert.equal(drawLog.filter(entry => entry.kind === 'strokeRect').length, 3, 'two bulkheads plus one square surge marker should be drawn');
+assert.equal(drawLog.filter(entry => entry.kind === 'strokeRect').length, 3, 'two bulkheads plus one R1 surge marker should be drawn');
+
+// R4 has two accepted service locations: its primary beacon and the crossline R4 LINK.
+// If R4 is the breaker, both mechanically valid service locations must carry the same
+// SURGE target affordance so the presentation does not imply that the alternate route
+// became inactive.
+run(`
+  state.operational.phase = OP_ESC_PHASES.SURGE;
+  state.operational.fault = {
+    kind: 'SURGE_LOAD',
+    breakerIndex: 3,
+    clearThreshold: 70,
+    triggeredAt: state.elapsed,
+    resolvedAt: null
+  };
+  state.beacons[3].energy = 60;
+  updateHud();
+`);
+const r4ServicePad = JSON.parse(run('JSON.stringify(relayServicePads[0])'));
+const r4Beacon = JSON.parse(run('JSON.stringify(state.beacons[3])'));
+drawLog.length = 0;
+run('render()');
+const r4TargetLabels = drawLog.filter(entry => entry.kind === 'fillText' && entry.text === 'TARGET 70%');
+assert.equal(r4TargetLabels.length, 2, 'R4 SURGE should mark both the beacon and accepted crossline service link');
+assert.ok(r4TargetLabels.some(entry => entry.args[0] === r4Beacon.x), 'R4 primary beacon should remain marked as a valid SURGE service location');
+assert.ok(r4TargetLabels.some(entry => entry.args[0] === r4ServicePad.x), 'R4 crossline service link should also be marked as a valid SURGE service location');
+assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'R4 LINK'), 'accepted R4 LINK identity should remain visible');
+assert.equal(drawLog.filter(entry => entry.kind === 'strokeRect').length, 4, 'two bulkheads plus two R4 surge target markers should be drawn');
 
 // Resolving the surge advances the dedicated phase surface while Status returns to
 // the immediate interaction language rather than repeating RECOVERY.
 run(`
-  state.beacons[0].energy = 71;
+  state.beacons[0].energy = 60;
   state.beacons[1].energy = 40;
   state.beacons[2].energy = 0;
-  state.beacons[3].energy = 0;
+  state.beacons[3].energy = 71;
   update(0.01);
 `);
 state = snapshot();
@@ -122,4 +149,4 @@ run('render()');
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'NETWORK STABLE'));
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'OPERATIONAL ESCALATION CLEARED'));
 
-console.log('experience operational escalation feedback passed: separate phase/action surfaces, target-truth cue, and stronger completion label');
+console.log('experience operational escalation feedback passed: separate phase/action surfaces, target-truth cues at every accepted service location, and stronger completion label');
