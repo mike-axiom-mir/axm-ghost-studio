@@ -83,6 +83,26 @@ closeTo(state.beacons[0].energy, 59.9748);
 closeTo(state.beacons[1].energy, 35.325342);
 closeTo(state.player.charge, 99.53);
 
+// The SURGE gate is raw >=70. Player-facing integer projection must stay on the
+// same side of that gate: a raw 69.6 breaker cannot say 70% while SURGE still
+// requires 70. Existing exact 35%-online and 100%-full boundaries remain intact.
+run(`
+  state.beacons[0].energy = 69.6;
+  state.beacons[1].energy = 35;
+  state.beacons[2].energy = 100;
+  updateHud();
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'SURGE');
+assert.ok(state.beacons[0].energy < state.operational.fault.clearThreshold);
+assert.equal(run('getDisplayedBeaconEnergy(state.beacons[0])'), 69);
+assert.equal(run('getDisplayedBeaconEnergy(state.beacons[1])'), 35);
+assert.equal(run('getDisplayedBeaconEnergy(state.beacons[2])'), 100);
+assert.match(elements.relayDetail.textContent, /R1 69%/);
+assert.match(elements.relayDetail.textContent, /R2 35%/);
+assert.match(elements.relayDetail.textContent, /R3 100%/);
+assert.equal(elements.stateText.textContent, 'SURGE — REINFORCE R1 TO 70%');
+
 // All four relays crossing the old 35% completion threshold does not bypass an
 // unresolved surge. The run stays active until the breaker is reinforced.
 run(`
@@ -109,6 +129,26 @@ assert.equal(state.operational.phase, 'RECOVERY');
 assert.ok(state.operational.fault.resolvedAt !== null);
 assert.equal(state.mode, 'RUNNING');
 assert.equal(elements.stateText.textContent, 'RECOVERY — CORE FULL');
+
+// Exact 70 is eligible for ordinary display and clears on the next normal update.
+run(`
+  resetGame();
+  state.operational.phase = OP_ESC_PHASES.SURGE;
+  state.operational.fault = {
+    kind: 'SURGE_LOAD',
+    breakerIndex: 0,
+    clearThreshold: 70,
+    triggeredAt: state.elapsed,
+    resolvedAt: null
+  };
+  state.beacons[0].energy = 70;
+  state.beacons[1].energy = 35;
+  update(0);
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(run('getDisplayedBeaconEnergy(state.beacons[0])'), 70);
+assert.match(elements.relayDetail.textContent, /R1 70%/);
 
 // Phase 3 keeps the founded win condition: all relays online resolves NETWORK STABLE.
 run(`
@@ -147,4 +187,4 @@ assert.equal(state.operational.fault, null);
 assert.equal(state.elapsed, 0);
 assert.deepEqual(state.beacons.map(beacon => beacon.energy), [34, 0, 0, 0]);
 
-console.log('systems operational escalation passed: TRIAGE -> SURGE_LOAD -> RECOVERY -> WON, with BLACKOUT and reset preserved');
+console.log('systems operational escalation passed: TRIAGE -> SURGE_LOAD -> RECOVERY -> WON, threshold-truth projection, BLACKOUT and reset preserved');
