@@ -66,6 +66,7 @@ Can persistent specialist roles, operating on recurring tasks and shared reposit
 
 Read these before working:
 
+- `studio/EXPERIMENT_RESULTS_2026-09-15.md` — paused multi-day experiment results, failure modes, lessons, final snapshot and resume-later handoff.
 - `studio/STUDIO_PROTOCOL.md` — shared operating contract.
 - `studio/GOVERNANCE.md` — internal authority, merge readiness and disagreement rules.
 - `studio/STUDIO_STATE.json` — current factual studio/game state.
