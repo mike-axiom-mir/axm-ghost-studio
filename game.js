@@ -196,7 +196,10 @@ function guardFocusedGamepadCarryover() {
     gamepadNeutralPending = true;
     gamepadNeutralPendingIndex = padIndex;
   }
-  if (padIndex !== null && pad.buttons?.[9]?.pressed) gamepadRestartHeldIndices.add(padIndex);
+  if (padIndex !== null) {
+    if (pad.buttons?.[9]?.pressed) gamepadRestartHeldIndices.add(padIndex);
+    else gamepadRestartHeldIndices.delete(padIndex);
+  }
 }
 
 function currentMovementIntentActive() {
