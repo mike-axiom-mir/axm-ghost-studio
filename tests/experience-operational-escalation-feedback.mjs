@@ -132,11 +132,71 @@ assert.equal(elements.operationText.textContent, 'RECOVERY');
 assert.equal(elements.operationCard.dataset.phase, 'RECOVERY');
 assert.equal(elements.stateText.textContent, 'TRANSFER R2');
 
-// Terminal-success presentation is tested from a state where every required
-// operational incident has already resolved. REROUTE itself is covered by the
-// Systems contract; this Experience test remains scoped to the terminal surface.
+// Wave 02 ROUTE_CUT must read differently from SURGE. Start the second incident from
+// the R4 primary location so PRIMARY is cut and the surviving crossline R4 LINK is the
+// required service route. Operation carries the incident identity; Status carries the
+// immediate surviving-route instruction.
 run(`
-  state.operational.routeCutResolved = true;
+  state.player.x = state.beacons[3].x;
+  state.player.y = state.beacons[3].y;
+  update(0.01);
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'REROUTE');
+assert.equal(state.operational.fault.kind, 'ROUTE_CUT');
+assert.equal(state.operational.fault.blockedLocation, 'PRIMARY');
+assert.equal(state.operational.fault.requiredLocation, 'CROSSLINE');
+assert.equal(elements.operationText.textContent, 'REROUTE');
+assert.equal(elements.operationCard.dataset.phase, 'REROUTE');
+assert.equal(elements.stateText.textContent, 'USE R4 LINK');
+
+drawLog.length = 0;
+run('render()');
+let routeCutLabels = drawLog.filter(entry => entry.kind === 'fillText' && (entry.text === 'CUT' || entry.text === 'USE'));
+assert.equal(routeCutLabels.length, 2, 'ROUTE_CUT should label exactly the blocked and surviving R4 service locations');
+assert.ok(routeCutLabels.some(entry => entry.text === 'CUT' && entry.args[0] === r4Beacon.x), 'blocked R4 primary location should carry CUT text');
+assert.ok(routeCutLabels.some(entry => entry.text === 'USE' && entry.args[0] === r4ServicePad.x), 'surviving R4 LINK should carry USE text');
+assert.ok(!drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'TARGET 70%'), 'SURGE target language must not leak into ROUTE_CUT');
+
+// The second reachable targeting outcome must invert the same compact visual contract
+// without inventing another cue family: CROSSLINE becomes CUT and PRIMARY becomes USE.
+run(`
+  state.operational.fault.blockedLocation = OP_ESC_ROUTE_CUT_LOCATIONS.CROSSLINE;
+  state.operational.fault.requiredLocation = OP_ESC_ROUTE_CUT_LOCATIONS.PRIMARY;
+  updateHud();
+`);
+assert.equal(elements.stateText.textContent, 'USE R4 PRIMARY');
+drawLog.length = 0;
+run('render()');
+routeCutLabels = drawLog.filter(entry => entry.kind === 'fillText' && (entry.text === 'CUT' || entry.text === 'USE'));
+assert.ok(routeCutLabels.some(entry => entry.text === 'CUT' && entry.args[0] === r4ServicePad.x), 'blocked R4 LINK should carry CUT text');
+assert.ok(routeCutLabels.some(entry => entry.text === 'USE' && entry.args[0] === r4Beacon.x), 'surviving R4 primary location should carry USE text');
+
+// Restore the mechanically selected PRIMARY-cut outcome and reach the surviving link.
+// Resolution gets a bounded acknowledgement, then yields Status back to ordinary
+// immediate-action feedback rather than becoming a permanent banner.
+run(`
+  state.operational.fault.blockedLocation = OP_ESC_ROUTE_CUT_LOCATIONS.PRIMARY;
+  state.operational.fault.requiredLocation = OP_ESC_ROUTE_CUT_LOCATIONS.CROSSLINE;
+  state.player.x = relayServicePads[0].x;
+  state.player.y = relayServicePads[0].y;
+  update(0.01);
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(state.operational.routeCutResolved, true);
+assert.equal(elements.operationText.textContent, 'RECOVERY');
+assert.equal(elements.stateText.textContent, 'ROUTE RESTORED');
+
+run(`
+  state.elapsed += 2;
+  updateHud();
+`);
+assert.equal(elements.stateText.textContent, 'TRANSFER R4');
+
+// Terminal-success presentation is tested from a state where every required
+// operational incident has already resolved.
+run(`
   state.beacons.forEach(beacon => { beacon.energy = 40; });
   update(0.01);
 `);
@@ -151,4 +211,4 @@ run('render()');
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'NETWORK STABLE'));
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'OPERATIONAL ESCALATION CLEARED'));
 
-console.log('experience operational escalation feedback passed: separate phase/action surfaces, target-truth cues at every accepted service location, and stronger completion label');
+console.log('experience operational escalation feedback passed: SURGE target truth plus ROUTE_CUT cut/use identity, bounded route-restored feedback, and terminal completion');
