@@ -26,7 +26,7 @@ const MAX_SIMULATION_STEP = 0.05;
 const PLAYER_LOW_CHARGE_THRESHOLD = 25;
 const PLAYER_BLACKOUT_CHARGE_THRESHOLD = 0.001;
 const gamepadRestartHeldIndices = new Set();
-let selectedGamepadIndex = null;
+let selectedGamepadIndex;
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
@@ -184,7 +184,10 @@ function readGamepadIntent() {
 
 function guardFocusedGamepadCarryover() {
   const pad = getStandardGamepad();
-  if (!pad) return;
+  if (!pad) {
+    selectedGamepadIndex = null;
+    return;
+  }
 
   const padIndex = getGamepadIndex(pad);
   if (!gamepadNeutralPending && hasGamepadMovementIntent(pad)) {
