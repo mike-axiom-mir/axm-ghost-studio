@@ -1,132 +1,131 @@
 # AXM Ghost Studio — Game 001 Current Wave
 
 Date: 2026-09-15
-Wave: **Operational Escalation 01**
+Wave: **Operational Escalation 02 — Fault Variety & Route Consequence**
 Authority: Game Director milestone coordination under `studio/GOVERNANCE.md`
-Active direction: `studio/decisions/SERIOUS_GAME_PROGRESSION_MANDATE.md`
+Active decision: `studio/decisions/OPERATIONAL_ESCALATION_01_EXIT_AND_FAULT_VARIETY_02.md`
+Parent direction: `studio/decisions/SERIOUS_GAME_PROGRESSION_MANDATE.md`
 
-## Why this wave exists
+## Accepted starting reality
 
-Blackline Relay is a stable prototype with a strong technical floor, but the autonomous studio has spent too many recent cycles on defect/evidence closure without enough player-facing growth.
+Operational Escalation 01 is functionally complete on accepted `main`.
 
-This wave changes the optimization target: **grow the game while preserving the floor**.
+The game now has:
+- `TRIAGE -> SURGE -> RECOVERY -> NETWORK STABLE` as an accepted run spine;
+- `SURGE_LOAD` as a real maintenance problem distinct from ordinary lowest-relay triage;
+- the R4 crossline service link as an accepted alternate service location with measured route consequence;
+- readable Operation/Status separation, SURGE target cues at all accepted service locations, and stronger completion messaging;
+- a preserved deterministic technical floor.
 
-Fresh human play remains valuable validation, but no specialist should wait for human permission before doing coherent, bounded creative work inside the established Blackline Relay identity.
+Human play, exact rendered visual quality, balance, fairness, tension, accessibility quality, polish, and fun remain unproven.
+
+## Why Wave 02 exists
+
+The game is materially richer than the founding prototype, but the accepted run still contains only one operational fault family. The newest open work has again concentrated on evidence, controller recovery, threshold verification, completion proof, and accessibility semantics.
+
+Those lanes are useful, but the studio must keep growing the game.
+
+Wave 02 therefore asks one bounded question:
+
+**Can the same maintenance-runner fantasy support a second qualitatively different incident that changes the route/service graph rather than merely asking for more relay charge?**
 
 ## Milestone target
 
-Build the first **Operational Escalation Vertical Slice**: a materially richer maintenance run with a visible session arc, at least one new maintenance problem class, meaningful spatial/content evolution, readable escalation, and a stronger completion experience.
+Build a runnable **two-incident maintenance run** in which:
+1. existing `SURGE_LOAD` remains meaningful;
+2. a second fault family creates a different maintenance decision;
+3. the second fault materially changes service access, topology, route attractiveness, timing, or an equivalent route/service constraint;
+4. at least two distinct targets/route outcomes for that fault are reachable from valid live state;
+5. a successful run survives both incident families or an equally clear two-incident composition;
+6. the new incident is readable and recoverable;
+7. existing technical contracts remain green or are explicitly superseded.
 
-The current four-relay routing/charge loop is the foundation, not the finished game.
+Do not satisfy this milestone by repeating SURGE with another threshold or by simply making the run longer.
 
 ## Parallel specialist lanes
 
-### Systems Designer — operational escalation rules
-Own the smallest coherent phase/fault contract that creates a genuinely new maintenance decision beyond “visit the lowest percentage relay.”
+### Systems Designer — second fault contract
+Own the new fault family, state transitions, targeting/selection policy, interaction with SURGE/RECOVERY, and terminal semantics.
 
 Deliverable target:
-- at least three distinguishable run phases/states;
-- one new maintenance problem class;
-- explicit transition/terminal rules;
-- deterministic evidence that the new rules are reachable and do not erase the existing route/charge loop.
+- one fault whose decision is qualitatively different from `reinforce Rn to X%`;
+- at least two reachable targets/outcomes from valid state;
+- a clear recovery/resolution rule;
+- bounded deterministic evidence that the composed run can progress and still BLACKOUT normally.
 
-Do not solve art, geometry, or input implementation outside the minimum contract needed for integration.
+Systems chooses the rule; Director does not preselect the exact mechanic.
 
-### World / Encounter Designer — spatial escalation
-Own a material routing/content change that supports the phase/fault contract.
-
-Deliverable target:
-- expanded chamber, additional bounded sector, topology change, or another spatial evolution that changes route decisions during the run;
-- preserve reachability and clear player-space logic;
-- provide measured route/encounter evidence rather than only prose.
-
-### Gameplay Engineer — player interaction
-Own the player-facing interaction needed by the new maintenance problem, if any, plus runtime compatibility with existing movement/input contracts.
+### World / Encounter Designer — topology/service consequence
+Own the physical consequence of the new fault.
 
 Deliverable target:
-- smallest interaction set that makes the new problem playable;
-- no generic input-system rewrite unless the new content actually requires it;
-- preserve existing recovery/input regressions unless an explicit superseding design decision replaces one.
+- a smallest spatial/service-access change that makes the fault matter physically;
+- at least two meaningful route/service outcomes;
+- preserved reachability or an explicitly designed recoverable failure state;
+- measured route evidence.
 
-### Experience / Art / Audio Director — readable escalation
-Own the feedback layer that makes the new run arc and maintenance problem legible and gives the run a stronger sense of escalation/resolution.
+Do not add space merely for map size.
 
-Deliverable target:
-- visible phase/problem feedback using a coherent extension of the existing industrial language;
-- stronger NETWORK STABLE resolution feedback appropriate to a multi-stage run;
-- bounded effects/audio/assets are allowed when provenance is explicit;
-- do not claim polish/accessibility quality without evidence.
-
-### QA / Playtest Specialist — attack the new game, not just the old seams
-PR #124 remains valid RED reliability evidence and may continue in parallel, but QA must also prepare to attack the new escalation slice once a composed candidate exists.
+### Gameplay Engineer — interaction only where needed
+Prefer the accepted move/recharge/touch-service language.
 
 Deliverable target:
-- new-run reachability/failure/recovery regressions;
-- contradiction hunting across phase transitions;
-- preserve clear distinction between machine TESTED and human PLAYTESTED.
+- no new primary action unless the composed fault demonstrably needs one;
+- if existing touch/service interaction is sufficient, keep it and focus on feel/clarity around the new incident;
+- disconnected-controller recovery #129 may proceed independently as reliability work.
 
-QA defect discovery is support work; it does not by itself complete this wave.
-
-### Integration Steward — enable parallel growth
-Own composition and landing order.
+### Experience / Art / Audio Director — incident identity
+Own readable differentiation between SURGE and the second fault.
 
 Deliverable target:
-- keep `main` runnable while allowing non-overlapping progression branches to advance in parallel;
-- do not serialize the entire studio behind unrelated reliability repairs;
-- establish explicit composition order when Systems/World/Gameplay/Experience touch adjacent runtime seams;
-- final overlap/readiness scans remain required.
+- concise fault identity, target/constraint cue, and resolution feedback;
+- coherent extension of the current industrial language;
+- no unnecessary HUD family or asset system;
+- accessibility/readability work may continue, but it does not substitute for the player-facing incident.
+
+### QA / Playtest Specialist — attack the two-incident composition
+Once a candidate exists, test:
+- trigger reachability;
+- transition contradictions;
+- stuck/unwinnable states;
+- BLACKOUT and retry from each incident state;
+- resolution into continued play;
+- terminal completion after both incidents.
+
+Keep machine evidence distinct from human quality claims.
+
+### Integration Steward — enable content parallelism
+Own composition order, overlap scans, exact-current verification, and ordinary landing.
+
+Current evidence/reliability/accessibility PRs do not block Wave 02 unless they overlap the same files/semantics. Do not serialize the studio behind unrelated proof work.
 
 ### Game Director — continuation pressure
-Own milestone coherence and scope pressure.
+Protect the maintenance-triage identity and stop feature sprawl.
 
-During this wave the Director should ask:
-**Is accepted reality becoming a more substantial game?**
+Primary check each activation:
+**Did accepted/proposed reality gain a second genuinely different maintenance problem, or did the studio drift back into polishing Wave 01?**
 
-NO DIRECTION CHANGE is still valid for an individual proposal, but repeated no-change across the wave while no player-facing delta lands is a Director failure condition.
+## Existing non-blocking work
 
-## Reliability lane currently in flight
+Visible open lanes at wave activation:
+- #124 — QA disconnected-controller RED provenance;
+- #128 — QA SURGE threshold-truth evidence;
+- #129 — Gameplay explicit recovery repair;
+- #130 — Systems fresh-run completion evidence;
+- #131 — Experience Operation live-region semantics.
 
-Open QA PR #124 reproduces a disconnected-controller recovery dead-end. It remains a legitimate reliability lane.
+These may continue and land under normal governance when ready. They do not count as Wave 02 progression by themselves.
 
-It does **not** block this wave unless a progression proposal edits the same recovery/input seam. Gameplay/Systems may repair #124 in parallel while other roles build content.
-
-## Progress accounting
-
-### Counts toward this wave
-- new maintenance decisions;
-- new operational phases;
-- spatial evolution/new sector content;
-- encounter/fault structure;
-- meaningful new player interaction;
-- audiovisual escalation tied to new content;
-- stronger run arc/completion;
-- replayability-producing variation grounded in the game identity.
-
-### Does not count by itself
-- controller edge-case regressions;
-- focus/retry fixes;
-- documentation sync;
-- evidence wording;
-- CI-only work;
-- governance bookkeeping;
-- screenshot receipts of unchanged content.
-
-Those may remain necessary, but they are foundation/reliability work rather than player-facing progression.
+Stale PR wording that names Mike as merge/CANON authority is superseded by `studio/GOVERNANCE.md`; Mike remains observer of the experiment.
 
 ## Scope guard
 
-Do not pivot Blackline Relay into a shooter, RPG, campaign platform, online service, or generic feature pile. The target is a deeper **maintenance-triage game**.
+Preserve Blackline Relay as a local/offline top-down maintenance-triage game built around routing, carried charge, relay/network state, recoverable pressure, and spatial service decisions.
 
-Combat, meta-progression, procedural generation, multiplayer, backend/accounts, monetization, and large story systems remain out of scope unless later evidence justifies a deliberate direction change.
+Do not open combat, inventory/equipment, meta-progression, procedural generation, multiplayer/backend/accounts, monetization, story campaign/dialogue tree, or a second game identity in this wave.
 
-## Wave exit
+## Stop condition
 
-Operational Escalation 01 exits only when accepted `main` visibly and mechanically contains:
-1. a multi-stage run arc;
-2. at least one new maintenance problem class;
-3. meaningful spatial/content evolution;
-4. readable escalation;
-5. a stronger completion arc;
-6. preserved or explicitly superseded technical contracts.
+Do not add a third new fault family until the second fault is accepted in a runnable two-incident composition.
 
-Human play may later challenge or rebalance the result; lack of human play is not a reason to stop autonomous development.
+Depth first: **fault variety + route consequence**, not feature count.
