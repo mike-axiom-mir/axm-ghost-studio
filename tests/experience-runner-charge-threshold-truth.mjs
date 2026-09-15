@@ -99,4 +99,19 @@ run(`
 `);
 assert.equal(elements.chargeText.textContent, '42%', 'ordinary non-threshold charge should retain nearest-integer display behavior');
 
-console.log('experience runner charge threshold truth passed: integer charge stays on the truthful side of low-charge and depletion state boundaries');
+run(`
+  state.mode = 'RUNNING';
+  state.player.x = core.x;
+  state.player.y = core.y;
+  state.player.charge = 99.6;
+  updateHud();
+`);
+assert.equal(elements.stateText.textContent, 'RECHARGING', 'charge below actual full capacity must not report CORE FULL');
+assert.equal(elements.chargeText.textContent, '99%', 'charge below actual full capacity must not round up to displayed 100%');
+
+run('update(0.01);');
+assert.equal(run('state.player.charge'), 100, 'core recharge should still reach and cap at actual full capacity');
+assert.equal(elements.stateText.textContent, 'CORE FULL', 'actual full capacity should report CORE FULL');
+assert.equal(elements.chargeText.textContent, '100%', 'actual full capacity should display 100%');
+
+console.log('experience runner charge threshold truth passed: integer charge stays on the truthful side of low-charge, depletion, and full-charge state boundaries');
