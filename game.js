@@ -15,6 +15,9 @@ const beaconSeed = [
   { x: 145, y: H - 125 },
   { x: W - 145, y: H - 125 }
 ];
+const relayServicePads = [
+  { relayIndex: 3, x: 720, y: H / 2, r: 20 }
+];
 const bulkheads = [
   { x: 300, y: 170, w: 42, h: 260 },
   { x: W - 342, y: 170, w: 42, h: 260 }
@@ -221,6 +224,13 @@ function resetForCurrentMovementIntent() {
   );
 }
 
+function playerTouchesRelayService(player, beacon, relayIndex) {
+  if (distance(player, beacon) <= player.r + beacon.r) return true;
+  return relayServicePads.some(pad =>
+    pad.relayIndex === relayIndex && distance(player, pad) <= player.r + pad.r
+  );
+}
+
 function update(dt) {
   if (!hasActiveGameplayFocus()) return false;
 
@@ -279,9 +289,10 @@ function update(dt) {
     p.charge = Math.max(0, p.charge - drainRate * dt);
   }
 
-  for (const beacon of state.beacons) {
+  for (let relayIndex = 0; relayIndex < state.beacons.length; relayIndex += 1) {
+    const beacon = state.beacons[relayIndex];
     beacon.energy = Math.max(0, beacon.energy - 4.2 * (beacon.energy / 100) * dt);
-    const touching = distance(p, beacon) <= p.r + beacon.r;
+    const touching = playerTouchesRelayService(p, beacon, relayIndex);
     if (touching && p.charge > 0 && beacon.energy < 100) {
       const transfer = Math.min(44 * dt, p.charge, 100 - beacon.energy);
       beacon.energy += transfer;
@@ -299,8 +310,8 @@ function update(dt) {
 function getTransferTarget() {
   if (state.mode !== 'RUNNING') return null;
   const p = state.player;
-  return state.beacons.find(beacon =>
-    distance(p, beacon) <= p.r + beacon.r && p.charge > 0 && beacon.energy < 100
+  return state.beacons.find((beacon, relayIndex) =>
+    playerTouchesRelayService(p, beacon, relayIndex) && p.charge > 0 && beacon.energy < 100
   ) || null;
 }
 
@@ -405,6 +416,34 @@ function drawCore() {
   ctx.fillText('CORE', core.x, core.y + 5);
 }
 
+function drawRelayServicePads() {
+  for (const pad of relayServicePads) {
+    const beacon = state.beacons[pad.relayIndex];
+    if (!beacon) continue;
+    const online = beacon.energy >= 35;
+
+    ctx.beginPath();
+    ctx.moveTo(pad.x, pad.y);
+    ctx.lineTo(beacon.x, beacon.y);
+    ctx.strokeStyle = online ? 'rgba(98, 255, 197, .25)' : 'rgba(255, 143, 159, .25)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(pad.x, pad.y, pad.r, 0, Math.PI * 2);
+    ctx.fillStyle = online ? '#102a24' : '#1d161a';
+    ctx.fill();
+    ctx.strokeStyle = online ? '#62ffc5' : '#80505b';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#dbe7ed';
+    ctx.textAlign = 'center';
+    ctx.font = '10px system-ui';
+    ctx.fillText(`R${pad.relayIndex + 1} LINK`, pad.x, pad.y + 3);
+  }
+}
+
 function drawBeacon(beacon, index) {
   const pct = beacon.energy / 100;
   const online = beacon.energy >= 35;
@@ -489,6 +528,7 @@ function render() {
   drawGrid();
   drawBulkheads();
   drawCore();
+  drawRelayServicePads();
   state.beacons.forEach(drawBeacon);
   drawTransferFeedback();
   drawPlayer();
