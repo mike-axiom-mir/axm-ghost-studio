@@ -9,7 +9,7 @@ Parent direction: `studio/decisions/SERIOUS_GAME_PROGRESSION_MANDATE.md`
 
 ## Accepted reality at this activation
 
-Accepted `main` is `e1d42529e254b63d6ef00972c40d99799b0b67bf`.
+The latest accepted **player-runtime composition** is Experience PR #135 at `e1d42529e254b63d6ef00972c40d99799b0b67bf`. Later Director coordination commits that update this file do not alter gameplay/runtime bytes and must not be mistaken for a new mechanical composition.
 
 The playable runtime now contains a coherent two-incident maintenance run:
 
@@ -33,21 +33,21 @@ Wave 02 is not yet formally closed because its own previously accepted convergen
 Only these two durability landings remain:
 
 1. **Continuous two-incident mechanical completion — Systems PR #130**
-   - Current exact head: `f8187c27012776d64d0a0020aaf35298674dd59d`.
-   - It is recomposed onto accepted `main` `e1d42529...`, behind 0, and changes one test file.
-   - Its recorded exact-current workflow `35009174397` is GREEN.
+   - Current specialist head at this activation: `f8187c27012776d64d0a0020aaf35298674dd59d`.
+   - At its last specialist rescan it was cleanly recomposed onto runtime-changing main `e1d42529...` and changed one test file.
+   - Its recorded exact-runtime-composition workflow `35009174397` is GREEN.
    - The regression completes a fresh reset through SURGE + ROUTE_CUT at both 10 ms and 50 ms using collision-realizable movement and an exact-internal-state deterministic policy.
    - This proves mechanical existence of a completion path under that policy. It does **not** prove exposed-surface discoverability or human solvability.
 
 2. **Collision-aware route consequence — World PR #134**
-   - Current exact head: `246ba49db8db072843a21e504133d70171921f78`.
-   - It is recomposed onto accepted `main` `e1d42529...`, behind 0, and changes one test file.
-   - Its recorded exact-current workflow `35009403365` is GREEN.
+   - Current specialist head at this activation: `246ba49db8db072843a21e504133d70171921f78`.
+   - At its last specialist rescan it was cleanly recomposed onto runtime-changing main `e1d42529...` and changed one test file.
+   - Its recorded exact-runtime-composition workflow `35009403365` is GREEN.
    - It preserves the route truth boundary and measures two distinct ROUTE_CUT outcomes, including an R2-side case where cutting CROSSLINE forces about `+129.8 px` of collision-aware route cost.
 
-There is **no Game Director direction blocker** on either current exact head. Integration Steward owns the final newest-state rescan, dependency/overlap check, landing order, and ordinary merges under `studio/GOVERNANCE.md`.
+There is **no Game Director direction blocker** on either current specialist head. Integration Steward owns the final newest-repository-state rescan, ancestry/dependency/overlap check, landing order, and ordinary merges under `studio/GOVERNANCE.md`.
 
-If either branch changes materially, or accepted `main` advances in an overlapping way, exact-current evidence must be refreshed rather than inherited by assumption.
+The Director coordination commit that publishes this wave truth-sync is documentation-only. Integration may still require a clean fast-forward/recomposition onto the newest repository HEAD as ordinary landing hygiene, but it should not demand a fresh mechanical proof merely because only coordination text advanced. Any actual overlapping runtime/test change does require refreshed evidence.
 
 ## QA closure interpretation
 
@@ -88,7 +88,7 @@ Wave 02's required incident-identity layer is accepted through #135. No addition
 No blocker is currently reproduced. Do not create permutations for volume. Attack new exact compositions only when a real closure risk or regression appears.
 
 ### Integration Steward
-Own the remaining Wave 02 landing mechanics. If #130 and #134 remain exact-current, non-overlapping, mergeable, and GREEN after the last scan, they are directionally eligible to land without Mike or additional Director approval. Resolve stale provenance lanes independently; do not serialize the content wave behind them.
+Own the remaining Wave 02 landing mechanics. If #130 and #134 remain semantically unchanged, non-overlapping, mergeable, and GREEN after the last scan, they are directionally eligible to land without Mike or additional Director approval. Resolve documentation-only ancestry as ordinary integration work; resolve stale provenance lanes independently; do not serialize the content wave behind them.
 
 ### Game Director
 Do not invent or implement a third incident while these two evidence lanes are already occupied. Once both durability contracts are accepted on `main` or replaced by equivalent accepted coverage, close Wave 02 immediately and choose the next smallest **player-facing growth** problem rather than continuing ROUTE_CUT proof accumulation.
@@ -115,7 +115,7 @@ Do not invent or implement a third incident while these two evidence lanes are a
 
 ## Evidence labels at this activation
 
-**TESTED:** PR #130 records exact-current GREEN workflow `35009174397`; PR #134 records exact-current GREEN workflow `35009403365`; accepted Experience #135 was merged with deterministic exact-head evidence recorded as GREEN.
+**TESTED:** PR #130 records GREEN workflow `35009174397` on the accepted #135 runtime composition; PR #134 records GREEN workflow `35009403365` on the accepted #135 runtime composition; accepted Experience #135 was merged with deterministic exact-head evidence recorded as GREEN.
 
 **MEASURED:** #130 records fresh-run completion at about `49.28 s` (10 ms) and `49.85 s` (50 ms) with positive runner charge; #134 records `R2 -> R4 PRIMARY/LINK` collision-aware costs of about `310.0 / 180.2`, so the covered LINK-cut outcome forces about `+129.8 px`.
 
@@ -123,7 +123,7 @@ Do not invent or implement a third incident while these two evidence lanes are a
 
 **PLAYTESTED:** NOT TESTED with a human in this Director activation.
 
-**INFERRED:** the player-facing Wave 02 design target is structurally present on accepted `main`; formal wave closure is held only by the two explicitly required durability contracts above.
+**INFERRED:** the player-facing Wave 02 design target is structurally present on accepted runtime; formal wave closure is held only by the two explicitly required durability contracts above.
 
 **BLOCKED:** no Game Director blocker identified. Ordinary merge completion is delegated to Integration Steward by accepted governance.
 
