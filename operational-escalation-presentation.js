@@ -44,30 +44,36 @@ updateHud = function() {
   updateOperationalPresentation();
 };
 
-function drawSurgeBreakerCue(beacon, index) {
+function drawSurgeTargetCue(servicePoint, relayIndex) {
   const operational = ensureOperationalEscalationState();
   if (
     state.mode !== 'RUNNING' ||
     operational.phase !== OP_ESC_PHASES.SURGE ||
     !operational.fault ||
-    operational.fault.breakerIndex !== index
+    operational.fault.breakerIndex !== relayIndex
   ) return;
 
-  const margin = beacon.r + 14;
+  const margin = servicePoint.r + 14;
   ctx.strokeStyle = '#ffe47a';
   ctx.lineWidth = 3;
-  ctx.strokeRect(beacon.x - margin, beacon.y - margin, margin * 2, margin * 2);
+  ctx.strokeRect(servicePoint.x - margin, servicePoint.y - margin, margin * 2, margin * 2);
 
   ctx.fillStyle = '#fff1ae';
   ctx.font = 'bold 11px system-ui';
   ctx.textAlign = 'center';
-  ctx.fillText(`TARGET ${operational.fault.clearThreshold}%`, beacon.x, beacon.y - margin - 8);
+  ctx.fillText(`TARGET ${operational.fault.clearThreshold}%`, servicePoint.x, servicePoint.y - margin - 8);
 }
+
+const baseExperienceOperationalDrawRelayServicePads = drawRelayServicePads;
+drawRelayServicePads = function() {
+  baseExperienceOperationalDrawRelayServicePads();
+  for (const pad of relayServicePads) drawSurgeTargetCue(pad, pad.relayIndex);
+};
 
 const baseExperienceOperationalDrawBeacon = drawBeacon;
 drawBeacon = function(beacon, index) {
   baseExperienceOperationalDrawBeacon(beacon, index);
-  drawSurgeBreakerCue(beacon, index);
+  drawSurgeTargetCue(beacon, index);
 };
 
 const baseExperienceOperationalDrawOverlay = drawOverlay;
