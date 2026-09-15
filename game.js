@@ -505,7 +505,11 @@ function frame(now) {
 window.addEventListener('keydown', event => {
   if (!hasActiveGameplayFocus()) return;
   const key = event.key.toLowerCase();
-  if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key)) event.preventDefault();
+  const movementKey = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'w', 'a', 's', 'd'].includes(key);
+  if (movementKey) {
+    event.preventDefault();
+    if (event.repeat && !keys.has(key)) return;
+  }
   if (key === 'r' && !event.repeat) resetForCurrentMovementIntent();
   keys.add(key);
 });
