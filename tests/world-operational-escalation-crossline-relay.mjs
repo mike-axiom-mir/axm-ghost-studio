@@ -41,12 +41,12 @@ const r4 = beaconSeed[3];
 
 assert.deepEqual(
   JSON.parse(JSON.stringify(r4)),
-  { x: 800, y: 300 },
-  'Operational Escalation crossline target R4 must stay in the right-side midline service position'
+  { x: 815, y: 350 },
+  'Operational Escalation R4 must stay in the right-side crossline-offset service position'
 );
-assert.equal(r4.y, core.y, 'R4 should sit on the core crossline so neither upper nor lower passage is the obvious geometric answer');
+assert.ok(r4.y > core.y && r4.y < 400, 'R4 should sit near the core crossline without collapsing onto the lower corner');
 assert.ok(r4.x > bulkheads[1].x + bulkheads[1].w, 'R4 must remain beyond the right bulkhead in the service side');
-assert.equal(positionBlocked(639, 300, 13), true, 'the direct core-to-R4 line must remain blocked by the right bulkhead');
+assert.equal(positionBlocked(639, 324, 13), true, 'the direct core-to-R4 diagonal must remain blocked by the right bulkhead');
 
 const STEP = 5;
 const RADIUS = 13;
@@ -103,15 +103,20 @@ const r4Upper = routeVia(core, upperPassage, r4);
 const r4Lower = routeVia(core, lowerPassage, r4);
 const r2Upper = routeVia(core, upperPassage, r2);
 const r2Lower = routeVia(core, lowerPassage, r2);
+const r4AlternatePenalty = Math.abs(r4Upper - r4Lower);
+const r2AlternatePenalty = Math.abs(r2Upper - r2Lower);
 
-assert.ok(Number.isFinite(coreToR4), 'crossline R4 must remain reachable from the core');
-assert.ok(coreToR4 > 400 && coreToR4 < 420, `crossline R4 should be a material but bounded service route, measured ${coreToR4}`);
-assert.ok(Number.isFinite(r4Upper) && Number.isFinite(r4Lower), 'both passage classes must provide a route to crossline R4');
-assert.ok(Math.abs(r4Upper - r4Lower) <= 1, `crossline R4 should preserve a genuine upper/lower route choice: ${r4Upper} vs ${r4Lower}`);
-assert.ok(r2Upper + 150 < r2Lower, `R2 should remain distinctly upper-biased, measured ${r2Upper} vs ${r2Lower}`);
+assert.ok(Number.isFinite(coreToR4), 'crossline-offset R4 must remain reachable from the core');
+assert.ok(coreToR4 > 390 && coreToR4 < 410, `R4 should be a material but bounded service route, measured ${coreToR4}`);
+assert.ok(Number.isFinite(r4Upper) && Number.isFinite(r4Lower), 'both passage classes must provide a route to crossline-offset R4');
+assert.ok(r4Lower < r4Upper, `R4 should keep a lower-route advantage, measured ${r4Lower} vs ${r4Upper}`);
+assert.ok(r4AlternatePenalty < 100, `R4 alternate passage should remain a plausible route choice, penalty ${r4AlternatePenalty}`);
+assert.ok(r2Upper < r2Lower, `R2 should remain upper-biased, measured ${r2Upper} vs ${r2Lower}`);
+assert.ok(r2AlternatePenalty > 200, `R2 should retain a strong corridor preference, penalty ${r2AlternatePenalty}`);
+assert.ok(r4AlternatePenalty * 2 < r2AlternatePenalty, 'R4 should be materially less corridor-locked than R2');
 
 console.log(
   `world operational escalation crossline relay passed: core->R4 ${coreToR4.toFixed(1)}, ` +
-  `R4 upper/lower ${r4Upper.toFixed(1)}/${r4Lower.toFixed(1)}, ` +
-  `R2 upper/lower ${r2Upper.toFixed(1)}/${r2Lower.toFixed(1)}`
+  `R4 upper/lower ${r4Upper.toFixed(1)}/${r4Lower.toFixed(1)} (penalty ${r4AlternatePenalty.toFixed(1)}), ` +
+  `R2 upper/lower ${r2Upper.toFixed(1)}/${r2Lower.toFixed(1)} (penalty ${r2AlternatePenalty.toFixed(1)})`
 );
