@@ -307,7 +307,7 @@ function getStatusLabel() {
   const transferTarget = getTransferTarget();
   if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
   const atCore = distance(state.player, core) <= state.player.r + core.r;
-  if (atCore && state.player.charge < 99.5) return 'RECHARGING';
+  if (atCore && state.player.charge < 100) return 'RECHARGING';
   if (state.player.charge <= PLAYER_LOW_CHARGE_THRESHOLD) return 'LOW CHARGE';
   return atCore ? 'CORE FULL' : 'ROUTING';
 }
@@ -322,6 +322,7 @@ function getDisplayedPlayerCharge() {
   if (charge > PLAYER_LOW_CHARGE_THRESHOLD && rounded <= PLAYER_LOW_CHARGE_THRESHOLD) return PLAYER_LOW_CHARGE_THRESHOLD + 1;
   if (charge <= PLAYER_BLACKOUT_CHARGE_THRESHOLD) return 0;
   if (rounded <= 0) return 1;
+  if (charge < 100 && rounded >= 100) return 99;
   return rounded;
 }
 
