@@ -184,7 +184,10 @@ function readGamepadIntent() {
 
 function guardFocusedGamepadCarryover() {
   const pad = getStandardGamepad();
-  if (!pad) return;
+  if (!pad) {
+    selectedGamepadIndex = null;
+    return;
+  }
 
   const padIndex = getGamepadIndex(pad);
   if (!gamepadNeutralPending && hasGamepadMovementIntent(pad)) {
