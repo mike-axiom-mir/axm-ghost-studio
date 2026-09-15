@@ -57,8 +57,8 @@ const run = expression => vm.runInContext(expression, context);
 
 run(`
   state.mode = 'RUNNING';
-  state.player.x = 480;
-  state.player.y = 200;
+  state.player.x = core.x + core.r + state.player.r + 10;
+  state.player.y = core.y;
   state.player.charge = 25.49;
   updateHud();
 `);
@@ -73,16 +73,30 @@ assert.equal(elements.stateText.textContent, 'LOW CHARGE', 'exactly 25 charge sh
 assert.equal(elements.chargeText.textContent, '25%', 'exactly 25 charge should remain displayed as 25%');
 
 run(`
-  state.player.charge = 0.49;
-  updateHud();
+  state.mode = 'RUNNING';
+  state.player.charge = 0.1511;
+  update(0.05);
 `);
-assert.equal(elements.stateText.textContent, 'LOW CHARGE', 'positive sub-one charge should remain LOW CHARGE before terminal depletion');
-assert.equal(elements.chargeText.textContent, '1%', 'positive runner charge must not round down to a displayed 0%');
+assert.equal(run('state.mode'), 'RUNNING', 'charge just above the depletion threshold after drain should remain nonterminal');
+assert.equal(run('state.player.charge > PLAYER_BLACKOUT_CHARGE_THRESHOLD'), true, 'nonterminal residual charge must remain above the shared depletion threshold');
+assert.equal(elements.stateText.textContent, 'LOW CHARGE', 'nonterminal residual charge should remain LOW CHARGE');
+assert.equal(elements.chargeText.textContent, '1%', 'nonterminal residual charge above the depletion threshold must not look empty');
 
 run(`
+  state.mode = 'RUNNING';
+  state.player.charge = 0.1505;
+  update(0.05);
+`);
+assert.equal(run('state.mode'), 'BLACKOUT', 'charge at or below the depletion threshold after drain should resolve to BLACKOUT');
+assert.equal(run('state.player.charge <= PLAYER_BLACKOUT_CHARGE_THRESHOLD'), true, 'terminal residual charge must be at or below the shared depletion threshold');
+assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal depletion should remain explicit in Status');
+assert.equal(elements.chargeText.textContent, '0%', 'BLACKOUT from depletion must not coexist with a positive displayed charge');
+
+run(`
+  state.mode = 'RUNNING';
   state.player.charge = 42.4;
   updateHud();
 `);
 assert.equal(elements.chargeText.textContent, '42%', 'ordinary non-threshold charge should retain nearest-integer display behavior');
 
-console.log('experience runner charge threshold truth passed: displayed integer charge cannot cross the low-charge or zero boundary before runtime state does');
+console.log('experience runner charge threshold truth passed: integer charge stays on the truthful side of low-charge and depletion state boundaries');
