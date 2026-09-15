@@ -63,8 +63,7 @@ function dispatch(type, key) {
 }
 
 // A retry that began while controller movement was held must remain disarmed
-// across controller absence. Repeating retry through keyboard must not erase
-// that unresolved neutral-edge requirement.
+// across controller absence. Disconnect alone is not a neutral edge.
 pad.axes = [1, 0];
 sandbox.__qaReconnect.state.mode = 'BLACKOUT';
 restartClick();
@@ -77,22 +76,29 @@ sandbox.__qaReconnect.update(0.05);
 assert.equal(sandbox.__qaReconnect.state.player.x, 480);
 assert.equal(elements.stateText.textContent, 'RECONNECT CONTROLLER');
 
+// Director recovery policy supersedes this regression's former repeated-R rule:
+// a deliberate non-gamepad restart may retire an unreachable controller-specific
+// obligation so the new run is not hard-bound to unavailable hardware.
 dispatch('keydown', 'r');
 dispatch('keyup', 'r');
-assert.equal(sandbox.__qaReconnect.movementArmed, false, 'repeating retry must not clear unresolved controller neutrality');
-assert.equal(sandbox.__qaReconnect.gamepadNeutralPending, true, 'controller-neutral pending state must survive repeated retry');
+assert.equal(sandbox.__qaReconnect.movementArmed, true, 'fresh keyboard recovery should retire an unreachable controller-neutral obligation');
+assert.equal(sandbox.__qaReconnect.gamepadNeutralPending, false, 'unavailable old controller should no longer own neutrality after explicit keyboard recovery');
 
+// If the old controller later returns while still held, ordinary selection/carryover
+// protection must create a fresh neutral obligation before it can move the runner.
 pad.connected = true;
 sandbox.__qaReconnect.update(0.05);
-assert.equal(sandbox.__qaReconnect.state.player.x, 480, 'reconnect-held controller must not move before a neutral observation');
+assert.equal(sandbox.__qaReconnect.state.player.x, 480, 'reconnect-held controller must not move before a fresh neutral observation');
 assert.equal(sandbox.__qaReconnect.movementArmed, false);
+assert.equal(sandbox.__qaReconnect.gamepadNeutralPending, true);
 
 pad.axes = [0, 0];
 sandbox.__qaReconnect.update(0.01);
 assert.equal(sandbox.__qaReconnect.movementArmed, true, 'observed controller neutral should re-arm movement');
+assert.equal(sandbox.__qaReconnect.gamepadNeutralPending, false);
 
 pad.axes = [1, 0];
 sandbox.__qaReconnect.update(0.05);
 assert.ok(sandbox.__qaReconnect.state.player.x > 480, 'movement should resume after the required neutral edge');
 
-console.log('qa retry reconnect regression passed: repeated keyboard retry cannot bypass pending controller neutrality');
+console.log('qa retry reconnect regression passed: explicit keyboard recovery escapes unavailable hardware while reconnect-held movement still requires neutral');
