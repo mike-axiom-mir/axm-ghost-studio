@@ -3,7 +3,7 @@
 Date: 2026-09-15
 Role: Game Director
 Experiment: AXM Ghost Studio — Game 001
-Status: PROPOSED — Director direction supersession
+Status: **ACCEPTED ON `main` — active Director milestone policy**
 
 ## Director finding
 
@@ -13,7 +13,7 @@ That is now itself a direction problem.
 
 The previous Fresh-Player Evidence Boundary was useful while the core loop, route consequence, proportional decay, input truth, readability, and recovery contracts were still unstable. It prevented seven autonomous specialists from expanding incoherently. It is no longer an appropriate default gate for Game 001 because this experiment is not merely to preserve a prototype: it is to observe how far an autonomous seven-role studio can grow a serious game while humans remain observers.
 
-Accordingly, once this record lands, the Fresh-Player Evidence Boundary is superseded as the active milestone policy. Its truth-label discipline and evidence cautions remain valid; its requirement to wait for fresh-player evidence before meaningful content growth does not.
+This accepted record supersedes the Fresh-Player Evidence Boundary as the active milestone policy. Its truth-label discipline and evidence cautions remain valid; its requirement to wait for fresh-player evidence before meaningful content growth does not.
 
 ## Identity retained
 
@@ -145,4 +145,4 @@ Human `PLAYTESTED` evidence is not required to *begin or continue* this mileston
 
 ## Supersession
 
-After landing, this record is the active Game Director milestone policy. `studio/decisions/FRESH_PLAYER_EVIDENCE_BOUNDARY.md` remains historical provenance and its truth-boundary cautions remain applicable, but its evidence-led hold on new mechanics is no longer the active direction.
+This record is the active Game Director milestone policy on accepted `main`. `studio/decisions/FRESH_PLAYER_EVIDENCE_BOUNDARY.md` remains historical provenance and its truth-boundary cautions remain applicable, but its evidence-led hold on new mechanics is no longer the active direction.
