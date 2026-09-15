@@ -6,9 +6,17 @@ import vm from 'node:vm';
 
 const testsDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testsDir, '..');
+const indexSource = readFileSync(path.join(root, 'index.html'), 'utf8');
 const gameSource = readFileSync(path.join(root, 'game.js'), 'utf8');
 const escalationSource = readFileSync(path.join(root, 'operational-escalation.js'), 'utf8');
 const presentationSource = readFileSync(path.join(root, 'operational-escalation-presentation.js'), 'utf8');
+
+// The Operation slot is sparse run-state feedback. Keep its phase changes available
+// to assistive technology without turning high-frequency charge/relay values into a
+// live stream. Real screen-reader behavior remains a separate evidence boundary.
+assert.match(indexSource, /id="operationCard"[^>]*role="status"/);
+assert.match(indexSource, /id="operationCard"[^>]*aria-live="polite"/);
+assert.match(indexSource, /id="operationCard"[^>]*aria-atomic="true"/);
 
 const drawLog = [];
 const noop = () => {};
@@ -211,4 +219,4 @@ run('render()');
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'NETWORK STABLE'));
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'OPERATIONAL ESCALATION CLEARED'));
 
-console.log('experience operational escalation feedback passed: SURGE target truth plus ROUTE_CUT cut/use identity, bounded route-restored feedback, and terminal completion');
+console.log('experience operational escalation feedback passed: live phase semantics plus SURGE target truth, ROUTE_CUT cut/use identity, bounded route-restored feedback, and terminal completion');
