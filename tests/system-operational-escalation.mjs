@@ -54,13 +54,14 @@ const closeTo = (actual, expected, epsilon = 1e-9) => {
 let state = snapshot();
 assert.equal(state.operational.phase, 'TRIAGE');
 assert.equal(state.operational.fault, null);
+assert.equal(state.operational.surgeResolved, false);
+assert.equal(state.operational.routeCutResolved, false);
 assert.deepEqual(state.beacons.map(beacon => beacon.energy), [34, 0, 0, 0]);
 assert.equal(elements.stateText.textContent, 'TRIAGE — CORE FULL');
 
-// Crossing from one to two online relays creates the new SURGE_LOAD problem.
-// R1 was already online below the 70% reinforcement threshold, so it becomes the
-// breaker even though R3/R4 are lower-energy offline relays. This is intentionally
-// a different maintenance decision from simply visiting the lowest percentage.
+// Crossing from one to two online relays creates SURGE_LOAD. R1 was already online
+// below 70%, so it becomes the breaker even though R3/R4 are lower-energy offline
+// relays. This keeps the first incident distinct from simply visiting the lowest relay.
 run(`
   state.beacons[0].energy = 60;
   state.beacons[1].energy = 34.9;
@@ -115,7 +116,7 @@ state = snapshot();
 assert.equal(state.operational.phase, 'SURGE');
 assert.equal(state.mode, 'RUNNING');
 
-// Reinforcing the designated breaker to >=70% advances into RECOVERY while the
+// Reinforcing the designated breaker to >=70 advances into RECOVERY while the
 // original transfer verb and resource rules remain in use.
 run(`
   state.beacons[0].energy = 71;
@@ -126,6 +127,8 @@ run(`
 `);
 state = snapshot();
 assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(state.operational.surgeResolved, true);
+assert.equal(state.operational.routeCutResolved, false);
 assert.ok(state.operational.fault.resolvedAt !== null);
 assert.equal(state.mode, 'RUNNING');
 assert.equal(elements.stateText.textContent, 'RECOVERY — CORE FULL');
@@ -147,44 +150,133 @@ run(`
 `);
 state = snapshot();
 assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(state.operational.surgeResolved, true);
 assert.equal(run('getDisplayedBeaconEnergy(state.beacons[0])'), 70);
 assert.match(elements.relayDetail.textContent, /R1 70%/);
 
-// Phase 3 keeps the founded win condition: all relays online resolves NETWORK STABLE.
+// Wave 02 adds a qualitatively different second incident. Once SURGE has resolved,
+// the next live update enters REROUTE and cuts whichever accepted R4 service location
+// is currently closer to the runner. At the core the crossline link is closer, so it
+// is cut and the player must reroute to the primary R4 beacon.
 run(`
   state.beacons.forEach(beacon => { beacon.energy = 40; });
+  state.player.x = core.x;
+  state.player.y = core.y;
+  update(0.01);
+`);
+state = snapshot();
+assert.equal(state.mode, 'RUNNING', 'old all-online completion must wait for the second incident');
+assert.equal(state.operational.phase, 'REROUTE');
+assert.equal(state.operational.fault.kind, 'ROUTE_CUT');
+assert.equal(state.operational.fault.relayIndex, 3);
+assert.equal(state.operational.fault.blockedLocation, 'CROSSLINE');
+assert.equal(state.operational.fault.requiredLocation, 'PRIMARY');
+assert.equal(elements.stateText.textContent, 'REROUTE — USE R4 PRIMARY');
+
+// The cut service location is mechanically unavailable while the incident is active.
+// Reaching it does not transfer into R4 and does not resolve the fault.
+const r4EnergyBeforeBlockedService = state.beacons[3].energy;
+run(`
+  const cutPad = relayServicePads.find(pad => pad.relayIndex === 3);
+  state.player.x = cutPad.x;
+  state.player.y = cutPad.y;
+  state.player.charge = 100;
+  update(0.01);
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'REROUTE');
+assert.equal(state.operational.routeCutResolved, false);
+assert.equal(state.mode, 'RUNNING');
+assert.ok(state.beacons[3].energy < r4EnergyBeforeBlockedService, 'blocked crossline service must not transfer into R4');
+
+// Reaching the surviving R4 primary service location resolves the route cut. Because
+// all four relays are still online, the same update may then complete NETWORK STABLE.
+run(`
+  state.player.x = state.beacons[3].x;
+  state.player.y = state.beacons[3].y;
+  state.player.charge = 100;
   update(0.01);
 `);
 state = snapshot();
 assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(state.operational.routeCutResolved, true);
+assert.ok(state.operational.fault.resolvedAt !== null);
 assert.equal(state.mode, 'WON');
 assert.equal(elements.stateText.textContent, 'NETWORK STABLE');
 
-// BLACKOUT remains a valid terminal from the new phase arc.
+// The selection policy has at least two reachable route outcomes. If REROUTE begins
+// while the runner is at the primary R4 beacon, that primary location is the nearer
+// one and is cut instead, forcing the accepted crossline R4 LINK.
 run(`
   resetGame();
+  state.operational.phase = OP_ESC_PHASES.RECOVERY;
+  state.operational.surgeResolved = true;
+  state.operational.routeCutResolved = false;
+  state.operational.fault = {
+    kind: 'SURGE_LOAD',
+    breakerIndex: 0,
+    clearThreshold: 70,
+    triggeredAt: 0,
+    resolvedAt: 0
+  };
+  state.beacons.forEach(beacon => { beacon.energy = 40; });
+  state.player.x = state.beacons[3].x;
+  state.player.y = state.beacons[3].y;
+  update(0);
+`);
+state = snapshot();
+assert.equal(state.mode, 'RUNNING');
+assert.equal(state.operational.phase, 'REROUTE');
+assert.equal(state.operational.fault.blockedLocation, 'PRIMARY');
+assert.equal(state.operational.fault.requiredLocation, 'CROSSLINE');
+assert.equal(elements.stateText.textContent, 'REROUTE — USE R4 LINK');
+
+run(`
+  const requiredPad = relayServicePads.find(pad => pad.relayIndex === 3);
+  state.player.x = requiredPad.x;
+  state.player.y = requiredPad.y;
+  update(0);
+`);
+state = snapshot();
+assert.equal(state.operational.phase, 'RECOVERY');
+assert.equal(state.operational.routeCutResolved, true);
+assert.equal(state.mode, 'WON');
+
+// BLACKOUT remains a valid terminal while the second incident is unresolved.
+run(`
+  resetGame();
+  state.operational.phase = OP_ESC_PHASES.REROUTE;
+  state.operational.surgeResolved = true;
+  state.operational.routeCutResolved = false;
+  state.operational.fault = {
+    kind: 'ROUTE_CUT',
+    relayIndex: 3,
+    blockedLocation: OP_ESC_ROUTE_CUT_LOCATIONS.CROSSLINE,
+    requiredLocation: OP_ESC_ROUTE_CUT_LOCATIONS.PRIMARY,
+    triggeredAt: state.elapsed,
+    resolvedAt: null
+  };
   state.beacons[0].energy = 60;
-  state.beacons[1].energy = 34.9;
-  state.player.x = state.beacons[1].x;
-  state.player.y = state.beacons[1].y;
-  state.player.charge = 100;
-  update(0.01);
+  state.beacons[1].energy = 40;
   state.player.x = 480;
   state.player.y = 100;
   state.player.charge = 0.1;
   update(0.05);
 `);
 state = snapshot();
-assert.equal(state.operational.phase, 'SURGE');
+assert.equal(state.operational.phase, 'REROUTE');
+assert.equal(state.operational.routeCutResolved, false);
 assert.equal(state.mode, 'BLACKOUT');
 
-// Retry returns the complete operational state to the reproducible TRIAGE seed.
+// Retry returns the complete two-incident operational state to the reproducible seed.
 run('resetGame()');
 state = snapshot();
 assert.equal(state.mode, 'RUNNING');
 assert.equal(state.operational.phase, 'TRIAGE');
 assert.equal(state.operational.fault, null);
+assert.equal(state.operational.surgeResolved, false);
+assert.equal(state.operational.routeCutResolved, false);
 assert.equal(state.elapsed, 0);
 assert.deepEqual(state.beacons.map(beacon => beacon.energy), [34, 0, 0, 0]);
 
-console.log('systems operational escalation passed: TRIAGE -> SURGE_LOAD -> RECOVERY -> WON, threshold-truth projection, BLACKOUT and reset preserved');
+console.log('systems operational escalation passed: TRIAGE -> SURGE_LOAD -> RECOVERY -> ROUTE_CUT/REROUTE -> RECOVERY -> WON, two route outcomes, BLACKOUT and reset preserved');
