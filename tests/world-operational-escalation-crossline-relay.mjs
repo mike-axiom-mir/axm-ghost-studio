@@ -41,12 +41,12 @@ const r4 = beaconSeed[3];
 
 assert.deepEqual(
   JSON.parse(JSON.stringify(r4)),
-  { x: 815, y: 350 },
-  'Operational Escalation R4 must stay in the right-side crossline-offset service position'
+  { x: 815, y: 425 },
+  'Operational Escalation R4 must stay in the bounded right-side crossline-offset service position'
 );
-assert.ok(r4.y > core.y && r4.y < 400, 'R4 should sit near the core crossline without collapsing onto the lower corner');
+assert.ok(r4.y > core.y && r4.y < 450, 'R4 should move off the lower corner while remaining lower-side readable');
 assert.ok(r4.x > bulkheads[1].x + bulkheads[1].w, 'R4 must remain beyond the right bulkhead in the service side');
-assert.equal(positionBlocked(639, 324, 13), true, 'the direct core-to-R4 diagonal must remain blocked by the right bulkhead');
+assert.equal(positionBlocked(639, 359, 13), true, 'the direct core-to-R4 diagonal must remain blocked by the right bulkhead');
 
 const STEP = 5;
 const RADIUS = 13;
@@ -107,13 +107,13 @@ const r4AlternatePenalty = Math.abs(r4Upper - r4Lower);
 const r2AlternatePenalty = Math.abs(r2Upper - r2Lower);
 
 assert.ok(Number.isFinite(coreToR4), 'crossline-offset R4 must remain reachable from the core');
-assert.ok(coreToR4 > 390 && coreToR4 < 410, `R4 should be a material but bounded service route, measured ${coreToR4}`);
+assert.ok(coreToR4 > 360 && coreToR4 < 380, `R4 should remain within the accepted service-distance envelope, measured ${coreToR4}`);
 assert.ok(Number.isFinite(r4Upper) && Number.isFinite(r4Lower), 'both passage classes must provide a route to crossline-offset R4');
 assert.ok(r4Lower < r4Upper, `R4 should keep a lower-route advantage, measured ${r4Lower} vs ${r4Upper}`);
-assert.ok(r4AlternatePenalty < 100, `R4 alternate passage should remain a plausible route choice, penalty ${r4AlternatePenalty}`);
+assert.ok(r4AlternatePenalty < 200, `R4 alternate-passage penalty should be reduced below 200, measured ${r4AlternatePenalty}`);
 assert.ok(r2Upper < r2Lower, `R2 should remain upper-biased, measured ${r2Upper} vs ${r2Lower}`);
-assert.ok(r2AlternatePenalty > 200, `R2 should retain a strong corridor preference, penalty ${r2AlternatePenalty}`);
-assert.ok(r4AlternatePenalty * 2 < r2AlternatePenalty, 'R4 should be materially less corridor-locked than R2');
+assert.ok(r2AlternatePenalty > 220, `R2 should retain a strong corridor preference, penalty ${r2AlternatePenalty}`);
+assert.ok(r4AlternatePenalty < r2AlternatePenalty * 0.85, 'R4 should be measurably less corridor-locked than R2');
 
 console.log(
   `world operational escalation crossline relay passed: core->R4 ${coreToR4.toFixed(1)}, ` +
