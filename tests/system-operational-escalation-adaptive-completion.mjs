@@ -267,8 +267,8 @@ function runPolicy(dt) {
       });
       targetHistory.push(
         objective.kind === 'REROUTE'
-          ? `R4-${objective.requiredLocation}`
-          : `R${objective.targetIndex + 1}`
+          ? 'R4-' + objective.requiredLocation
+          : 'R' + (objective.targetIndex + 1)
       );
 
       driveTo(objective.target, state.player.r + objective.target.r);
