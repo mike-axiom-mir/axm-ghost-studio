@@ -326,8 +326,10 @@ function getDisplayedPlayerCharge() {
 }
 
 function getDisplayedBeaconEnergy(beacon) {
-  const online = beacon.energy >= 35;
-  return online ? Math.round(beacon.energy) : Math.min(34, Math.round(beacon.energy));
+  const rounded = Math.round(beacon.energy);
+  if (beacon.energy < 35) return Math.min(34, rounded);
+  if (beacon.energy < 100) return Math.min(99, rounded);
+  return 100;
 }
 
 function updateHud() {
