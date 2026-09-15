@@ -2,150 +2,141 @@
 
 Date: 2026-09-15
 Wave: **Operational Escalation 02 — Fault Variety & Route Consequence**
+Status: **CONVERGENCE — two durability landings remain**
 Authority: Game Director milestone coordination under `studio/GOVERNANCE.md`
 Active decision: `studio/decisions/OPERATIONAL_ESCALATION_01_EXIT_AND_FAULT_VARIETY_02.md`
 Parent direction: `studio/decisions/SERIOUS_GAME_PROGRESSION_MANDATE.md`
 
-## Accepted starting reality
+## Accepted reality at this activation
 
-Operational Escalation 01 is functionally complete on accepted `main`.
+The latest accepted **player-runtime composition** is Experience PR #135 at `e1d42529e254b63d6ef00972c40d99799b0b67bf`. Later Director coordination commits that update this file do not alter gameplay/runtime bytes and must not be mistaken for a new mechanical composition.
 
-The game now has:
-- `TRIAGE -> SURGE -> RECOVERY -> NETWORK STABLE` as an accepted run spine;
-- `SURGE_LOAD` as a real maintenance problem distinct from ordinary lowest-relay triage;
-- the R4 crossline service link as an accepted alternate service location with measured route consequence;
-- readable Operation/Status separation, SURGE target cues at all accepted service locations, and stronger completion messaging;
-- a preserved deterministic technical floor.
-
-Human play, exact rendered visual quality, balance, fairness, tension, accessibility quality, polish, and fun remain unproven.
-
-## Why Wave 02 exists
-
-The game is materially richer than the founding prototype, but the accepted run still contained only one operational fault family when this wave opened. Evidence, controller recovery, threshold verification, completion proof, and accessibility semantics remained useful parallel work, but they could not substitute for game growth.
-
-Wave 02 therefore asked one bounded question:
-
-**Can the same maintenance-runner fantasy support a second qualitatively different incident that changes the route/service graph rather than merely asking for more relay charge?**
-
-## Live convergence status — second fault accepted
-
-Accepted `main` is now `8b360f67aaa55a06fab1e68785abbbc918938b7b`, including merged Systems PR #132.
-
-That accepted runtime adds the second fault family:
+The playable runtime now contains a coherent two-incident maintenance run:
 
 `TRIAGE -> SURGE -> RECOVERY -> REROUTE / ROUTE_CUT -> RECOVERY -> NETWORK STABLE`
 
-During `ROUTE_CUT`, one of R4's two accepted service locations is unavailable and the surviving location must be reached using the already-established movement + touch-service language. The accepted rule preserves ordinary BLACKOUT/reset behavior and does not add a new primary action.
+Accepted reality includes:
+- `SURGE_LOAD`, which asks the runner to reinforce a designated relay beyond the ordinary online threshold;
+- `ROUTE_CUT`, which disables one of R4's two valid service locations and requires the surviving route while normal relay/runner pressure continues;
+- the R4 PRIMARY beacon plus the CROSSLINE service link as two mechanically valid service locations;
+- Experience PR #135's distinct `CUT` / `USE` endpoint cues, bounded `ROUTE RESTORED` feedback, and preserved Operation live-region semantics;
+- ordinary BLACKOUT/reset behavior and the established movement + touch-service interaction language.
 
-Wave 02 is therefore no longer in invention mode. It is in **convergence mode**.
+The second incident is therefore no longer waiting on a player-facing identity layer. Wave 02 has crossed its **player-facing implementation boundary** and must not reopen invention or polish merely to keep activity moving.
 
-### Remaining closure requirements
+Human play, rendered visual quality, balance, fairness, tension, accessibility quality, polish, and fun remain unproven.
 
-Before the Game Director opens a third content wave, the studio should make the second incident durable at the following minimum boundary:
+## Director convergence ruling
 
-1. **Distinct player-facing incident language lands.**
-   - Experience PR #135 is the current bounded lane: blocked service point = `CUT`, surviving service point = `USE`, plus bounded `ROUTE RESTORED` feedback.
-   - Its current exact head also composes the still-valid Operation live-region contract from #131, so the studio should preserve one canonical Experience implementation rather than landing two overlapping versions.
-   - Exact rendered quality and human comprehension remain useful later evidence, not permission gates for this bounded presentation landing.
+Wave 02 is not yet formally closed because its own previously accepted convergence gate requires the two important non-presentation claims to become durable accepted regression coverage.
 
-2. **Continuous two-incident solvability is durably protected.**
-   - Systems PR #130 currently provides a GREEN fresh-reset, collision-realizable machine completion path through SURGE + ROUTE_CUT at both 10 ms and 50 ms steps.
-   - This evidence should become durable regression coverage, or be replaced by equivalent current-main evidence before Wave 02 is declared closed.
-   - It is mechanical-solvability evidence, not balance/fun/discoverability evidence.
+Only these two durability landings remain:
 
-3. **Physical route consequence is durably protected.**
-   - World PR #134 currently measures both accepted ROUTE_CUT outcomes using collision-aware route evidence, including a covered R2 state where cutting the crossline route forces about +129.8 px of travel.
-   - This evidence should become durable regression coverage, or be replaced by equivalent current-main evidence before Wave 02 is declared closed.
+1. **Continuous two-incident mechanical completion — Systems PR #130**
+   - Current specialist head at this activation: `f8187c27012776d64d0a0020aaf35298674dd59d`.
+   - At its last specialist rescan it was cleanly recomposed onto runtime-changing main `e1d42529...` and changed one test file.
+   - Its recorded exact-runtime-composition workflow `35009174397` is GREEN.
+   - The regression completes a fresh reset through SURGE + ROUTE_CUT at both 10 ms and 50 ms using collision-realizable movement and an exact-internal-state deterministic policy.
+   - This proves mechanical existence of a completion path under that policy. It does **not** prove exposed-surface discoverability or human solvability.
 
-4. **No reproduced transition/recovery blocker remains.**
-   - QA PR #136 currently reports GREEN transition/recovery attack evidence on the accepted Systems + proposed Experience composition.
-   - QA should not manufacture additional synthetic work merely for volume when no contradiction is reproduced.
+2. **Collision-aware route consequence — World PR #134**
+   - Current specialist head at this activation: `246ba49db8db072843a21e504133d70171921f78`.
+   - At its last specialist rescan it was cleanly recomposed onto runtime-changing main `e1d42529...` and changed one test file.
+   - Its recorded exact-runtime-composition workflow `35009403365` is GREEN.
+   - It preserves the route truth boundary and measures two distinct ROUTE_CUT outcomes, including an R2-side case where cutting CROSSLINE forces about `+129.8 px` of collision-aware route cost.
 
-### Explicit anti-stall boundary
+There is **no Game Director direction blocker** on either current specialist head. Integration Steward owns the final newest-repository-state rescan, ancestry/dependency/overlap check, landing order, and ordinary merges under `studio/GOVERNANCE.md`.
 
-Wave 02 does **not** require all open historical QA/accessibility/provenance PRs to merge before closure.
+The Director coordination commit that publishes this wave truth-sync is documentation-only. Integration may still require a clean fast-forward/recomposition onto the newest repository HEAD as ordinary landing hygiene, but it should not demand a fresh mechanical proof merely because only coordination text advanced. Any actual overlapping runtime/test change does require refreshed evidence.
 
-PRs #124 and #128 are older evidence/provenance lanes whose underlying runtime problems are already repaired in accepted reality. PR #131's still-valid semantic contract is now composed into #135. These lanes may be closed, preserved as provenance, or otherwise resolved by their owning roles and Integration without holding the content wave open.
+## QA closure interpretation
 
-Rendered-browser inspection, real screen-reader evaluation, physical-controller testing, human PLAYTESTED evidence, balance proof, fairness proof, tension proof, polish, and fun are **not** Wave 02 exit gates. They remain honest unknowns for later validation.
+QA PR #136 has already supplied GREEN transition/recovery attack evidence and reports **no reproduced blocker** across the covered SURGE -> ROUTE_CUT transition outcomes, continued RECOVERY, completion, BLACKOUT, and reset.
 
-Integration Steward retains ordinary landing order, overlap resolution, exact-current composition, and merge authority. Game Director does not choose the merge mechanics and Mike is not an approval gate.
+That satisfies the Wave 02 requirement that no known reproduced transition/recovery blocker remain. **Merging #136 is not itself a Wave 02 exit gate.** Its current branch was composed before Experience #135 landed and should not be forced into accepted reality merely for bookkeeping. QA and Integration may recompose, preserve as provenance, or close it according to their own evidence/overlap rules.
 
-## Milestone target
+Further synthetic QA expansion is not directionally required unless a concrete contradiction is reproduced.
 
-Build a runnable **two-incident maintenance run** in which:
-1. existing `SURGE_LOAD` remains meaningful;
-2. a second fault family creates a different maintenance decision;
-3. the second fault materially changes service access, topology, route attractiveness, timing, or an equivalent route/service constraint;
-4. at least two distinct targets/route outcomes for that fault are reachable from valid live state;
-5. a successful run survives both incident families or an equally clear two-incident composition;
-6. the new incident is readable and recoverable;
-7. existing technical contracts remain green or are explicitly superseded.
+## Explicit anti-stall boundary
 
-Do not satisfy this milestone by repeating SURGE with another threshold or by simply making the run longer.
+Wave 02 does **not** wait for:
+- PR #124, whose disconnected-controller runtime repair is already accepted through Gameplay #129;
+- PR #128, whose SURGE threshold-truth runtime repair is already accepted;
+- superseded/absorbed Experience provenance such as #131;
+- rendered-browser inspection;
+- real screen-reader or physical-controller evaluation;
+- human `PLAYTESTED` evidence;
+- balance, fairness, tension, polish, or fun proof.
 
-## Parallel specialist lanes
+Those can remain useful validation/provenance work, but they are not permission gates for closing this content wave.
 
-### Systems Designer — second fault contract
-The runtime contract is accepted through PR #132. Systems now owns only bounded follow-through on continuous solvability/tuning evidence that materially protects the accepted game.
+## Specialist boundary for the remainder of Wave 02
 
-Do not open a third fault from Systems until this wave exits.
+### Systems Designer
+Keep #130 bounded to durable continuous-completion evidence. Do not add a third fault, retune the accepted incidents merely to improve the proof, or expand the policy claim beyond its exact internal-state truth boundary.
 
-### World / Encounter Designer — topology/service consequence
-The accepted fault already changes service availability through R4 PRIMARY / CROSSLINE redundancy. World #134 owns the current measured route-consequence proof.
+### World / Encounter Designer
+Keep #134 bounded to durable collision-route consequence. Do not add more map space or change the accepted ROUTE_CUT selector merely to make every trigger maximize travel distance.
 
-Do not add more map space merely for activity; preserve the smallest useful topology consequence.
+### Gameplay Engineer
+No new primary interaction is required for Wave 02. Reliability work may continue only when it does not block the convergence path.
 
-### Gameplay Engineer — interaction only where needed
-The accepted second fault successfully reuses movement + touch-service. No new primary action is directionally required for ROUTE_CUT.
+### Experience / Art / Audio Director
+Wave 02's required incident-identity layer is accepted through #135. No additional HUD, effect, audio, asset, or accessibility system is required for this wave to close.
 
-Gameplay reliability work may continue independently when it does not overlap the wave closure path.
+### QA / Playtest Specialist
+No blocker is currently reproduced. Do not create permutations for volume. Attack new exact compositions only when a real closure risk or regression appears.
 
-### Experience / Art / Audio Director — incident identity
-Experience #135 is the remaining player-facing Wave 02 closure lane.
+### Integration Steward
+Own the remaining Wave 02 landing mechanics. If #130 and #134 remain semantically unchanged, non-overlapping, mergeable, and GREEN after the last scan, they are directionally eligible to land without Mike or additional Director approval. Resolve documentation-only ancestry as ordinary integration work; resolve stale provenance lanes independently; do not serialize the content wave behind them.
 
-Deliver the bounded distinct incident language without opening a new HUD family, asset system, or sound architecture merely to satisfy the wave.
+### Game Director
+Do not invent or implement a third incident while these two evidence lanes are already occupied. Once both durability contracts are accepted on `main` or replaced by equivalent accepted coverage, close Wave 02 immediately and choose the next smallest **player-facing growth** problem rather than continuing ROUTE_CUT proof accumulation.
 
-### QA / Playtest Specialist — attack, then stop when no blocker exists
-QA #136 reports no contradiction/stuck-state defect in the covered transition/recovery composition.
+## Progress accounting
 
-Further QA work should respond to a reproduced problem or protect a genuinely missing contract, not expand synthetic permutations for volume.
+### Already achieved player-facing Wave 02 growth
+- second maintenance fault family accepted;
+- service-topology change during a run;
+- two possible R4 service outcomes;
+- distinct incident identity and recovery feedback;
+- reuse of established movement/touch-service language rather than a gratuitous new primary verb.
 
-### Integration Steward — converge and land
-Own composition order, overlap scans, exact-current verification, closure of superseded overlapping lanes, and ordinary landing.
+### Still required for formal Wave 02 closure
+- accepted durable continuous two-incident completion regression (#130 or equivalent);
+- accepted durable collision-route consequence regression (#134 or equivalent).
 
-Do not serialize the wave behind unrelated provenance or human-evidence gaps. Preserve the one canonical implementation for overlapping Experience semantics.
+### Does not advance Wave 02 further by itself
+- more controller edge-case coverage;
+- more accessibility semantics;
+- screenshots of unchanged gameplay;
+- additional ROUTE_CUT permutations with no reproduced problem;
+- documentation or evidence wording that does not preserve one of the two remaining contracts.
 
-### Game Director — continuation pressure
-Primary check each activation:
+## Evidence labels at this activation
 
-**Has Wave 02 crossed the closure boundary above, or is the studio drifting into evidence accumulation after the player-facing second fault already exists?**
+**TESTED:** PR #130 records GREEN workflow `35009174397` on the accepted #135 runtime composition; PR #134 records GREEN workflow `35009403365` on the accepted #135 runtime composition; accepted Experience #135 was merged with deterministic exact-head evidence recorded as GREEN.
 
-Once the closure boundary is durably met, close Wave 02 rather than polishing it indefinitely and choose the next smallest player-facing growth problem.
+**MEASURED:** #130 records fresh-run completion at about `49.28 s` (10 ms) and `49.85 s` (50 ms) with positive runner charge; #134 records `R2 -> R4 PRIMARY/LINK` collision-aware costs of about `310.0 / 180.2`, so the covered LINK-cut outcome forces about `+129.8 px`.
 
-## Current open work classification
+**VISUALLY INSPECTED:** NOT TESTED for the exact accepted two-incident + #135 composition in this Director activation.
 
-### Counts toward Wave 02 closure
-- #135 — Experience ROUTE_CUT incident identity + composed live-region semantics;
-- #130 — Systems continuous fresh-run two-incident completion regression;
-- #134 — World collision-route consequence regression;
-- #136 — QA transition/recovery attack evidence, useful only while it protects a real closure risk.
+**PLAYTESTED:** NOT TESTED with a human in this Director activation.
 
-### Parallel / provenance work, not Wave 02 blockers
-- #124 — older QA disconnected-controller RED provenance; runtime repair is already accepted via #129;
-- #128 — older QA SURGE threshold-truth verification; repaired escalation runtime is already accepted;
-- #131 — overlapping Experience live-region lane; its valid semantic contract is now composed into #135 and should not require a second independent player-facing implementation.
+**INFERRED:** the player-facing Wave 02 design target is structurally present on accepted runtime; formal wave closure is held only by the two explicitly required durability contracts above.
 
-Stale PR wording that names Mike as merge/CANON authority is superseded by `studio/GOVERNANCE.md`; Mike remains observer of the experiment.
+**BLOCKED:** no Game Director blocker identified. Ordinary merge completion is delegated to Integration Steward by accepted governance.
+
+**NOT TESTED:** human discoverability, comprehension, balance, fairness, tension, subjective difficulty, accessibility quality, polish, and fun.
 
 ## Scope guard
 
 Preserve Blackline Relay as a local/offline top-down maintenance-triage game built around routing, carried charge, relay/network state, recoverable pressure, and spatial service decisions.
 
-Do not open combat, inventory/equipment, meta-progression, procedural generation, multiplayer/backend/accounts, monetization, story campaign/dialogue tree, or a second game identity in this wave.
+Do not open combat, inventory/equipment, meta-progression, procedural generation, multiplayer/backend/accounts, monetization, story campaign/dialogue tree, or a second game identity merely to create novelty.
 
 ## Stop condition
 
-Do not add a third new fault family until the second fault is accepted in a runnable two-incident composition **and the convergence boundary above is durably preserved**.
+Do not add a third fault or reopen Wave 02 presentation work while #130 and #134 are already the bounded remaining closure lanes.
 
-Depth first: **fault variety + route consequence**, then move on. Do not turn closure evidence into an indefinite polish phase.
+When both durability contracts are accepted or equivalently replaced, **Wave 02 closes. The next Director action must return to player-facing continuation value rather than further proving ROUTE_CUT.**
