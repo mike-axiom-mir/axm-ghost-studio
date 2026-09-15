@@ -6,9 +6,17 @@ import vm from 'node:vm';
 
 const testsDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testsDir, '..');
+const indexSource = readFileSync(path.join(root, 'index.html'), 'utf8');
 const gameSource = readFileSync(path.join(root, 'game.js'), 'utf8');
 const escalationSource = readFileSync(path.join(root, 'operational-escalation.js'), 'utf8');
 const presentationSource = readFileSync(path.join(root, 'operational-escalation-presentation.js'), 'utf8');
+
+// The visible Operation slot is dynamic run-state feedback, not decorative text.
+// Preserve a polite atomic live-region contract so phase changes are exposed to
+// assistive technology without turning every resource tick into an announcement.
+assert.match(indexSource, /id="operationCard"[^>]*role="status"/);
+assert.match(indexSource, /id="operationCard"[^>]*aria-live="polite"/);
+assert.match(indexSource, /id="operationCard"[^>]*aria-atomic="true"/);
 
 const drawLog = [];
 const noop = () => {};
@@ -149,4 +157,4 @@ run('render()');
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'NETWORK STABLE'));
 assert.ok(drawLog.some(entry => entry.kind === 'fillText' && entry.text === 'OPERATIONAL ESCALATION CLEARED'));
 
-console.log('experience operational escalation feedback passed: separate phase/action surfaces, target-truth cues at every accepted service location, and stronger completion label');
+console.log('experience operational escalation feedback passed: live phase semantics, separate phase/action surfaces, target-truth cues at every accepted service location, and stronger completion label');
