@@ -126,7 +126,7 @@ assert.equal(elements.stateText.textContent, 'LOW CHARGE', 'low carried charge s
 run('state.player.x = core.x; state.player.y = core.y; state.player.charge = 55; updateHud();');
 assert.equal(elements.stateText.textContent, 'RECHARGING', 'partial charge at the core should be explicit');
 run("state.mode = 'WON'; updateHud();");
-assert.equal(elements.stateText.textContent, 'WON', 'terminal WON state should remain explicit');
+assert.equal(elements.stateText.textContent, 'NETWORK STABLE', 'terminal success status should match the visible NETWORK STABLE overlay');
 run("state.mode = 'BLACKOUT'; updateHud();");
 assert.equal(elements.stateText.textContent, 'BLACKOUT', 'terminal BLACKOUT state should remain explicit');
 

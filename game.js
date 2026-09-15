@@ -302,6 +302,7 @@ function getTransferTarget() {
 }
 
 function getStatusLabel() {
+  if (state.mode === 'WON') return 'NETWORK STABLE';
   if (state.mode !== 'RUNNING') return state.mode;
   if (!hasActiveGameplayFocus()) return 'PAUSED — RETURN TO GAME';
   if (!movementArmed) {
