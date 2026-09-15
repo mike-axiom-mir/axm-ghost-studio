@@ -70,6 +70,26 @@ function resolveOperationalSurgeIfReady() {
   return true;
 }
 
+const baseOperationalDisplayedBeaconEnergy = getDisplayedBeaconEnergy;
+getDisplayedBeaconEnergy = function(beacon) {
+  const displayed = baseOperationalDisplayedBeaconEnergy(beacon);
+  const operational = ensureOperationalEscalationState();
+
+  if (
+    state.mode !== 'RUNNING' ||
+    operational.phase !== OP_ESC_PHASES.SURGE ||
+    !operational.fault
+  ) {
+    return displayed;
+  }
+
+  const breaker = state.beacons[operational.fault.breakerIndex];
+  if (beacon !== breaker || beacon.energy >= operational.fault.clearThreshold) return displayed;
+
+  const highestVisibleBelowClear = Math.ceil(operational.fault.clearThreshold) - 1;
+  return Math.min(displayed, highestVisibleBelowClear);
+};
+
 const baseOperationalResetGame = resetGame;
 resetGame = function(...args) {
   baseOperationalResetGame(...args);
