@@ -23,6 +23,8 @@ const bulkheads = [
 const keys = new Set();
 const GAMEPAD_DEADZONE = 0.2;
 const MAX_SIMULATION_STEP = 0.05;
+const PLAYER_LOW_CHARGE_THRESHOLD = 25;
+const PLAYER_BLACKOUT_CHARGE_THRESHOLD = 0.001;
 const gamepadRestartHeldIndices = new Set();
 let selectedGamepadIndex;
 let movementArmed = true;
@@ -282,7 +284,7 @@ function update(dt) {
 
   const online = state.beacons.filter(b => b.energy >= 35).length;
   if (online === state.beacons.length) state.mode = 'WON';
-  else if (p.charge <= 0.001 && !atCore) state.mode = 'BLACKOUT';
+  else if (p.charge <= PLAYER_BLACKOUT_CHARGE_THRESHOLD && !atCore) state.mode = 'BLACKOUT';
   updateHud();
   return true;
 }
@@ -306,12 +308,21 @@ function getStatusLabel() {
   if (transferTarget) return `TRANSFER R${state.beacons.indexOf(transferTarget) + 1}`;
   const atCore = distance(state.player, core) <= state.player.r + core.r;
   if (atCore && state.player.charge < 99.5) return 'RECHARGING';
-  if (state.player.charge <= 25) return 'LOW CHARGE';
+  if (state.player.charge <= PLAYER_LOW_CHARGE_THRESHOLD) return 'LOW CHARGE';
   return atCore ? 'CORE FULL' : 'ROUTING';
 }
 
 function setTextIfChanged(element, value) {
   if (element.textContent !== value) element.textContent = value;
+}
+
+function getDisplayedPlayerCharge() {
+  const charge = state.player.charge;
+  const rounded = Math.round(charge);
+  if (charge > PLAYER_LOW_CHARGE_THRESHOLD && rounded <= PLAYER_LOW_CHARGE_THRESHOLD) return PLAYER_LOW_CHARGE_THRESHOLD + 1;
+  if (charge <= PLAYER_BLACKOUT_CHARGE_THRESHOLD) return 0;
+  if (rounded <= 0) return 1;
+  return rounded;
 }
 
 function getDisplayedBeaconEnergy(beacon) {
@@ -321,7 +332,7 @@ function getDisplayedBeaconEnergy(beacon) {
 
 function updateHud() {
   const online = state.beacons.filter(b => b.energy >= 35).length;
-  setTextIfChanged(chargeText, `${Math.round(state.player.charge)}%`);
+  setTextIfChanged(chargeText, `${getDisplayedPlayerCharge()}%`);
   setTextIfChanged(relayText, `${online} / ${state.beacons.length}`);
   if (relayDetail) {
     const relaySummary = state.beacons
@@ -438,7 +449,7 @@ function drawPlayer() {
   const p = state.player;
   ctx.beginPath();
   ctx.arc(p.x, p.y, p.r + 5, 0, Math.PI * 2);
-  ctx.strokeStyle = p.charge > 25 ? '#ffe47a' : '#ff6e73';
+  ctx.strokeStyle = p.charge > PLAYER_LOW_CHARGE_THRESHOLD ? '#ffe47a' : '#ff6e73';
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.beginPath();
