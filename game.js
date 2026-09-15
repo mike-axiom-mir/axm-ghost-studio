@@ -190,6 +190,7 @@ function guardFocusedGamepadCarryover() {
   }
 
   const padIndex = getGamepadIndex(pad);
+  selectedGamepadIndex = padIndex;
   if (!gamepadNeutralPending && hasGamepadMovementIntent(pad)) {
     movementArmed = false;
     gamepadNeutralPending = true;
