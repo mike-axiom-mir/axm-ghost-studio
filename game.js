@@ -209,12 +209,17 @@ function currentMovementIntentActive() {
   return hasKeyboardMovementIntent() || hasGamepadMovementIntent();
 }
 
-function resetForCurrentMovementIntent() {
+function resetForCurrentMovementIntent(allowUnavailableGamepadRecovery = false) {
   const pad = getStandardGamepad();
   const gamepadMovementActive = hasGamepadMovementIntent(pad);
   const pendingGamepadNeutral = gamepadNeutralPending;
-  const requireGamepadNeutral = gamepadMovementActive || pendingGamepadNeutral;
-  const neutralGamepadIndex = pendingGamepadNeutral
+  const pendingGamepad = pendingGamepadNeutral
+    ? getStandardGamepadByIndex(gamepadNeutralPendingIndex)
+    : null;
+  const preservePendingGamepadNeutral = pendingGamepadNeutral &&
+    (!allowUnavailableGamepadRecovery || Boolean(pendingGamepad));
+  const requireGamepadNeutral = gamepadMovementActive || preservePendingGamepadNeutral;
+  const neutralGamepadIndex = preservePendingGamepadNeutral
     ? gamepadNeutralPendingIndex
     : (gamepadMovementActive ? getGamepadIndex(pad) : null);
   resetGame(
@@ -561,7 +566,7 @@ window.addEventListener('keydown', event => {
     event.preventDefault();
     if (event.repeat && !keys.has(key)) return;
   }
-  if (key === 'r' && !event.repeat) resetForCurrentMovementIntent();
+  if (key === 'r' && !event.repeat) resetForCurrentMovementIntent(true);
   keys.add(key);
 });
 window.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
@@ -587,7 +592,7 @@ if (typeof document.addEventListener === 'function') {
   });
 }
 restartButton.addEventListener('click', () => {
-  if (hasActiveGameplayFocus()) resetForCurrentMovementIntent();
+  if (hasActiveGameplayFocus()) resetForCurrentMovementIntent(true);
 });
 
 resetGame();
