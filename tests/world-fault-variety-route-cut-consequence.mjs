@@ -137,6 +137,10 @@ function seedResolvedSurgeAt(x, y) {
   return JSON.parse(vm.runInContext('JSON.stringify(state)', sandbox));
 }
 
+// Presentation semantics are Experience-owned and covered by accepted #135. This
+// World regression intentionally asserts only accepted topology/state and measured
+// collision-route consequence rather than coupling to player-facing copy.
+
 // Outcome A: after an R2-side commitment, Systems cuts the currently attractive LINK.
 // World measurement proves this forces a real route consequence to the primary R4 service.
 let state = seedResolvedSurgeAt(r2.x, r2.y);
@@ -145,7 +149,6 @@ assert.equal(state.operational.phase, 'REROUTE');
 assert.equal(state.operational.fault.kind, 'ROUTE_CUT');
 assert.equal(state.operational.fault.blockedLocation, 'CROSSLINE');
 assert.equal(state.operational.fault.requiredLocation, 'PRIMARY');
-assert.equal(elements.get('stateText').textContent, 'REROUTE — USE R4 PRIMARY');
 assert.ok(r2ToPrimary - r2ToLink > 100, 'R2-side CROSSLINE cut must force more than 100 px of additional collision-aware route cost');
 
 // Outcome B: if the incident begins at the primary service area, PRIMARY is cut and
@@ -155,7 +158,6 @@ assert.equal(state.mode, 'RUNNING');
 assert.equal(state.operational.phase, 'REROUTE');
 assert.equal(state.operational.fault.blockedLocation, 'PRIMARY');
 assert.equal(state.operational.fault.requiredLocation, 'CROSSLINE');
-assert.equal(elements.get('stateText').textContent, 'REROUTE — USE R4 LINK');
 assert.ok(primaryToLink > 170 && primaryToLink < 190, `primary R4 cut should force a bounded route to the link, measured ${primaryToLink}`);
 
 console.log(
