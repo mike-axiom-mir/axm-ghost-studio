@@ -543,4 +543,5 @@ restartButton.addEventListener('click', () => {
 });
 
 resetGame();
+if (hasActiveGameplayFocus()) guardFocusedGamepadCarryover();
 requestAnimationFrame(frame);
