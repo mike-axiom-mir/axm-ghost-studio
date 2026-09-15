@@ -26,7 +26,7 @@ const MAX_SIMULATION_STEP = 0.05;
 const PLAYER_LOW_CHARGE_THRESHOLD = 25;
 const PLAYER_BLACKOUT_CHARGE_THRESHOLD = 0.001;
 const gamepadRestartHeldIndices = new Set();
-let selectedGamepadIndex;
+let selectedGamepadIndex = null;
 let movementArmed = true;
 let gamepadNeutralPending = false;
 let gamepadNeutralPendingIndex = null;
