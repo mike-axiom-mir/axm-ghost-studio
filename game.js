@@ -302,6 +302,7 @@ function getTransferTarget() {
 }
 
 function getStatusLabel() {
+  if (state.mode === 'WON') return 'NETWORK STABLE';
   if (state.mode !== 'RUNNING') return state.mode;
   if (!hasActiveGameplayFocus()) return 'PAUSED — RETURN TO GAME';
   if (!movementArmed) {
@@ -357,7 +358,7 @@ function drawGrid() {
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
   }
   for (let y = 0; y <= H; y += 48) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, H); ctx.stroke();
   }
 }
 
