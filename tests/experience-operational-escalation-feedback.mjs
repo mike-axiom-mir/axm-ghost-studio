@@ -132,9 +132,11 @@ assert.equal(elements.operationText.textContent, 'RECOVERY');
 assert.equal(elements.operationCard.dataset.phase, 'RECOVERY');
 assert.equal(elements.stateText.textContent, 'TRANSFER R2');
 
-// Terminal success receives a distinct resolution label in addition to the existing
-// NETWORK STABLE overlay. This is a presentation extension, not a new win rule.
+// Terminal-success presentation is tested from a state where every required
+// operational incident has already resolved. REROUTE itself is covered by the
+// Systems contract; this Experience test remains scoped to the terminal surface.
 run(`
+  state.operational.routeCutResolved = true;
   state.beacons.forEach(beacon => { beacon.energy = 40; });
   update(0.01);
 `);
