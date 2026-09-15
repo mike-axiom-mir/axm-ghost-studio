@@ -29,6 +29,7 @@ const elements = {
 };
 const buttonsA = Array.from({ length: 16 }, () => ({ pressed: false }));
 const buttonsB = Array.from({ length: 16 }, () => ({ pressed: false }));
+buttonsB[9].pressed = true;
 const padA = { index: 0, connected: true, mapping: 'standard', axes: [0, 0], buttons: buttonsA };
 const padB = { index: 1, connected: true, mapping: 'standard', axes: [1, 0], buttons: buttonsB };
 const pads = [padA, padB];
@@ -50,14 +51,16 @@ vm.runInContext(`${gameSource}\n;globalThis.__startupSwap = { get state(){ retur
 
 const game = sandbox.__startupSwap;
 assert.equal(game.state.player.x, 480);
+game.state.elapsed = 7;
 
 // Focused startup initially observes neutral controller A while controller B is
-// already connected and held right. If A disappears before the first update,
-// B becomes selected. That held secondary state must be treated as takeover
-// carryover rather than a fresh movement edge.
+// already connected with movement and Start held. If A disappears before the
+// first update, B becomes selected. Those carried-over states must be treated
+// as takeover carryover rather than fresh movement/restart edges.
 padA.connected = false;
 game.update(0.05);
 assert.equal(game.state.player.x, 480, 'startup controller swap must not turn a pre-held secondary controller into immediate movement');
+assert.ok(game.state.elapsed > 7, 'pre-held Start on the takeover controller must not synthesize a restart/reset');
 assert.equal(game.movementArmed, false);
 assert.equal(game.gamepadNeutralPending, true);
 assert.equal(game.gamepadNeutralPendingIndex, 1);
@@ -68,9 +71,22 @@ assert.equal(game.state.player.x, 480);
 assert.equal(game.movementArmed, true);
 assert.equal(game.gamepadNeutralPending, false);
 assert.equal(game.gamepadNeutralPendingIndex, null);
+assert.ok(game.state.elapsed > 7, 'holding Start through neutral recovery must remain an already-held input');
 
+buttonsB[9].pressed = false;
+game.update(0.01);
+const elapsedBeforeFreshRestart = game.state.elapsed;
+assert.ok(elapsedBeforeFreshRestart > 7);
+
+buttonsB[9].pressed = true;
+game.update(0.01);
+assert.equal(game.state.elapsed, 0, 'release then fresh Start must still restart normally after takeover recovery');
+assert.equal(game.state.player.x, 480);
+
+buttonsB[9].pressed = false;
+game.update(0.01);
 padB.axes = [1, 0];
 game.update(0.05);
 assert.equal(game.state.player.x, 491.75, 'fresh movement after the newly selected controller is observed neutral should work normally');
 
-console.log('gameplay startup controller swap neutrality passed: pre-held secondary takeover waits for neutral, then fresh movement resumes');
+console.log('gameplay startup controller swap neutrality passed: carried movement/Start wait for valid edges, then fresh restart and movement resume');
