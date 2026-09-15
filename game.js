@@ -13,7 +13,7 @@ const beaconSeed = [
   { x: 145, y: 125 },
   { x: W - 145, y: 125 },
   { x: 145, y: H - 125 },
-  { x: W - 145, y: 350 }
+  { x: W - 145, y: 425 }
 ];
 const bulkheads = [
   { x: 300, y: 170, w: 42, h: 260 },
