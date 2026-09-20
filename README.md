@@ -74,3 +74,11 @@ Read these before working:
 - `studio/FOUNDING_GATE.md` — historical rules for the founding pass and post-founding identity boundary.
 - `studio/DECISION_LOG.md` — durable decisions, including superseded authority history.
 - `.github/pull_request_template.md` — evidence and handoff structure.
+
+## Licensing
+
+Current AXM-owned machine/workshop code: **PolyForm Noncommercial 1.0.0 + `CREATOR_OUTPUT_PERMISSION.md`**.
+
+Commercial Creator Output is allowed; commercial exploitation of Ghost Studio itself requires separate permission.
+
+Earlier published versions keep any historical licenses already granted to those versions. Third-party material remains under its own terms. See `LICENSE`, `LICENSE_BOUNDARY.md`, and `CREATOR_OUTPUT_PERMISSION.md`.
